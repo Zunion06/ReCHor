@@ -22,7 +22,7 @@ public record Journey(List<Leg> legs) {
                     legs.get(i-1).arrTime().isEqual(legs.get(i).depTime()));
             Preconditions.checkArgument(legs.get(i-1).arrStop().equals(legs.get(i).depStop()));
         }
-
+//salut
     }
     public Stop depStop() {
         return legs.getFirst().depStop();
