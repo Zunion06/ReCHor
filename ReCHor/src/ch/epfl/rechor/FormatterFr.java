@@ -5,6 +5,9 @@ import ch.epfl.rechor.journey.Stop;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Objects;
 
 import static java.lang.Character.isDigit;
@@ -20,43 +23,60 @@ public final class FormatterFr {
 
     static String formatTime(LocalDateTime dateTime) {
         Objects.requireNonNull(dateTime);
-        return (dateTime.getHour() + "h" + dateTime.getMinute());
+        DateTimeFormatter fmt = new DateTimeFormatterBuilder()
+                .appendValue(ChronoField.HOUR_OF_DAY)
+                .appendLiteral('h')
+                .appendValue(ChronoField.MINUTE_OF_HOUR)
+                .toFormatter();
+        return (fmt.toString());
     }
 
     static String formatPlatformName(Stop stop) {
         Objects.requireNonNull(stop);
+        StringBuilder builder=new StringBuilder(100);
         if (isDigit(stop.plateformName().charAt(0))) {
-            return ("voie " + stop.plateformName());
+            builder.append("voie ");
         } else if (isLetter(stop.plateformName().charAt(0))) {
-            return ("quai " + stop.plateformName());
+            builder.append("quai ");
         }
-        Preconditions.checkArgument(true);
-        return(null);
+        builder.append(stop.plateformName());
+        return(builder.toString());
     }
 
     static String formatLeg(Journey.Leg.Foot footLeg){
         Objects.requireNonNull(footLeg);
-        if(footLeg.isTransfer()){
-            return("changement ("+formatDuration(footLeg.duration())+")");
-        } else {
-            return("trajet à pied ("+formatDuration((footLeg.duration()))+")");
+        StringBuilder builder=new StringBuilder(100);
+        if(footLeg.isTransfer()) {
+            builder.append("changement (");
         }
+        else {
+            builder.append("trajet à pied (");
+        }
+         builder.append(formatDuration(footLeg.duration()));
     }
 
     static String formatLeg(Journey.Leg.Transport leg){
         Objects.requireNonNull(leg);
-        StringBuilder format = new StringBuilder(50);
-//        StringBuilder.
-
-        if ((leg.depStop().plateformName()!=null)&&(leg.arrStop().plateformName()!=null)) {
-            return(leg.depTime()+" "+leg.depStop()+" ("+leg.depStop().plateformName()+") → "
-                    +leg.arrStop()+" (arr. "+leg.arrTime()+" "+leg.arrStop().plateformName()+")");
+        StringBuilder builder = new StringBuilder(100);
+        builder.append(leg.depTime()).append(" ");
+        if(leg.depStop().plateformName()!=null){
+            builder.append(leg.depStop()).append(" (").append(leg.depStop().plateformName()).append(")");
         }
-        return(leg.depTime()+" "+leg.depStop()+" → "+leg.arrStop()+" (arr. "+leg.arrTime()+")");
+        builder.append(" → ");
+        builder.append(leg.arrStop()).append(" (arr. ");
+        builder.append(leg.arrTime());
+        if(leg.arrStop().plateformName()!=null) {
+            builder.append(" ").append(leg.arrStop().plateformName());
+        }
+        builder.append(")");
+
+        return(builder.toString());
     }
 
     static String formatRouteDestination(Journey.Leg.Transport transportLeg){
         Objects.requireNonNull(transportLeg);
-        return(transportLeg.route()+" Direction "+transportLeg.destination());
+        StringBuilder builder = new StringBuilder();
+        builder.append(transportLeg.route()).append(" Direction ").append(transportLeg.destination());
+        return(builder.toString());
     }
 }
