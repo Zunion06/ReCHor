@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="wht t f">
-      <change afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/TestMatt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/FormatterFr.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/FormatterFr.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/Journey.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/Journey.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +22,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Zunion06"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Zunion06/ReCHor.git",
+    "accountId": "37e9423e-3d3e-4d8d-b1f9-7d3ff3bbc8b7"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -45,9 +53,10 @@
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Guillaume/Documents/codes/Java/ReCHor/ReCHor",
+    "last_opened_file_path": "C:/Users/Guillaume/Documents/codes/Java/rechor_skeleton/ReCHor/ReCHor/ReCHor",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
