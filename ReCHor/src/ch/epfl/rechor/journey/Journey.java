@@ -11,16 +11,14 @@ import java.util.Objects;
 
 public record Journey(List<Leg> legs) {
     public Journey{
+        Objects.requireNonNull(legs);//check for null list
+        Preconditions.checkArgument(!legs.isEmpty());
         legs=List.copyOf(legs); //make a copy to be immuable
-        Objects.requireNonNull(legs); //check for null list
         Leg firstStep=legs.getFirst();
         Leg lastStep=legs.getLast();
-        for(int i=0; i<legs.size()-2;i++){
-            if(legs.get(i) instanceof Leg.Foot){//check that foot steps alternate with transport
-                Preconditions.checkArgument(!(legs.get(i+1) instanceof Leg.Transport));
-            }
-            if(legs.get(i) instanceof Leg.Transport){//check that transport steps alternate with foot
-                Preconditions.checkArgument(!(legs.get(i+1) instanceof Leg.Foot));
+        for(int i=1; i<legs.size();i++){
+            if(legs.get(i) instanceof Leg.Foot){//check that foot steps alternate with transport (as there would be no foot step after a foot step)
+                Preconditions.checkArgument(!(legs.get(i-1) instanceof Leg.Foot));
             }
             //if(firstStep.getDate)
         }
@@ -66,7 +64,7 @@ public record Journey(List<Leg> legs) {
         public record IntermediateStop (Stop stop,LocalDateTime arrTime,LocalDateTime depTime) {
             public IntermediateStop{
                 Objects.requireNonNull(stop);
-                Preconditions.checkArgument(arrTime.isAfter(depTime)||
+                Preconditions.checkArgument(arrTime.isBefore(depTime)||
                         arrTime.isEqual(depTime));
             }
         }
@@ -92,13 +90,15 @@ public record Journey(List<Leg> legs) {
                 Objects.requireNonNull(depTime);
                 Objects.requireNonNull(arrStop);
                 Objects.requireNonNull(arrTime);
+                Preconditions.checkArgument(depTime.isBefore(arrTime)||
+                        depTime.isEqual(arrTime));
             }
             public List<IntermediateStop> intermediateStops(){
                 return List.of();
             }
 
             public boolean isTransfer(){
-                return(depStop.equals(arrStop));
+                return(depStop.name().equals(arrStop.name()));
             }
         }
     }
