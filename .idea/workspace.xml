@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="wht t f">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/FormatterFr.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/FormatterFr.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,19 +21,20 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="KEEP" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "Zunion06"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Zunion06&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Zunion06/ReCHor.git",
-    "accountId": "37e9423e-3d3e-4d8d-b1f9-7d3ff3bbc8b7"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Zunion06/ReCHor.git&quot;,
+    &quot;accountId&quot;: &quot;37e9423e-3d3e-4d8d-b1f9-7d3ff3bbc8b7&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -46,6 +47,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Downloaded.Files.Path.Enabled": "false",
+    "JUnit.FormatterFrTest.executor": "Run",
+    "JUnit.JourneyTest.executor": "Run",
+    "JUnit.JourneyTest.journeyConstructorThrowsWhenLegsAreNotConsecutive.executor": "Debug",
     "JUnit.PreconditionsTest.executor": "Run",
     "JUnit.Test.executor": "Run",
     "JUnit.TestMatt.test.executor": "Run",
@@ -60,7 +64,53 @@
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.TestMatt.test">
+  <component name="RunManager" selected="JUnit.FormatterFrTest">
+    <configuration name="FormatterFrTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ReCHor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ch.epfl.rechor.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.FormatterFrTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JourneyTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ReCHor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor.journey" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.journey.JourneyTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="JourneyTest.journeyConstructorThrowsWhenLegsAreNotConsecutive" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ReCHor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor.journey" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.journey.JourneyTest" />
+      <option name="METHOD_NAME" value="journeyConstructorThrowsWhenLegsAreNotConsecutive" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Test" type="JUnit" factoryName="JUnit">
       <module name="ReCHor" />
       <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
@@ -90,6 +140,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.FormatterFrTest" />
+        <item itemvalue="JUnit.JourneyTest" />
+        <item itemvalue="JUnit.JourneyTest.journeyConstructorThrowsWhenLegsAreNotConsecutive" />
         <item itemvalue="JUnit.TestMatt.test" />
       </list>
     </recent_temporary>
@@ -119,7 +172,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740137429892</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="wht t f">
+      <option name="closed" value="true" />
+      <created>1740145554214</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1740145554214</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
