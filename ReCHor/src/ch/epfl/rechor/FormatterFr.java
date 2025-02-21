@@ -46,7 +46,7 @@ public final class FormatterFr {
     static String formatLeg(Journey.Leg.Transport leg){
         Objects.requireNonNull(leg);
         StringBuilder format = new StringBuilder(50);
-        StringBuilder.
+//        StringBuilder.
 
         if ((leg.depStop().plateformName()!=null)&&(leg.arrStop().plateformName()!=null)) {
             return(leg.depTime()+" "+leg.depStop()+" ("+leg.depStop().plateformName()+") → "
