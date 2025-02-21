@@ -27,9 +27,10 @@ public final class FormatterFr {
         DateTimeFormatter fmt = new DateTimeFormatterBuilder()
                 .appendValue(ChronoField.HOUR_OF_DAY)
                 .appendLiteral('h')
-                .appendValue(ChronoField.MINUTE_OF_HOUR)
+                .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
                 .toFormatter();
-        return (fmt.toString());
+        fmt.format(dateTime);
+        return (fmt.format(dateTime).toString());
     }
 
     static String formatPlatformName(Stop stop) {
