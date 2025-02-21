@@ -14,15 +14,17 @@ public record Journey(List<Leg> legs) {
         legs=List.copyOf(legs); //make a copy to be immutable
         Preconditions.checkArgument(!legs.isEmpty());
         Objects.requireNonNull(legs); //check for null list
-        for(int i=1; i<legs.size()-1;i++){
+        for(int i=1; i<legs.size();i++){
             if(legs.get(i) instanceof Leg.Foot){//check that foot steps alternate with transport
                 Preconditions.checkArgument(!(legs.get(i-1) instanceof Leg.Foot));
+            }
+            if(legs.get(i) instanceof Leg.Transport){
+                Preconditions.checkArgument(!(legs.get(i-1) instanceof Leg.Transport));
             }
             Preconditions.checkArgument(legs.get(i-1).arrTime().isBefore(legs.get(i).depTime())||
                     legs.get(i-1).arrTime().isEqual(legs.get(i).depTime()));
             Preconditions.checkArgument(legs.get(i-1).arrStop().equals(legs.get(i).depStop()));
         }
-//salut
     }
     public Stop depStop() {
         return legs.getFirst().depStop();

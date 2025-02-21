@@ -19,7 +19,7 @@ class JourneyTest {
         var s4 = new Stop("Lausanne", "5", 6.629092, 46.516792);
         var s5 = new Stop("Lausanne", "1", 6.629092, 46.516792);
         var s6 = new Stop("Romont FR", "2", 6.911811, 46.693508);
-        var s7 = new Stop("Arrêt Random", "S2", 6.999811, 46.699908);
+        var s7 = new Stop("Arrêt Random", "P2", 6.999811, 46.699908);
 
         var d = LocalDate.of(2025, Month.FEBRUARY, 18);
         var l1 = new Journey.Leg.Transport(
