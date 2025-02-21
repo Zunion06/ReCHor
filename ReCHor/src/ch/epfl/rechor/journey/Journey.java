@@ -27,23 +27,24 @@ public record Journey(List<Leg> legs) {
 
     }
     public Stop depStop() {
-        return null;
+        return legs.getFirst().depStop();
     }
 
     public Stop arrStop(){
-        return null;
+        return legs.getLast().arrStop();
     }
 
     public LocalDateTime depTime(){
-        return null;
+        return legs.getFirst().depTime();
     }
 
     public LocalDateTime arrTime(){
-        return null;
+        return legs.getLast().arrTime();
     }
 
     public Duration duration(){
-        return null;
+        return Duration.between(legs.getFirst().depTime(),
+                legs.getLast().arrTime());
     }
 
     public sealed interface Leg {
