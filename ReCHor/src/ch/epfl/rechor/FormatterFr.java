@@ -16,8 +16,8 @@ import static java.lang.Character.isLetter;
 public final class FormatterFr {
     static String formatDuration(Duration duration) {
         if (((int) duration.getSeconds()) / 3600 > 0 ) {
-            int h=(((int) duration.getSeconds()) / 3600);
-            return (h + " h " + (duration.getSeconds()-h*3600) + " min");
+            long h=duration.toHours();
+            return (h + " h " + duration.minusHours(h).toMinutes() + " min");
         }
         return (((int) duration.getSeconds() / 60) + " min");
     }
