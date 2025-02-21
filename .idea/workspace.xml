@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="wht t f" />
+    <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="wht t f">
+      <change afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/TestMatt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/FormatterFr.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/FormatterFr.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/Journey.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/Journey.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -34,6 +40,7 @@
     "Downloaded.Files.Path.Enabled": "false",
     "JUnit.PreconditionsTest.executor": "Run",
     "JUnit.Test.executor": "Run",
+    "JUnit.TestMatt.test.executor": "Run",
     "Repository.Attach.Annotations": "false",
     "Repository.Attach.JavaDocs": "false",
     "Repository.Attach.Sources": "false",
@@ -44,7 +51,7 @@
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.TestMatt.test">
     <configuration name="Test" type="JUnit" factoryName="JUnit">
       <module name="ReCHor" />
       <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
@@ -56,6 +63,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestMatt.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ReCHor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ch.epfl.rechor.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.TestMatt" />
+      <option name="METHOD_NAME" value="test" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.TestMatt.test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -74,7 +102,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740133155198</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="wht t f">
+      <option name="closed" value="true" />
+      <created>1740137429892</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1740137429892</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -89,6 +125,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="iohjoih" />
     <MESSAGE value="wht t f" />
     <option name="LAST_COMMIT_MESSAGE" value="wht t f" />
   </component>

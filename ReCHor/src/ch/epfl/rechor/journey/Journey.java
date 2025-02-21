@@ -11,18 +11,17 @@ import java.util.Objects;
 
 public record Journey(List<Leg> legs) {
     public Journey{
-        legs=List.copyOf(legs); //make a copy to be immuable
+        legs=List.copyOf(legs); //make a copy to be immutable
         Objects.requireNonNull(legs); //check for null list
-        Leg firstStep=legs.getFirst();
-        Leg lastStep=legs.getLast();
-        for(int i=0; i<legs.size()-2;i++){
+        for(int i=1; i<legs.size()-1;i++){
             if(legs.get(i) instanceof Leg.Foot){//check that foot steps alternate with transport
-                Preconditions.checkArgument(!(legs.get(i+1) instanceof Leg.Transport));
+                Preconditions.checkArgument(!(legs.get(i-1) instanceof Leg.Transport));
             }
             if(legs.get(i) instanceof Leg.Transport){//check that transport steps alternate with foot
-                Preconditions.checkArgument(!(legs.get(i+1) instanceof Leg.Foot));
+                Preconditions.checkArgument(!(legs.get(i-1) instanceof Leg.Foot));
             }
-            //if(firstStep.getDate)
+            Preconditions.checkArgument(legs.get(i+1).arrTime().isBefore(legs.get(i).depTime()));
+            Preconditions.checkArgument(legs.get(i+1).depStop().equals(legs.get(i).arrStop()));
         }
 
     }
