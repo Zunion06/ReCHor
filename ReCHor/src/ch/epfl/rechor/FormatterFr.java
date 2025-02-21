@@ -35,13 +35,15 @@ public final class FormatterFr {
 
     static String formatPlatformName(Stop stop) {
         Objects.requireNonNull(stop);
-        StringBuilder builder=new StringBuilder(100);
-        if (isDigit(stop.plateformName().charAt(0))) {
-            builder.append("voie ");
-        } else if (isLetter(stop.plateformName().charAt(0))) {
-            builder.append("quai ");
+        StringBuilder builder = new StringBuilder(100);
+        if(stop.plateformName()!=null&&!stop.plateformName().isEmpty()) {
+            if (isDigit(stop.plateformName().charAt(0))) {
+                builder.append("voie ");
+            } else if (isLetter(stop.plateformName().charAt(0))) {
+                builder.append("quai ");
+            }
+            builder.append(stop.plateformName());
         }
-        builder.append(stop.plateformName());
         return(builder.toString());
     }
 
