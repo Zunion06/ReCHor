@@ -53,7 +53,8 @@ public final class FormatterFr {
         else {
             builder.append("trajet à pied (");
         }
-         builder.append(formatDuration(footLeg.duration()));
+        builder.append(formatDuration(footLeg.duration()));
+        builder.append(")");
         return(builder.toString());
     }
 
