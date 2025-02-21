@@ -62,15 +62,16 @@ public final class FormatterFr {
     static String formatLeg(Journey.Leg.Transport leg){
         Objects.requireNonNull(leg);
         StringBuilder builder = new StringBuilder(100);
-        builder.append(leg.depTime()).append(" ");
+        builder.append(formatTime(leg.depTime())).append(" ");
+        builder.append(leg.depStop().name());
         if(leg.depStop().plateformName()!=null){
-            builder.append(leg.depStop()).append(" (").append(leg.depStop().plateformName()).append(")");
+            builder.append(" (").append(formatPlatformName(leg.depStop())).append(")");
         }
         builder.append(" → ");
-        builder.append(leg.arrStop()).append(" (arr. ");
-        builder.append(leg.arrTime());
+        builder.append(leg.arrStop().name()).append(" (arr. ");
+        builder.append(formatTime(leg.arrTime()));
         if(leg.arrStop().plateformName()!=null) {
-            builder.append(" ").append(leg.arrStop().plateformName());
+            builder.append(" ").append(formatPlatformName(leg.arrStop()));
         }
         builder.append(")");
 
