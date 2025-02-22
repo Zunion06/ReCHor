@@ -17,7 +17,8 @@ public class PackedCriteria {
         // No need to check "payload" as it is an int, therefore it has a maximum of 32 bits
         long arrMinsLong = Integer.toUnsignedLong(arrMins);
         long changesLong = Integer.toUnsignedLong(changes);
-        return arrMinsLong << BIT_INDEX_OF_ARRIVING_TIME | changesLong << BIT_INDEX_OF_CHANGES | payload;
+        long payloadLong = Integer.toUnsignedLong(payload);
+        return arrMinsLong << BIT_INDEX_OF_ARRIVING_TIME | changesLong << BIT_INDEX_OF_CHANGES | payloadLong;
     }
 
     public static boolean hasDepMins(long criteria) {
@@ -34,13 +35,13 @@ public class PackedCriteria {
 
     public static int arrMins(long criteria) {
         int mask =  Bits32_24_8.mask(NUMBER_OF_BITS_FOR_TIMES);
-        int arrMinsBeforeMidnight = (int) (criteria >> BIT_INDEX_OF_DEPARTURE_TIME) & mask;
+        int arrMinsBeforeMidnight = (int) (criteria >>> BIT_INDEX_OF_ARRIVING_TIME) & mask;
         return arrMinsBeforeMidnight - 240;
     }
 
     public static int changes(long criteria) {
         int mask =  Bits32_24_8.mask(NUMBER_OF_BITS_FOR_CHANGES);
-        return (int) (criteria >> BIT_INDEX_OF_CHANGES) & mask;
+        return (int) (criteria >>> BIT_INDEX_OF_CHANGES) & mask;
     }
 
     public static int payload(long criteria) {
@@ -49,6 +50,7 @@ public class PackedCriteria {
 
     public static boolean dominatesOrIsEqual(long criteria1, long criteria2) {
         Preconditions.checkArgument((criteria1 | criteria2) >>> 63 == 0); // test if the last bits are 0 as it should
+        Preconditions.checkArgument(hasDepMins(criteria1) == hasDepMins(criteria2));
         boolean depMinsPart = criteria1 <= criteria2; //works because the departure hour is on the most significant bits
         boolean arrMinsPart = arrMins(criteria1) <= arrMins(criteria2);
         boolean changesPart = changes(criteria1) <= changes(criteria2);
@@ -63,12 +65,15 @@ public class PackedCriteria {
     public static long withDepMins(long criteria, int depMins1) {
         Preconditions.checkArgument(!hasDepMins(criteria));
         Preconditions.checkBitLength(depMins1,NUMBER_OF_BITS_FOR_TIMES);
-        return Integer.toUnsignedLong(depMins1) << BIT_INDEX_OF_DEPARTURE_TIME | criteria;
+        Preconditions.checkArgument(depMins1 <= arrMins(criteria)); // should it be done ? it was not specified
+                // and should it be " <= " or just " < " ?
+        long depMinsComp = 4095 - depMins1;
+        return depMinsComp << BIT_INDEX_OF_DEPARTURE_TIME | criteria;
     }
 
     public static long withAdditionalChange(long criteria) {
         int newChanges = changes(criteria) + 1 ;
-        Preconditions.checkBitLength(newChanges,NUMBER_OF_BITS_FOR_CHANGES);
+        Preconditions.checkBitLength(newChanges,NUMBER_OF_BITS_FOR_CHANGES); // would not really be an IllegalArgumentException tho --> need modifications (?)
         long resetedCriteria = Bits32_24_8.bitsErasure(criteria,BIT_INDEX_OF_CHANGES,NUMBER_OF_BITS_FOR_CHANGES);
         long newChangesLong = Integer.toUnsignedLong(newChanges);
         return newChangesLong << BIT_INDEX_OF_CHANGES | resetedCriteria;
@@ -76,7 +81,7 @@ public class PackedCriteria {
 
     // should I check if criteria does not have a payload or should I just change it ?
     public static long withPayload(long criteria, int payload1) {
-        Preconditions.checkArgument(payload(criteria)==0); // would not really be an IllegalArgumentException tho --> need modifications
+        Preconditions.checkArgument(payload(criteria)==0);
         long resetedCriteria = Bits32_24_8.bitsErasure(criteria,BIT_INDEX_OF_PAYLOAD,NUMBER_OF_BITS_FOR_PAYLOAD);
         return resetedCriteria | payload1;
     }
