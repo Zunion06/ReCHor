@@ -1,18 +1,10 @@
 package ch.epfl.rechor;
 
-import ch.epfl.rechor.journey.Journey;
-import ch.epfl.rechor.journey.Stop;
-import ch.epfl.rechor.journey.Vehicle;
 import org.junit.jupiter.api.Test;
-
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Bits32_24_8Test {
+public class MyBits32_24_8Test {
     @Test
     void Bits32_24_8PackWorksWithBitsComposedOfOnes() {
         int bits24 = 0b111111111111111111111111; // 24 chars
