@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="wht t f">
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/FormatterFr.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/FormatterFr.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/IcalBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +33,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Zunion06/ReCHor.git&quot;,
-    &quot;accountId&quot;: &quot;37e9423e-3d3e-4d8d-b1f9-7d3ff3bbc8b7&quot;
+    &quot;accountId&quot;: &quot;e08e9eaa-ae13-475e-b981-5d1f425cbc38&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
