@@ -1,28 +1,52 @@
 package ch.epfl.rechor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.StringJoiner;
 
 public final class IcalBuilder {
-    StringBuilder builder = new StringBuilder();
+    StringBuilder builder = new StringBuilder(75);
+    ArrayList<Component> components = new ArrayList<Component>();
+    String CRLF = "\r\n ";
 
-    IcalBuilder add(Name name, String value){
-        builder.append()
+    public IcalBuilder add(Name name, String value){
+        if(value.length()>=74-name.toString().length()){
+            StringJoiner joiner = new StringJoiner("");
+            joiner.add(value.substring(0,72-name.toString().length())+CRLF);
+            value=value.substring(72-name.toString().length());
+            for(int i=(72-name.toString().length()); value.length()>75;i+=73){
+                joiner.add(value.substring(0,73)+CRLF);
+                value=value.substring(73);
+            }
+            value=joiner.add(value).toString();
+        }
+        builder.append(name.toString()).append(":").append(value).append("\n");
+        return this;
     }
 
-    IcalBuilder add(Name name, LocalDateTime dateTime){
-
+    public IcalBuilder add(Name name, LocalDateTime dateTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
+        builder.append(name.toString()).append(":").append(formatter.format(dateTime)).append("\n");
+        return this;
     }
 
-    IcalBuilder begin(Component component){
-
+    public IcalBuilder begin(Component component){
+        components.add(component);
+        builder.append("BEGIN:").append(component.toString()).append("\n");
+        return this;
     }
 
-    IcalBuilder end(){
-
+    public IcalBuilder end(){
+        if(components.isEmpty()){throw new IllegalArgumentException();}
+        builder.append("END:").append(components.getLast().toString()).append("\n");
+        components.removeLast();
+        return this;
     }
 
-    String build(){
-
+    public String build(){
+        if(!components.isEmpty()){throw new IllegalArgumentException();}
+        return builder.toString();
     }
 
     public enum Component{
