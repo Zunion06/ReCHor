@@ -53,7 +53,10 @@ public final class PackedCriteria {
 //        Preconditions.checkArgument((criteria1 | criteria2) >>> 63 == 0); // test if the last bits are 0 as it should
         Preconditions.checkArgument(hasDepMins(criteria1) == hasDepMins(criteria2));
 
-        boolean depMinsPart = criteria1 <= criteria2; //works because the departure hour is on the most significant bits
+        // because it is not assured that the 64th bit is 0
+        long mask = Bits32_24_8.longMask(63);
+
+        boolean depMinsPart = (criteria1 & mask) <= (criteria2 & mask); //works because the departure hour is on the most significant bits
         boolean arrMinsPart = arrMins(criteria1) <= arrMins(criteria2);
         boolean changesPart = changes(criteria1) <= changes(criteria2);
         return depMinsPart && arrMinsPart && changesPart;
@@ -75,10 +78,11 @@ public final class PackedCriteria {
     }
 
     public static long withAdditionalChange(long criteria) {
-        long newChanges = changes(criteria) + 1 ;
+        long newChanges = (changes(criteria) + 1);
 //        Preconditions.checkBitLength(newChanges,NUMBER_OF_BITS_FOR_CHANGES); // would not really be an IllegalArgumentException tho --> need modifications (?)
         long resetedCriteria = Bits32_24_8.bitsErasure(criteria,BIT_INDEX_OF_CHANGES,NUMBER_OF_BITS_FOR_CHANGES);
-        return newChanges << BIT_INDEX_OF_CHANGES | resetedCriteria;
+        int mask = Bits32_24_8.mask(NUMBER_OF_BITS_FOR_CHANGES);
+        return (newChanges & mask) << BIT_INDEX_OF_CHANGES | resetedCriteria;
     }
 
     // should I check if criteria does not have a payload or should I just change it ?

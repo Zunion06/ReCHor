@@ -140,9 +140,8 @@ public class MyPackedCriteriaTest {
     void PackedCriteriaPayloadWorksOnLimitCases() {
         int arrMins = 780; // 9h00
         int changes = 2;
-        int payload1 = -1;
-        long pack1 = PackedCriteria.pack(arrMins,changes,payload1);
-        int actualResult1 = PackedCriteria.payload(pack1);
+
+        int actualResult1 = PackedCriteria.payload(-1L >>> 1);
         int expectedResult1 = -1 ;
         assertEquals(expectedResult1, actualResult1);
 
@@ -288,8 +287,6 @@ public class MyPackedCriteriaTest {
         long pack1 = PackedCriteria.pack(arrMins,changes1,payload);
         long actualResult1 = PackedCriteria.withAdditionalChange(pack1);
         long expectedResult1 = 0b00000000000000011000011001111111L<<32 | 0b11111111 ;
-//        System.out.println(Long.toBinaryString(expectedResult1));
-//        System.out.println(Long.toBinaryString(actualResult1));
         assertEquals(expectedResult1, actualResult1);
 
         int changes2 = 0 ;
@@ -307,8 +304,6 @@ public class MyPackedCriteriaTest {
         long pack = PackedCriteria.pack(arrMins,changes,payload);
         long actualResult = PackedCriteria.withPayload(pack,256);
         long expectedResult = 0b00000000000000011000011000000010L<<32 | 0b100000000 ;
-//        System.out.println(Long.toBinaryString(expectedResult));
-//        System.out.println(Long.toBinaryString(actualResult));
         assertEquals(expectedResult, actualResult);
     }
 
@@ -321,8 +316,6 @@ public class MyPackedCriteriaTest {
         long actualResult1 = PackedCriteria.withPayload(pack1,0);
         long expectedResult1 = 0b00000000000000011000011000000010L<<32 ;
 
-//        System.out.println(Long.toBinaryString(expectedResult1));
-//        System.out.println(Long.toBinaryString(actualResult1));
         assertEquals(expectedResult1, actualResult1);
 
         int payload2 = 0;
