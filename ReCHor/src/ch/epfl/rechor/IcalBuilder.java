@@ -30,13 +30,15 @@ public final class IcalBuilder {
 
         }
 
-        builder.append(name.toString()).append(":").append(value.substring(0,75-name.toString().length())).append(CRLF);
-        value=value.substring(75-name.toString().length());
-        int characterIndex=75-name.toString().length();
-        while(value.length()>75){
-            builder.append(value.substring(0,75)).append(CRLF);
-            value=value.substring(75);
+        builder.append(name.toString()).append(":").append(value.substring(0,74-name.toString().length())).append(CRLF);
+        value=value.substring(74-name.toString().length());
+        int characterIndex=74-name.toString().length();
+        while(value.length()>74){
+            builder.append(value.substring(0,74)).append(CRLF);
+            value=value.substring(74);
         }
+        builder.append(value).append("\n");
+
         return this;
     }
 
