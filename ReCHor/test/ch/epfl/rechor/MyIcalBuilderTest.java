@@ -11,8 +11,11 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 public class MyIcalBuilderTest{
-public static void main(String[] args) {
+public static String testJourney() {
     var s1 = new Stop("Ecublens VD, EPFL", null, 6.566141, 46.522196);
     var s2 = new Stop("Renens VD, gare", null, 6.578519, 46.537619);
     var s3 = new Stop("Renens VD", "4", 6.578935, 46.537042);
@@ -64,7 +67,28 @@ public static void main(String[] args) {
     String icalString = JourneyIcalConverter.toIcalendar(journey);
 
     // 5. Print and check
-    System.out.println(icalString);
+    return(icalString);
 
-}
+    }
+
+    @Test
+    void EqualTest(){
+        String expected = "BEGIN:VCALENDAR\n" +
+                "VERSION:2.0\n" +
+                "PRODID:ReCHor\n" +
+                "BEGIN:VEVENT\n" +
+                "UID:bbff399f-d276-4052-8798-9c2f227353de\n" +
+                "DTSTAMP:20250216T182750\n" +
+                "DTSTART:20250218T161300\n" +
+                "DTEND:20250218T175700\n" +
+                "SUMMARY:Ecublens VD, EPFL → Gruyères\n" +
+                "DESCRIPTION:16h13 Ecublens VD, EPFL → Renens VD, gare (arr. 16h19)\\ntrajet \n" +
+                " à pied (3 min)\\n16h26 Renens VD (voie 4) → Lausanne (arr. 16h33 voie 5)\\nc\n" +
+                " hangement (5 min)\\n16h40 Lausanne (voie 1) → Romont FR (arr. 17h13 voie 2)\n" +
+                " \\nchangement (3 min)\\n17h22 Romont FR (voie 1) → Bulle (arr. 17h41 voie 2)\n" +
+                " \\nchangement (3 min)\\n17h50 Bulle (voie 4) → Gruyères (arr. 17h57 voie 2)\n" +
+                "END:VEVENT\n" +
+                "END:VCALENDAR";
+        assertEquals(testJourney(),expected);
+    }
 }

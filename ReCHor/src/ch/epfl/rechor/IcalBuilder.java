@@ -6,22 +6,37 @@ import java.util.ArrayList;
 import java.util.StringJoiner;
 
 public final class IcalBuilder {
-    StringBuilder builder = new StringBuilder(75);
+    StringBuilder builder = new StringBuilder();
     ArrayList<Component> components = new ArrayList<Component>();
     String CRLF = "\r\n ";
 
     public IcalBuilder add(Name name, String value){
-        if(value.length()>=74-name.toString().length()){
-            StringJoiner joiner = new StringJoiner("");
-            joiner.add(value.substring(0,72-name.toString().length())+CRLF);
-            value=value.substring(72-name.toString().length());
-            for(int i=(72-name.toString().length()); value.length()>75;i+=73){
-                joiner.add(value.substring(0,73)+CRLF);
-                value=value.substring(73);
-            }
-            value=joiner.add(value).toString();
+        //if(value.length()>=75-name.toString().length()){
+        //            StringJoiner joiner = new StringJoiner("");
+        //            joiner.add(value.substring(0,74-name.toString().length())+CRLF);
+        //            value=value.substring(74-name.toString().length());
+        //            for(int i=(74-name.toString().length()); value.length()>75;i+=74){
+        //                joiner.add(value.substring(0,73)+CRLF);
+        //                value=value.substring(73);
+        //            }
+        //            value=joiner.add(value).toString();
+        //        }
+        //        builder.append(name.toString()).append(":").append(value).append("\n");
+        //        return this;
+
+        if(value.length() < 75-name.toString().length()){
+            builder.append(name.toString()).append(":").append(value).append("\n");
+            return this;
+
         }
-        builder.append(name.toString()).append(":").append(value).append("\n");
+
+        builder.append(name.toString()).append(":").append(value.substring(0,75-name.toString().length())).append(CRLF);
+        value=value.substring(75-name.toString().length());
+        int characterIndex=75-name.toString().length();
+        while(value.length()>75){
+            builder.append(value.substring(0,75)).append(CRLF);
+            value=value.substring(75);
+        }
         return this;
     }
 
@@ -33,13 +48,13 @@ public final class IcalBuilder {
 
     public IcalBuilder begin(Component component){
         components.add(component);
-        builder.append("BEGIN:").append(component.toString()).append("\n");
+        builder.append(Name.BEGIN).append(":").append(component.toString()).append("\n");
         return this;
     }
 
     public IcalBuilder end(){
         if(components.isEmpty()){throw new IllegalArgumentException();}
-        builder.append("END:").append(components.getLast().toString()).append("\n");
+        builder.append(Name.END).append(":").append(components.getLast().toString()).append("\n");
         components.removeLast();
         return this;
     }
