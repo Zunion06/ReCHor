@@ -1,6 +1,9 @@
 package ch.epfl.rechor.journey;
 
-import org.testng.annotations.Test;
+//import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -8,7 +11,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-@Test
 public class MyJourneyIcalConverterTest {
     public static String testJourney1() {
         var s1 = new Stop("Ecublens VD, EPFL", null, 6.566141, 46.522196);
@@ -176,7 +178,7 @@ public class MyJourneyIcalConverterTest {
 
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void EqualTest() {
         String expected = "BEGIN:VCALENDAR\n" +
                 "VERSION:2.0\n" +

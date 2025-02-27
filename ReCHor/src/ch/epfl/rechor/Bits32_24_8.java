@@ -34,13 +34,13 @@ public final class Bits32_24_8 {
     public static long bitsErasure(long number, int startIndex, int length) {
         Preconditions.checkArgument(isLegalForLong(startIndex));
         Preconditions.checkArgument(isLegalForLong(startIndex+length));
-        Preconditions.checkArgument(0 < length);
-        long mask = longMask(length - 1) << startIndex;
+//        Preconditions.checkArgument(0 < length);
+        long mask = longMask(length) << startIndex;
         return number & ~mask;
     }
 
-    // is that needed ?
-//    public static int bitsErasure(int number, int startIndex, int length) {
+    // is that needed ? --> Nope (just keeping it as comment, 'cause it does not hurt)
+//ui    public static int bitsErasure(int number, int startIndex, int length) {
 //        Preconditions.checkArgument(isLegalForInt(startIndex));
 //        Preconditions.checkArgument(isLegalForInt(startIndex+length));
 //        Preconditions.checkArgument(0 < length);
