@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.StringJoiner;
 
 public final class IcalBuilder {
-    StringBuilder builder = new StringBuilder();
-    ArrayList<Component> components = new ArrayList<Component>();
-    String CRLF = "\r\n ";
+    private final StringBuilder builder = new StringBuilder();
+    private final ArrayList<Component> components = new ArrayList<Component>();
+    private final String CRLF = "\r\n ";
 
     public IcalBuilder add(Name name, String value){
         //if(value.length()>=75-name.toString().length()){
