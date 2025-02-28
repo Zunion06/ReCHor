@@ -1,4 +1,4 @@
-package ch.epfl.rechor;
+package ch.epfl.rechor.journey;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

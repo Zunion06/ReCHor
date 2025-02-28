@@ -1,8 +1,8 @@
-package ch.epfl.rechor;
+package ch.epfl.rechor.journey;
 
 import org.junit.jupiter.api.Test;
 
-import static ch.epfl.rechor.PackedCriteria.*;
+import static ch.epfl.rechor.journey.PackedCriteria.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MyPackedCriteriaTest {

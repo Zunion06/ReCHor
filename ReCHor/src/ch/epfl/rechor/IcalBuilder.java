@@ -11,22 +11,10 @@ public final class IcalBuilder {
     private final String CRLF = "\r\n ";
 
     public IcalBuilder add(Name name, String value){
-        //if(value.length()>=75-name.toString().length()){
-        //            StringJoiner joiner = new StringJoiner("");
-        //            joiner.add(value.substring(0,74-name.toString().length())+CRLF);
-        //            value=value.substring(74-name.toString().length());
-        //            for(int i=(74-name.toString().length()); value.length()>75;i+=74){
-        //                joiner.add(value.substring(0,73)+CRLF);
-        //                value=value.substring(73);
-        //            }
-        //            value=joiner.add(value).toString();
-        //        }
-        //        builder.append(name.toString()).append(":").append(value).append("\n");
-        //        return this;
 
-        //if the text i
+        //if the text is smaller than 75 characters
         if(value.length() < 75-name.toString().length()){
-            builder.append(name.toString()).append(":").append(value).append("\n");
+            builder.append(name.toString()).append(":").append(value).append("\r\n");
             return this;
 
         }
@@ -38,26 +26,26 @@ public final class IcalBuilder {
             builder.append(value.substring(0,74)).append(CRLF);
             value=value.substring(74);
         }
-        builder.append(value).append("\n");
+        builder.append(value).append("\r\n");
 
         return this;
     }
 
     public IcalBuilder add(Name name, LocalDateTime dateTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
-        builder.append(name.toString()).append(":").append(formatter.format(dateTime)).append("\n");
+        builder.append(name.toString()).append(":").append(formatter.format(dateTime)).append("\r\n");
         return this;
     }
 
     public IcalBuilder begin(Component component){
         components.add(component);
-        builder.append(Name.BEGIN).append(":").append(component.toString()).append("\n");
+        builder.append(Name.BEGIN).append(":").append(component.toString()).append("\r\n");
         return this;
     }
 
     public IcalBuilder end(){
         Preconditions.checkArgument(!components.isEmpty());
-        builder.append(Name.END).append(":").append(components.getLast().toString()).append("\n");
+        builder.append(Name.END).append(":").append(components.getLast().toString()).append("\r\n");
         components.removeLast();
         return this;
     }

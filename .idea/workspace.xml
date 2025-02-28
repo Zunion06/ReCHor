@@ -4,12 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="wht t f">
+    <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="bazinga">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/cs108/Submit.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/cs108/Submit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/cs108/Submit.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/cs108/Submit.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/PackedCriteria.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/PackedCriteria.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedCriteriaTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedCriteriaTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/IcalBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/IcalBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/PackedCriteria.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/PackedCriteria.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/JourneyIcalConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/JourneyIcalConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedCriteria2Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyPackedCriteria2Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedCriteriaTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyPackedCriteriaTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/PackedCriteria.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/journey/JourneyIcalConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/journey/JourneyIcalConverter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedCriteria2Test.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedCriteriaTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +28,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -82,12 +91,17 @@
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="ch.epfl.rechor.journey" />
+    </key>
+  </component>
   <component name="RunManager" selected="JUnit.MyJourneyIcalConverterTest">
     <configuration name="MyIcalBuilderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ReCHor" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ch.epfl.rechor.*" />
+          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -117,12 +131,12 @@
       <module name="ReCHor" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ch.epfl.rechor.*" />
+          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
-      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyPackedCriteria2Test" />
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor.journey" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.journey.MyPackedCriteria2Test" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -132,12 +146,12 @@
       <module name="ReCHor" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ch.epfl.rechor.*" />
+          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
-      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyPackedCriteriaTest" />
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor.journey" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.journey.MyPackedCriteriaTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -147,12 +161,12 @@
       <module name="ReCHor" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ch.epfl.rechor.*" />
+          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
-      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyPackedCriteriaTest" />
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor.journey" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.journey.MyPackedCriteriaTest" />
       <option name="METHOD_NAME" value="testEdgeCases" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -269,7 +283,23 @@
       <option name="project" value="LOCAL" />
       <updated>1740740737401</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="bazinga">
+      <option name="closed" value="true" />
+      <created>1740747526709</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1740747526709</updated>
+    </task>
+    <task id="LOCAL-00012" summary="bazinga">
+      <option name="closed" value="true" />
+      <created>1740747701581</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1740747701581</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -286,6 +316,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="iohjoih" />
     <MESSAGE value="wht t f" />
-    <option name="LAST_COMMIT_MESSAGE" value="wht t f" />
+    <MESSAGE value="bazinga" />
+    <option name="LAST_COMMIT_MESSAGE" value="bazinga" />
   </component>
 </project>

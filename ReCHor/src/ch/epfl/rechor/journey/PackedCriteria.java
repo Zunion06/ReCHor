@@ -1,4 +1,7 @@
-package ch.epfl.rechor;
+package ch.epfl.rechor.journey;
+
+import ch.epfl.rechor.Bits32_24_8;
+import ch.epfl.rechor.Preconditions;
 
 // should it be final ?
 public final class PackedCriteria {
@@ -24,6 +27,7 @@ public final class PackedCriteria {
 
     public static boolean hasDepMins(long criteria) {
         long mask = Bits32_24_8.longMask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
+        System.out.println(mask);
         return (criteria & mask) != 0;
     }
 

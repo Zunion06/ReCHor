@@ -14,7 +14,6 @@ import static ch.epfl.rechor.IcalBuilder.Name.*;
 public class JourneyIcalConverter {
     private JourneyIcalConverter(){}
 
-    //doit être static?
     public static String toIcalendar(Journey journey){
         IcalBuilder builder = new IcalBuilder();
 
