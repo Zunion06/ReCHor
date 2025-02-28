@@ -4,20 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="bazinga">
+    <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="part 3">
+      <change afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/ParetoFront.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/IcalBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/IcalBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/PackedCriteria.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/PackedCriteria.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/JourneyIcalConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/journey/JourneyIcalConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedCriteria2Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyPackedCriteria2Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedCriteriaTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyPackedCriteriaTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/timetable/TimeTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/timetable/TimeTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder$Component.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder$Component.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder$Name.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder$Name.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/PackedCriteria.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/journey/JourneyIcalConverter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/journey/JourneyIcalConverter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedCriteria2Test.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedCriteriaTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +20,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -61,6 +54,7 @@
   "keyToString": {
     "Application.MyIcalBuilderTest.executor": "Run",
     "Application.MyJourneyIcalConverterTest.executor": "Run",
+    "Application.Submit.executor": "Run",
     "Downloaded.Files.Path.Enabled": "false",
     "JUnit.FormatterFrTest.executor": "Run",
     "JUnit.JourneyTest.executor": "Run",
@@ -96,18 +90,16 @@
       <recent name="ch.epfl.rechor.journey" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.MyJourneyIcalConverterTest">
-    <configuration name="MyIcalBuilderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Application.Submit">
+    <configuration name="Submit" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.cs108.Submit" />
       <module name="ReCHor" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
+          <option name="PATTERN" value="ch.epfl.cs108.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
-      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyIcalBuilderTest" />
-      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -157,18 +149,17 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MyPackedCriteriaTest.testEdgeCases" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="MyPackedRangeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ReCHor" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
+          <option name="PATTERN" value="ch.epfl.rechor.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="ch.epfl.rechor.journey" />
-      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.journey.MyPackedCriteriaTest" />
-      <option name="METHOD_NAME" value="testEdgeCases" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyPackedRangeTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -186,11 +177,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Submit" />
+        <item itemvalue="JUnit.MyPackedRangeTest" />
         <item itemvalue="JUnit.MyJourneyIcalConverterTest" />
         <item itemvalue="JUnit.MyPackedCriteriaTest" />
         <item itemvalue="JUnit.MyPackedCriteria2Test" />
-        <item itemvalue="JUnit.MyIcalBuilderTest" />
-        <item itemvalue="JUnit.MyPackedCriteriaTest.testEdgeCases" />
       </list>
     </recent_temporary>
   </component>
@@ -299,7 +290,23 @@
       <option name="project" value="LOCAL" />
       <updated>1740747701581</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="part 3 + tweaks to IcalBuilder">
+      <option name="closed" value="true" />
+      <created>1740752002712</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1740752002712</updated>
+    </task>
+    <task id="LOCAL-00014" summary="part 3">
+      <option name="closed" value="true" />
+      <created>1740752078133</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1740752078133</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -317,6 +324,8 @@
     <MESSAGE value="iohjoih" />
     <MESSAGE value="wht t f" />
     <MESSAGE value="bazinga" />
-    <option name="LAST_COMMIT_MESSAGE" value="bazinga" />
+    <MESSAGE value="part 3 + tweaks to IcalBuilder" />
+    <MESSAGE value="part 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="part 3" />
   </component>
 </project>

@@ -85,7 +85,7 @@ public final class PackedCriteria {
     // should I check if criteria does not have a depMins or should I just change it ?
     public static long withDepMins(long criteria, int depMins1) {
 //        Preconditions.checkArgument(!hasDepMins(criteria));
-        Preconditions.checkArgument(-240<=depMins1 && depMins1 < 2880);
+//        Preconditions.checkArgument(-240<=depMins1 && depMins1 < 2880);
 //        Preconditions.checkArgument(depMins1 <= arrMins(criteria)); // should it be done ? it was not specified
                 // and should it be " <= " or just " < " ?
         long resetedCriteria = Bits32_24_8.bitsErasure(criteria, BIT_INDEX_OF_DEPARTURE_TIME,NUMBER_OF_BITS_FOR_TIMES);
