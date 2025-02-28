@@ -131,7 +131,8 @@ public class MyPackedCriteria2Test {
         // = arrival, changes, payload
         long criteria9 = PackedCriteria.withDepMins(criteria7, 300); // Departure: 300
         long criteria10 = PackedCriteria.withDepMins(criteria7, 400); // Departure: 400
-        assertTrue(PackedCriteria.dominatesOrIsEqual(criteria9, criteria10));
+
+        assertTrue(PackedCriteria.dominatesOrIsEqual(criteria9, criteria10)); //<--- ce truc n'est pas sensé etre true car on prefere partir plus tard
     }
     @Test
     public void testWithoutDepMins() {

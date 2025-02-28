@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MyPackedCriteriaTest {
     @Test
     void PackedCriteriaPackWorksOnNonTrivialCase() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         long actualResult = pack(arrMins,changes,0);
         long expectedResult = 0b00000000000000011000011000000010L << 32;
@@ -17,21 +17,41 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaPackWorksOnLimitCase() {
-        int arrMins = (1 << 12) - 1 ;
+        int arrMins = 2879 ;
         int changes = (1 << 7) - 1;
         int payload = -1 ;
         long actualResult = pack(arrMins,changes,payload);
-        long expectedResult = (1L << 51) - 1;
+        long expectedResult = 0b110000101111111111111111111111111111111111111111111L;
+//        System.out.println(Integer.toBinaryString(2880));
+//        System.out.println(Long.toBinaryString(expectedResult));
+//        System.out.println(Long.toBinaryString(actualResult));
+        assertEquals(expectedResult, actualResult);
+
+        arrMins = -240 ;
+        changes = 0;
+        payload = 0 ;
+        actualResult = pack(arrMins,changes,payload);
+        expectedResult = 0;
         assertEquals(expectedResult, actualResult);
     }
 
     @Test
     void PackedCriteriaThrowsWhenArrMinsIsTooBig() {
-        int arrMins = 1 << 12;
+        int arrMins = 2880;
         int changes = (1 << 7) - 1;
         int payload = -1 ;
         assertThrows(IllegalArgumentException.class, () ->
             pack(arrMins,changes,payload)
+        );
+    }
+
+    @Test
+    void PackedCriteriaThrowsWhenArrMinsIsTooLOW() {
+        int arrMins = -241;
+        int changes = (1 << 7) - 1;
+        int payload = -1 ;
+        assertThrows(IllegalArgumentException.class, () ->
+                pack(arrMins,changes,payload)
         );
     }
 
@@ -55,8 +75,8 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaDepMinsWorksOnNonTrivialCase() {
-        int depMins = 720; // 8h00
-        int arrMins = 780; // 9h00
+        int depMins = 480; // 8h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         int payload = 255;
         long pack = PackedCriteria.withDepMins(pack(arrMins,changes,payload),depMins);
@@ -67,13 +87,13 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaDepMinsWorksOnLimitCase() {
-        int depMins = 4094;
-        int arrMins = 4095;
+        int depMins = 2879;
+        int arrMins = 2879;
         int changes = 2;
         int payload = 255;
         long pack = PackedCriteria.withDepMins(pack(arrMins,changes,payload),depMins);
         int actualResult = PackedCriteria.depMins(pack);
-        int expectedResult = 4094 - 240 ;
+        int expectedResult = 2879 ;
         assertEquals(expectedResult, actualResult);
     }
 
@@ -89,7 +109,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaArrMinsWorks() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         int payload = 255;
         long pack = pack(arrMins,changes,payload);
@@ -100,7 +120,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaChangesWorksOnNonTrivialCase() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         int payload = 255;
         long pack = pack(arrMins,changes,payload);
@@ -111,7 +131,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaChangesWorksOnLimitCases() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes1 = (1 << 7) - 1 ;
         int payload = 255;
         long pack1 = pack(arrMins,changes1,payload);
@@ -128,7 +148,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaPayloadWorksOnNonTrivialCase() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         int payload = 255;
         long pack = pack(arrMins,changes,payload);
@@ -139,7 +159,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaPayloadWorksOnLimitCases() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes = 2;
 
         int actualResult1 = PackedCriteria.payload(-1L >>> 1);
@@ -156,13 +176,13 @@ public class MyPackedCriteriaTest {
     @Test
     void PackedCriteriaDominatesOrIsEqualWorks1() {
         int depMins1 = 725; // 8h05
-        int arrMins1 = 780; // 9h00
+        int arrMins1 = 540; // 9h00
         int changes1 = 2;
         int payload1 = 255;
         long pack1 = PackedCriteria.withDepMins(pack(arrMins1,changes1,payload1),depMins1);
 
-        int depMins2 = 720; // 8h00
-        int arrMins2 = 780; // 9h00
+        int depMins2 = 480; // 8h00
+        int arrMins2 = 540; // 9h00
         int changes2 = 2;
         int payload2 = 255;
         long pack2 = PackedCriteria.withDepMins(pack(arrMins2,changes2,payload2),depMins2);
@@ -174,14 +194,14 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaDominatesOrIsEqualWorks2() {
-        int depMins1 = 725; // 8h05
-        int arrMins1 = 780; // 9h00
+        int depMins1 = 725 -240 ; // 8h05
+        int arrMins1 = 540; // 9h00
         int changes1 = 2;
         int payload1 = 255;
         long pack1 = PackedCriteria.withDepMins(pack(arrMins1,changes1,payload1),depMins1);
 
-        int depMins2 = 720; // 8h00
-        int arrMins2 = 775; // 8h55
+        int depMins2 = 480; // 8h00
+        int arrMins2 = 775-240; // 8h55
         int changes2 = 2;
         int payload2 = 255;
         long pack2 = PackedCriteria.withDepMins(pack(arrMins2,changes2,payload2),depMins2);
@@ -199,8 +219,8 @@ public class MyPackedCriteriaTest {
         int payload1 = 255;
         long pack1 = PackedCriteria.withDepMins(pack(arrMins1,changes1,payload1),depMins1);
 
-        int depMins2 = 720; // 8h00
-        int arrMins2 = 780; // 9h00
+        int depMins2 = 480; // 8h00
+        int arrMins2 = 540; // 9h00
         int changes2 = 2;
         int payload2 = 255;
         long pack2 = PackedCriteria.withDepMins(pack(arrMins2,changes2,payload2),depMins2);
@@ -213,12 +233,12 @@ public class MyPackedCriteriaTest {
     @Test
     void PackedCriteriaDominatesOrIsEqualThrowsWhenNoDepartureTime() {
         int depMins1 = 725; // 8h05
-        int arrMins1 = 780; // 9h00
+        int arrMins1 = 540; // 9h00
         int changes1 = 2;
         int payload1 = 255;
         long pack1 = PackedCriteria.withDepMins(pack(arrMins1,changes1,payload1),depMins1);
 
-        int arrMins2 = 780; // 9h00
+        int arrMins2 = 540; // 9h00
         int changes2 = 2;
         int payload2 = 255;
         long pack2 = pack(arrMins2,changes2,payload2);
@@ -233,8 +253,8 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaWithDepMinsWorksOnNonTrivialCase() {
-        int depMins = 720; // 8h00
-        int arrMins = 780; // 9h00
+        int depMins = 480; // 8h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         int payload = 255;
         long actualResult = PackedCriteria.withDepMins(pack(arrMins,changes,payload),depMins);
@@ -244,16 +264,17 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaWithDepMinsWorksOnLimitCase() {
-        int depMins1 = (1 << 12) - 1 ;
-        int arrMins1 = (1 << 12) - 1 ;
+        int depMins1 = 2879 ;
+        int arrMins1 = 2879 ;
         int changes = 2;
         int payload = 255;
         long actualResult1 = PackedCriteria.withDepMins(pack(arrMins1,changes,payload),depMins1);
-        long expectedResult1 = 0b00000000000001111111111110000010L<<32 | 0b11111111 ;
+//        System.out.println(Integer.toBinaryString(4095-0b110000101111));
+        long expectedResult1 = 0b00011110100001100001011110000010L<<32 | 0b11111111 ;
         assertEquals(expectedResult1, actualResult1);
 
-        int depMins2 = 0 ;
-        int arrMins2 = 0 ;
+        int depMins2 = -240 ;
+        int arrMins2 = -240 ;
         long actualResult2 = PackedCriteria.withDepMins(pack(arrMins2,changes,payload),depMins2);
         long expectedResult2 = 0b01111111111110000000000000000010L<<32 | 0b11111111 ;
         assertEquals(expectedResult2, actualResult2);
@@ -271,7 +292,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaWithAdditionalChangeWorksOnNonTrivialCase() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         int payload = 255;
         long pack = pack(arrMins,changes,payload);
@@ -282,7 +303,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaWithAdditionalChangeWorksOnLimitCases() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes1 = (1 << 7) - 2 ;
         int payload = 255;
         long pack1 = pack(arrMins,changes1,payload);
@@ -299,7 +320,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaWithPayloadWorksOnNonTrivialCase() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         int payload = 255;
         long pack = pack(arrMins,changes,payload);
@@ -310,7 +331,7 @@ public class MyPackedCriteriaTest {
 
     @Test
     void PackedCriteriaWithPayloadWorksOnLimitCases() {
-        int arrMins = 780; // 9h00
+        int arrMins = 540; // 9h00
         int changes = 2;
         int payload1 = -1;
         long pack1 = pack(arrMins,changes,payload1);
