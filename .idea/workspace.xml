@@ -5,26 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0077df29-db6c-476f-84a0-6299a7ebb804" name="Changes" comment="wht t f">
-      <change afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedCriteria2Test.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/Bits32_24_8.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/Bits32_24_8.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/IcalBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/IcalBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/PackedCriteria.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/rechor/PackedCriteria.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyBits32_24_8Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyBits32_24_8Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyIcalBuilderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyIcalBuilderTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedCriteriaTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedCriteriaTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedRangeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/MyPackedRangeTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/test/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/Bits32_24_8.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/Bits32_24_8.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder$Component.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder$Component.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder$Name.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder$Name.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/IcalBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReCHor/src/ch/epfl/cs108/Submit.java" beforeDir="false" afterPath="$PROJECT_DIR$/ReCHor/src/ch/epfl/cs108/Submit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/cs108/Submit.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/cs108/Submit.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/PackedCriteria.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/ReCHor/ch/epfl/rechor/PackedCriteria.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyBits32_24_8Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyBits32_24_8Test.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyIcalBuilderTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyIcalBuilderTest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedCriteriaTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedCriteriaTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedRangeTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/MyPackedRangeTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/ReCHor/ch/epfl/rechor/journey/MyJourneyIcalConverterTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +82,7 @@
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.MyIcalBuilderTest">
+  <component name="RunManager" selected="JUnit.MyJourneyIcalConverterTest">
     <configuration name="MyIcalBuilderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ReCHor" />
       <extension name="coverage">
@@ -108,6 +93,21 @@
       </extension>
       <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
       <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyIcalBuilderTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyJourneyIcalConverterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ReCHor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ch.epfl.rechor.journey.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor.journey" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.journey.MyJourneyIcalConverterTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -159,22 +159,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MyPackedCriteriaTest.testPack" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ReCHor" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ch.epfl.rechor.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
-      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyPackedCriteriaTest" />
-      <option name="METHOD_NAME" value="testPack" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Test" type="JUnit" factoryName="JUnit">
       <module name="ReCHor" />
       <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
@@ -188,11 +172,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.MyIcalBuilderTest" />
-        <item itemvalue="JUnit.MyPackedCriteria2Test" />
-        <item itemvalue="JUnit.MyPackedCriteriaTest.testEdgeCases" />
-        <item itemvalue="JUnit.MyPackedCriteriaTest.testPack" />
+        <item itemvalue="JUnit.MyJourneyIcalConverterTest" />
         <item itemvalue="JUnit.MyPackedCriteriaTest" />
+        <item itemvalue="JUnit.MyPackedCriteria2Test" />
+        <item itemvalue="JUnit.MyIcalBuilderTest" />
+        <item itemvalue="JUnit.MyPackedCriteriaTest.testEdgeCases" />
       </list>
     </recent_temporary>
   </component>
@@ -269,7 +253,23 @@
       <option name="project" value="LOCAL" />
       <updated>1740679669053</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="wht t f">
+      <option name="closed" value="true" />
+      <created>1740740452074</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1740740452074</updated>
+    </task>
+    <task id="LOCAL-00010" summary="wht t f">
+      <option name="closed" value="true" />
+      <created>1740740737401</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1740740737401</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
