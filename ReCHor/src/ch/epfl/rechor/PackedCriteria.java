@@ -13,10 +13,10 @@ public final class PackedCriteria {
     private PackedCriteria() {}
 
     public static long pack(int arrMins, int changes, int payload) {
-        Preconditions.checkBitLength(arrMins,NUMBER_OF_BITS_FOR_TIMES);
+        Preconditions.checkBitLength(arrMins+240,NUMBER_OF_BITS_FOR_TIMES);
         Preconditions.checkBitLength(changes,NUMBER_OF_BITS_FOR_CHANGES);
         // No need to check "payload" as it is an int, therefore it has a maximum of 32 bits
-        long arrMinsLong = Integer.toUnsignedLong(arrMins);
+        long arrMinsLong = Integer.toUnsignedLong(arrMins+240);
         long changesLong = Integer.toUnsignedLong(changes);
         long payloadLong = Integer.toUnsignedLong(payload);
         return arrMinsLong << BIT_INDEX_OF_ARRIVING_TIME | changesLong << BIT_INDEX_OF_CHANGES | payloadLong;
@@ -69,11 +69,11 @@ public final class PackedCriteria {
     // should I check if criteria does not have a depMins or should I just change it ?
     public static long withDepMins(long criteria, int depMins1) {
 //        Preconditions.checkArgument(!hasDepMins(criteria));
-        Preconditions.checkBitLength(depMins1,NUMBER_OF_BITS_FOR_TIMES);
+        Preconditions.checkBitLength(depMins1+240,NUMBER_OF_BITS_FOR_TIMES);
 //        Preconditions.checkArgument(depMins1 <= arrMins(criteria)); // should it be done ? it was not specified
                 // and should it be " <= " or just " < " ?
         long resetedCriteria = Bits32_24_8.bitsErasure(criteria, BIT_INDEX_OF_DEPARTURE_TIME,NUMBER_OF_BITS_FOR_TIMES);
-        long depMinsComp = 4095 - depMins1;
+        long depMinsComp = 4095 - depMins1 -240;
         return depMinsComp << BIT_INDEX_OF_DEPARTURE_TIME | resetedCriteria;
     }
 

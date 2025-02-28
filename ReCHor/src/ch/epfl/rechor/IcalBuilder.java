@@ -24,6 +24,7 @@ public final class IcalBuilder {
         //        builder.append(name.toString()).append(":").append(value).append("\n");
         //        return this;
 
+        //if the text i
         if(value.length() < 75-name.toString().length()){
             builder.append(name.toString()).append(":").append(value).append("\n");
             return this;
@@ -55,14 +56,14 @@ public final class IcalBuilder {
     }
 
     public IcalBuilder end(){
-        if(components.isEmpty()){throw new IllegalArgumentException();}
+        Preconditions.checkArgument(!components.isEmpty());
         builder.append(Name.END).append(":").append(components.getLast().toString()).append("\n");
         components.removeLast();
         return this;
     }
 
     public String build(){
-        if(!components.isEmpty()){throw new IllegalArgumentException();}
+        Preconditions.checkArgument(components.isEmpty());
         return builder.toString();
     }
 

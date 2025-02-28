@@ -55,4 +55,5 @@ public final class Bits32_24_8 {
     private static boolean isLegalForInt(int index) {
         return 0 <= index && index <= Integer.SIZE;
     }
+
 }
