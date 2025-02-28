@@ -1,16 +1,8 @@
 package ch.epfl.rechor;
 
-import ch.epfl.rechor.journey.Journey;
-import ch.epfl.rechor.journey.JourneyIcalConverter;
-import ch.epfl.rechor.journey.Stop;
-import ch.epfl.rechor.journey.Vehicle;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 

@@ -97,7 +97,22 @@
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
-  <component name="RunManager" selected="JUnit.MyPackedCriteria2Test">
+  <component name="RunManager" selected="JUnit.MyIcalBuilderTest">
+    <configuration name="MyIcalBuilderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ReCHor" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ch.epfl.rechor.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
+      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyIcalBuilderTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="MyPackedCriteria2Test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ReCHor" />
       <extension name="coverage">
@@ -109,22 +124,6 @@
       <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
       <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyPackedCriteria2Test" />
       <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="MyPackedCriteria2Test.testPack" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ReCHor" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ch.epfl.rechor.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ch.epfl.rechor" />
-      <option name="MAIN_CLASS_NAME" value="ch.epfl.rechor.MyPackedCriteria2Test" />
-      <option name="METHOD_NAME" value="testPack" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -189,11 +188,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.MyIcalBuilderTest" />
         <item itemvalue="JUnit.MyPackedCriteria2Test" />
         <item itemvalue="JUnit.MyPackedCriteriaTest.testEdgeCases" />
         <item itemvalue="JUnit.MyPackedCriteriaTest.testPack" />
         <item itemvalue="JUnit.MyPackedCriteriaTest" />
-        <item itemvalue="JUnit.MyPackedCriteria2Test.testPack" />
       </list>
     </recent_temporary>
   </component>
