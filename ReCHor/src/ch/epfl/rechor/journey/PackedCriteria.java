@@ -56,25 +56,12 @@ public final class PackedCriteria {
 //        Preconditions.checkArgument((criteria1 | criteria2) >>> 63 == 0); // test if the last bits are 0 as it should
         Preconditions.checkArgument(hasDepMins(criteria1) == hasDepMins(criteria2));
 
-        // because it is not assured that the 64th bit is 0
-        long mask = Bits32_24_8.longMask(63);
-
-        boolean depMinsPart = (criteria1 & mask) <= (criteria2 & mask); //works because the departure hour is on the most significant bits
-        boolean arrMinsPart = arrMins(criteria1) <= arrMins(criteria2);
-        boolean changesPart = changes(criteria1) <= changes(criteria2);
-
-//        System.out.println(Long.toBinaryString(criteria1));
-//        System.out.println(Long.toBinaryString(criteria2));
-//        System.out.println(0b110111100011);
-//        System.out.println(0b110101111111);
-//        System.out.println(depMins(criteria1));
-//        System.out.println(depMins(criteria2));
-//        System.out.println(depMinsPart);
-//        System.out.println(arrMinsPart);
-//        System.out.println(changesPart);
-
-
-        return depMinsPart && arrMinsPart && changesPart;
+        return hasDepMins(criteria1) ?
+                depMins(criteria1) >= depMins(criteria2)
+                        && arrMins(criteria1) <= arrMins(criteria2)
+                        && changes(criteria1) <= changes(criteria2) :
+                arrMins(criteria1) <= arrMins(criteria2)
+                        && changes(criteria1) <= changes(criteria2);
     }
 
     public static long withoutDepMins(long criteria) {
