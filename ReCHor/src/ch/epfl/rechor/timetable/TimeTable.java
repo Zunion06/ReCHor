@@ -27,7 +27,7 @@ public interface TimeTable {
 
     // Returns true if the given stop index is a station (not a platform).
     default boolean isStationId(int stopId){
-        return false;//might need to be changed
+        return false;
     }
 
     // Returns true if the given stop index is a platform (not a station).

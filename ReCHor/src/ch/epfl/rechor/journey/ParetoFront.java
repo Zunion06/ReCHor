@@ -32,7 +32,9 @@ public class ParetoFront {
 
     // Calls the given LongConsumer action for each criterion in the Pareto front, in order.
     public void forEach(LongConsumer action){
-        //????????
+        for(int i=0;i<tupleTable.length;i++){
+            action.accept(tupleTable[i]);
+        }
     }
 
     public String toString(){
