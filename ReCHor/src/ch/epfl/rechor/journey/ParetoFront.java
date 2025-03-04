@@ -22,9 +22,9 @@ public class ParetoFront {
 
     // Returns the packed optimization criteria for the given arrival time and changes, or throws NoSuchElementException if not found.
     public long get(int arrMins, int changes){
-        for(int i=0;i<tupleTable.length;i++){
-            if((arrMins(tupleTable[i])==arrMins)&&(changes(tupleTable[i])==changes)){
-                return tupleTable[i];
+        for (long tuple : tupleTable) {
+            if ((arrMins(tuple) == arrMins) && (changes(tuple) == changes)) {
+                return tuple;
             }
         }
         throw new NoSuchElementException();
@@ -32,15 +32,15 @@ public class ParetoFront {
 
     // Calls the given LongConsumer action for each criterion in the Pareto front, in order.
     public void forEach(LongConsumer action){
-        for(int i=0;i<tupleTable.length;i++){
-            action.accept(tupleTable[i]);
+        for (long tuple : tupleTable) {
+            action.accept(tuple);
         }
     }
 
     public String toString(){
         StringBuilder builder = new StringBuilder();
-        for(int i=0;i<tupleTable.length;i++){
-            builder.append(tupleTable[i]).append("\n");
+        for (long tuple : tupleTable) {
+            builder.append(tuple).append("\n");
         }
         return builder.toString();
     }
