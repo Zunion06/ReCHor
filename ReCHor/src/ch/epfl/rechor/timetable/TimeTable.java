@@ -27,21 +27,29 @@ public interface TimeTable {
 
     // Returns true if the given stop index is a station (not a platform).
     default boolean isStationId(int stopId){
-        return false;
+        return (stopId < stations().size());
     }
 
     // Returns true if the given stop index is a platform (not a station).
     default boolean isPlatformId(int stopId){
-        return false;//might need to be changed
+        return !isStationId(stopId);
     }
 
     // Returns the station index of the given stop (same if the stop is a station).
     default int stationId(int stopId){
-        return -1;//might need to be changed
+        if(isStationId(stopId)){
+            return stopId;
+        }
+        else{
+            return stopId-stations().size();
+        }
     }
 
     // Returns the platform name of the given stop, or null if it is a station.
     default String platformName(int stopId){
-        return null;//might need to be changed
+        if(isPlatformId(stopId)){
+            return platforms().name(stationId(stopId));
+        }
+        return null;
     }
 }
