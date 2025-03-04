@@ -40,7 +40,16 @@ public class ParetoFront {
     public String toString(){
         StringBuilder builder = new StringBuilder();
         for (long tuple : tupleTable) {
-            builder.append(tuple).append("\n");
+            builder.append('(');
+            if (PackedCriteria.hasDepMins(tuple)) {
+                builder.append(PackedCriteria.depMins(tuple))
+                        .append(',');
+            }
+            builder.append(PackedCriteria.arrMins(tuple))
+                    .append(',')
+                    .append(PackedCriteria.changes(tuple))
+                    .append(')')
+                    .append('\n');
         }
         return builder.toString();
     }
