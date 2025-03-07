@@ -14,7 +14,7 @@ public interface TimeTable {
     abstract Platforms platforms();
 
     // Returns the indexed routes of the timetable.
-    //abstract Routes routes();
+    abstract Routes routes();
 
     // Returns the indexed transfers of the timetable.
     abstract Transfers transfers();
