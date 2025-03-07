@@ -79,9 +79,11 @@ public class GhaliParetoBuildTest {
         assertFalse(builder1.fullyDominates(builder2, 0));
         assertFalse(builder2.fullyDominates(builder1, 0));
 
-        builder1.clear().add(480, 1, 0);
+        builder1.clear().add(0,480, 1, 0);
         builder2.clear().add(482, 2, 0);
         assertTrue(builder1.fullyDominates(builder2, 0));
+
+        assertTrue(builder1.clear().fullyDominates(builder2.clear(),0));
     }
 
     @Test

@@ -56,8 +56,8 @@ public final class PackedCriteria {
 //        Preconditions.checkArgument((criteria1 | criteria2) >>> 63 == 0); // test if the last bits are 0 as it should
         Preconditions.checkArgument(hasDepMins(criteria1) == hasDepMins(criteria2));
 
-        System.out.println(arrMins(criteria1) <= arrMins(criteria2)
-                && changes(criteria1) <= changes(criteria2));
+//        System.out.println(arrMins(criteria1) <= arrMins(criteria2)
+//                && changes(criteria1) <= changes(criteria2));
         return hasDepMins(criteria1) ?
                 depMins(criteria1) >= depMins(criteria2)
                         && arrMins(criteria1) <= arrMins(criteria2)
@@ -96,7 +96,7 @@ public final class PackedCriteria {
         return resetedCriteria | Integer.toUnsignedLong(payload1);
     }
 
-    public String packToString(long criteria) {
+    public static String packToString(long criteria) {
         StringBuilder builder = new StringBuilder();
         builder.append('(');
         if (hasDepMins(criteria)) {

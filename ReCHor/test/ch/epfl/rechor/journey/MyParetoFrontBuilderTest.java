@@ -31,10 +31,15 @@ public class MyParetoFrontBuilderTest {
         long[] step6 = {tuple1,tuple3,tuple4,tuple5};
 
         assertArrayEquals(step1,builder.add(tuple1).build().toArray());
+//        System.out.println(1);
         assertArrayEquals(step2,builder.add(tuple2).build().toArray());
+//        System.out.println(2);
         assertArrayEquals(step3,builder.add(tuple6).build().toArray());
+//        System.out.println(3);
         assertArrayEquals(step4,builder.add(tuple3).build().toArray());
+//        System.out.println(4);
         assertArrayEquals(step5,builder.add(tuple4).build().toArray());
+//        System.out.println(5);
         assertArrayEquals(step6,builder.add(tuple5).build().toArray());
     }
 

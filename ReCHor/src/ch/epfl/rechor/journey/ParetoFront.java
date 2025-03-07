@@ -92,10 +92,10 @@ public class ParetoFront {
             int placementIndex = 0;
             for (int i=0;i<size;i++){
                 if (dominatesOrIsEqual(tupleTable[i],packedTuple)){
-                    System.out.println("loul");
-                    System.out.println(arrMins(packedTuple)+" "+arrMins(tupleTable[i]));
-                    System.out.println(changes(packedTuple)+" "+changes(tupleTable[i]));
-                    System.out.println(dominatesOrIsEqual(tupleTable[i],packedTuple));
+//                    System.out.println("loul");
+//                    System.out.println(arrMins(packedTuple)+" "+arrMins(tupleTable[i]));
+//                    System.out.println(changes(packedTuple)+" "+changes(tupleTable[i]));
+//                    System.out.println(dominatesOrIsEqual(tupleTable[i],packedTuple));
                     return this;
                 }
                 if (packedTuple < tupleTable[i]){
@@ -124,7 +124,10 @@ public class ParetoFront {
         private int reordering(int startIndex,long packedTuple){
             int dst = startIndex;
             for (int src = startIndex; src < size; src += 1) {
-                if (dominatesOrIsEqual(packedTuple,tupleTable[src])) continue;
+                if (dominatesOrIsEqual(packedTuple,tupleTable[src])) {
+                    System.out.println("loul");
+                    continue;
+                }
                 if (dst != src) tupleTable[dst] = tupleTable[src];
                 dst += 1;
             }
@@ -151,12 +154,13 @@ public class ParetoFront {
 
         // pas terrible le code --> à refaire mieux
         public boolean fullyDominates(Builder that, int depMins){
+            if (size==that.size && size==0) return true;
             boolean domination;
-            for (long thisTuple : tupleTable) {
+            for (int j=0; j<size; j++) {
                 domination = true;
                 for (int i=0; i<that.size && domination;i++ ) {
-//                    System.out.println(packToString());
-                    if (!dominatesOrIsEqual(thisTuple, withDepMins(that.tupleTable[i],depMins))) {
+//                    System.out.println(packToString(tupleTable[j])+" "+packToString(withDepMins(that.tupleTable[i],depMins)));
+                    if (!dominatesOrIsEqual(tupleTable[j], withDepMins(that.tupleTable[i],depMins))) {
                         domination = false;
                     }
                 }
