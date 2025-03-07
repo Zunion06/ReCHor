@@ -7,9 +7,8 @@ import java.util.function.LongConsumer;
 import static ch.epfl.rechor.journey.PackedCriteria.*;
 
 public class ParetoFront {
-    private final long[] tupleTable;
+    public final long[] tupleTable;
     public static final ParetoFront EMPTY = new ParetoFront(new long[0]);
-    private int size;
 
     private ParetoFront(long[] tupleTable){
         this.tupleTable=tupleTable;
@@ -17,7 +16,7 @@ public class ParetoFront {
 
     // Returns the size of the Pareto front (number of optimization tuples).
     public int size(){
-        return size;
+        return tupleTable.length;
     }
 
     // Returns the packed optimization criteria for the given arrival time and changes, or throws NoSuchElementException if not found.
@@ -41,21 +40,23 @@ public class ParetoFront {
         StringBuilder builder = new StringBuilder();
         for (long tuple : tupleTable) {
             builder.append('(');
-            if (PackedCriteria.hasDepMins(tuple)) {
-                int depMins = PackedCriteria.depMins(tuple);
+            if (hasDepMins(tuple)) {
+                int depMins = depMins(tuple);
                 builder.append(depMins/60)
                         .append('h')
                         .append(depMins%60)
                         .append(',');
             }
-            int arrMins = PackedCriteria.arrMins(tuple);
+            int arrMins = arrMins(tuple);
             builder.append(arrMins/60)
                     .append('h')
                     .append(arrMins%60)
                     .append(',')
-                    .append(PackedCriteria.changes(tuple))
+                    .append(changes(tuple))
                     .append(')')
                     .append('\n');
+
+            builder.append(payload(tuple));
         }
         return builder.toString();
     }
@@ -86,7 +87,7 @@ public class ParetoFront {
         public Builder add(long packedTuple){
             int placementIndex = 0;
             for (int i=0;i<size;i++){
-                if (PackedCriteria.dominatesOrIsEqual(tupleTable[i],packedTuple)){
+                if (dominatesOrIsEqual(tupleTable[i],packedTuple)){
                     return this;
                 }
                 if ((packedTuple>>>32) < (tupleTable[i]>>>32)){
@@ -115,7 +116,7 @@ public class ParetoFront {
         private int reordering(int startIndex,long packedTuple){
             int dst = startIndex;
             for (int src = startIndex; src < size; src += 1) {
-                if (PackedCriteria.dominatesOrIsEqual(packedTuple,tupleTable[src])) continue;
+                if (dominatesOrIsEqual(packedTuple,tupleTable[src])) continue;
                 if (dst != src) tupleTable[dst] = tupleTable[src];
                 dst += 1;
             }
@@ -140,7 +141,7 @@ public class ParetoFront {
             for (long thisTuple : tupleTable) {
                 domination = true;
                 for (long thatTuple : that.tupleTable ) {
-                    if (!PackedCriteria.dominatesOrIsEqual(thisTuple, PackedCriteria.withDepMins(thatTuple,depMins))) {
+                    if (!dominatesOrIsEqual(thisTuple, withDepMins(thatTuple,depMins))) {
                         domination = false;
                     }
                 }
