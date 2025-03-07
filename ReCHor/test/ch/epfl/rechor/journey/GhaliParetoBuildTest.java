@@ -1,5 +1,5 @@
 
-package ch.epfl.rechor.my_journey;
+package ch.epfl.rechor.journey;
 
 import ch.epfl.rechor.journey.PackedCriteria;
 import ch.epfl.rechor.journey.ParetoFront;
