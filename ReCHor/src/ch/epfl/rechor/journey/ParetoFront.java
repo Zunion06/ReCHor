@@ -125,7 +125,7 @@ public class ParetoFront {
             int dst = startIndex;
             for (int src = startIndex; src < size; src += 1) {
                 if (dominatesOrIsEqual(packedTuple,tupleTable[src])) {
-                    System.out.println("loul");
+                    //System.out.println("loul");
                     continue;
                 }
                 if (dst != src) tupleTable[dst] = tupleTable[src];
