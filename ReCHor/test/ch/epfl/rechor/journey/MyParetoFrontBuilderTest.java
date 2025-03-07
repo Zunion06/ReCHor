@@ -1,6 +1,12 @@
 package ch.epfl.rechor.journey;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static ch.epfl.rechor.journey.PackedCriteria.*;
 
@@ -56,4 +62,104 @@ public class MyParetoFrontBuilderTest {
 //        assertTrue();
 
     }
+
+    //################################## test tibo et ali ##################
+
+    private ParetoFront.Builder builder;
+
+
+    @BeforeEach
+    void setUp() {
+        builder = new ParetoFront.Builder();
+    }
+
+
+    @Test
+    void testIsEmptyInitially() {
+        assertTrue(builder.isEmpty());
+    }
+
+
+    @Test
+    void testAddAndSize() {
+        builder.add(70, 1, 120);
+        assertFalse(builder.isEmpty());
+    }
+
+
+    @Test
+    void testClear() {
+        builder.add(70, 1, 120).clear();
+        assertTrue(builder.isEmpty());
+    }
+
+
+    @Test
+    void testBuild() {
+        builder.add(70, 1, 120).add(90, 2, 140);
+        ParetoFront front = builder.build();
+        assertEquals(1, front.size());
+    }
+
+
+    @Test
+    void testForEach() {
+        builder.add(70, 1, 120).add(90, 2, 140);
+        List<Long> collected = new ArrayList<>();
+        builder.forEach(collected::add);
+        assertEquals(1, collected.size());
+    }
+
+
+    @Test
+    void testEmptyParetoFront2() {
+        ParetoFront emptyFront = ParetoFront.EMPTY;
+        assertEquals(0, emptyFront.size(), "Une frontière vide doit avoir une taille de 0");
+        assertThrows(NoSuchElementException.class, () -> emptyFront.get(480, 2), "get() sur une frontière vide doit lever une exception");
+    }
+
+
+    @Test
+    void testAddAndSize2() {
+        ParetoFront.Builder builder = new ParetoFront.Builder();
+        builder.add(480, 2, 100);
+        builder.add(500, 1, 200);
+        ParetoFront front = builder.build();
+        assertEquals(2, front.size(), "La frontière doit contenir 2 tuples après ajout");
+    }
+
+
+
+
+
+
+    @Test
+    void testForEach2() {
+        ParetoFront.Builder builder = new ParetoFront.Builder();
+        builder.add(480, 2, 100);
+        builder.add(500, 1, 200);
+        ParetoFront front = builder.build();
+
+
+        List<Long> results = new ArrayList<>();
+        front.forEach(results::add);
+        assertEquals(2, results.size(), "forEach doit parcourir tous les éléments");
+    }
+
+
+    @Test
+    void testFullyDominates2() {
+        ParetoFront.Builder builder1 = new ParetoFront.Builder();
+        builder1.add(480, 2, 100);
+        builder1.add(500, 1, 200);
+
+
+        ParetoFront.Builder builder2 = new ParetoFront.Builder();
+        builder2.add(490, 3, 150);
+
+
+        assertTrue(builder1.fullyDominates(builder2, 450), "La première frontière doit dominer la seconde");
+    }
 }
+
+
