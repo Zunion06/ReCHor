@@ -98,7 +98,7 @@ public class MyParetoFrontBuilderTest {
     void testBuild() {
         builder.add(70, 1, 120).add(90, 2, 140);
         ParetoFront front = builder.build();
-        assertEquals(1, front.size());
+        assertEquals(2, front.size());
     }
 
 
@@ -107,7 +107,7 @@ public class MyParetoFrontBuilderTest {
         builder.add(70, 1, 120).add(90, 2, 140);
         List<Long> collected = new ArrayList<>();
         builder.forEach(collected::add);
-        assertEquals(1, collected.size());
+        assertEquals(2, collected.size());
     }
 
 

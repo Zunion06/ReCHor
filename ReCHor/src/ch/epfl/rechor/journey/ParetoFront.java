@@ -92,6 +92,10 @@ public class ParetoFront {
             int placementIndex = 0;
             for (int i=0;i<size;i++){
                 if (dominatesOrIsEqual(tupleTable[i],packedTuple)){
+                    System.out.println("loul");
+                    System.out.println(arrMins(packedTuple)+" "+arrMins(tupleTable[i]));
+                    System.out.println(changes(packedTuple)+" "+changes(tupleTable[i]));
+                    System.out.println(dominatesOrIsEqual(tupleTable[i],packedTuple));
                     return this;
                 }
                 if (packedTuple < tupleTable[i]){
