@@ -1,7 +1,6 @@
 package ch.epfl.rechor.journey;
 
 import java.util.NoSuchElementException;
-import java.util.StringJoiner;
 import java.util.function.LongConsumer;
 
 import static ch.epfl.rechor.journey.PackedCriteria.*;
@@ -81,6 +80,7 @@ public class ParetoFront {
 
         public Builder clear(){
             tupleTable=new long[tupleTable.length];
+            this.size=0;
             return this;
         }
 
@@ -140,8 +140,8 @@ public class ParetoFront {
             boolean domination;
             for (long thisTuple : tupleTable) {
                 domination = true;
-                for (long thatTuple : that.tupleTable ) {
-                    if (!dominatesOrIsEqual(thisTuple, withDepMins(thatTuple,depMins))) {
+                for (int i=0; i<that.size;i++ ) {
+                    if (!dominatesOrIsEqual(thisTuple, withDepMins(that.tupleTable[i],depMins))) {
                         domination = false;
                     }
                 }
