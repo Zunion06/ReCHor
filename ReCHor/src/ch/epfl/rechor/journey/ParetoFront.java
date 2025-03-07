@@ -7,7 +7,7 @@ import java.util.function.LongConsumer;
 import static ch.epfl.rechor.journey.PackedCriteria.*;
 
 public class ParetoFront {
-    private long[] tupleTable;
+    private final long[] tupleTable;
     public static final ParetoFront EMPTY = new ParetoFront(new long[0]);
     private int size;
 
@@ -42,10 +42,16 @@ public class ParetoFront {
         for (long tuple : tupleTable) {
             builder.append('(');
             if (PackedCriteria.hasDepMins(tuple)) {
-                builder.append(PackedCriteria.depMins(tuple))
+                int depMins = PackedCriteria.depMins(tuple);
+                builder.append(depMins/60)
+                        .append('h')
+                        .append(depMins%60)
                         .append(',');
             }
-            builder.append(PackedCriteria.arrMins(tuple))
+            int arrMins = PackedCriteria.arrMins(tuple);
+            builder.append(arrMins/60)
+                    .append('h')
+                    .append(arrMins%60)
                     .append(',')
                     .append(PackedCriteria.changes(tuple))
                     .append(')')
@@ -60,7 +66,7 @@ public class ParetoFront {
         private int size;
 
         public Builder(){
-            tupleTable=new long[0];
+            tupleTable=new long[2];
         }
 
         public Builder(Builder that){
@@ -69,7 +75,7 @@ public class ParetoFront {
         }
 
         public boolean isEmpty(){
-            return tupleTable.length==0;
+            return size==0;
         }
 
         public Builder clear(){
@@ -78,8 +84,42 @@ public class ParetoFront {
         }
 
         public Builder add(long packedTuple){
-            //???
+            int placementIndex = 0;
+            for (int i=0;i<size;i++){
+                if (PackedCriteria.dominatesOrIsEqual(tupleTable[i],packedTuple)){
+                    return this;
+                }
+                if ((packedTuple>>>32) < (tupleTable[i]>>>32)){
+                    break;
+                }
+                placementIndex=i+1;
+            }
+//            System.out.println(placementIndex);
+            size = reordering(placementIndex,packedTuple);
+            if (size<tupleTable.length){
+                System.arraycopy(tupleTable, placementIndex,tupleTable,placementIndex+1,size-placementIndex);
+                tupleTable[placementIndex]=packedTuple;
+            }
+            else {
+                int newTupleTableLength = tupleTable.length + tupleTable.length / 2;
+                long[] newTable = new long[newTupleTableLength];
+                System.arraycopy(tupleTable, 0,newTable,0,placementIndex);
+                System.arraycopy(tupleTable, placementIndex,newTable,placementIndex+1,size-placementIndex);
+                newTable[placementIndex]=packedTuple;
+                tupleTable = newTable;
+            }
+            size++;
             return this;
+        }
+
+        private int reordering(int startIndex,long packedTuple){
+            int dst = startIndex;
+            for (int src = startIndex; src < size; src += 1) {
+                if (PackedCriteria.dominatesOrIsEqual(packedTuple,tupleTable[src])) continue;
+                if (dst != src) tupleTable[dst] = tupleTable[src];
+                dst += 1;
+            }
+            return dst;
         }
 
         public Builder add(int arrMins, int changes, int payload){
@@ -94,17 +134,32 @@ public class ParetoFront {
             return this;
         }
 
+        // pas terrible le code --> à refaire mieux
         public boolean fullyDominates(Builder that, int depMins){
-            //???
+            boolean domination;
+            for (long thisTuple : tupleTable) {
+                domination = true;
+                for (long thatTuple : that.tupleTable ) {
+                    if (!PackedCriteria.dominatesOrIsEqual(thisTuple, PackedCriteria.withDepMins(thatTuple,depMins))) {
+                        domination = false;
+                    }
+                }
+                if (domination) return true;
+            }
             return false;
         }
 
+        // /!\ c'est du copié collé
         public void forEach(LongConsumer action){
-            //how to call the forEach method of ParetoFront???
+            for (int i=0;i<size;i++) {
+                action.accept(tupleTable[i]);
+            }
         }
 
         public ParetoFront build(){
-            return new ParetoFront(tupleTable);
+            long[] finalTable = new long[size];
+            System.arraycopy(tupleTable,0,finalTable,0,size);
+            return new ParetoFront(finalTable);
         }
 
     }
