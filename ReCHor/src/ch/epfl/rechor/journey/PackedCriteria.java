@@ -93,4 +93,27 @@ public final class PackedCriteria {
         long resetedCriteria = Bits32_24_8.bitsErasure(criteria,BIT_INDEX_OF_PAYLOAD,NUMBER_OF_BITS_FOR_PAYLOAD);
         return resetedCriteria | Integer.toUnsignedLong(payload1);
     }
+
+    public String packToString(long criteria) {
+        StringBuilder builder = new StringBuilder();
+        builder.append('(');
+        if (hasDepMins(criteria)) {
+            int depMins = depMins(criteria);
+            builder.append(depMins/60)
+                    .append('h')
+                    .append(depMins%60)
+                    .append(',');
+        }
+        int arrMins = arrMins(criteria);
+        builder.append(arrMins/60)
+                .append('h')
+                .append(arrMins%60)
+                .append(',')
+                .append(changes(criteria))
+                .append(')')
+                .append(' ')
+                .append(payload(criteria))
+                .append('\n');
+        return builder.toString();
+    }
 }

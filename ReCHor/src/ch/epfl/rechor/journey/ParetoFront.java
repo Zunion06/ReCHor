@@ -6,7 +6,7 @@ import java.util.function.LongConsumer;
 import static ch.epfl.rechor.journey.PackedCriteria.*;
 
 public class ParetoFront {
-    public final long[] tupleTable;
+    private final long[] tupleTable;
     public static final ParetoFront EMPTY = new ParetoFront(new long[0]);
 
     private ParetoFront(long[] tupleTable){
@@ -33,6 +33,10 @@ public class ParetoFront {
         for (int i=0;i<size();i++) {
             action.accept(tupleTable[i]);
         }
+    }
+
+    public long[] toArray() {
+        return tupleTable;
     }
 
     public String toString(){
@@ -90,7 +94,7 @@ public class ParetoFront {
                 if (dominatesOrIsEqual(tupleTable[i],packedTuple)){
                     return this;
                 }
-                if ((packedTuple>>>32) < (tupleTable[i]>>>32)){
+                if (packedTuple < tupleTable[i]){
                     break;
                 }
                 placementIndex=i+1;
@@ -128,6 +132,12 @@ public class ParetoFront {
             return this;
         }
 
+        public Builder add(int depMins, int arrMins, int changes, int payload){
+            long tuple = withDepMins(pack(arrMins,changes,payload),depMins);
+            add(tuple);
+            return this;
+        }
+
         public Builder addAll(Builder that){
             for(int i=0;i<that.size;i++){
                 add(that.tupleTable[i]);
@@ -140,7 +150,8 @@ public class ParetoFront {
             boolean domination;
             for (long thisTuple : tupleTable) {
                 domination = true;
-                for (int i=0; i<that.size;i++ ) {
+                for (int i=0; i<that.size && domination;i++ ) {
+//                    System.out.println(packToString());
                     if (!dominatesOrIsEqual(thisTuple, withDepMins(that.tupleTable[i],depMins))) {
                         domination = false;
                     }

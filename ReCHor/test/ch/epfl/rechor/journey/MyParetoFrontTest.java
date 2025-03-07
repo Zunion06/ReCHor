@@ -17,8 +17,7 @@ public class MyParetoFrontTest {
         ParetoFront.Builder builder = new ParetoFront.Builder();
         long[] step6 = {tuple1,tuple3,tuple4,tuple5};
 
-        builder.add(tuple1)
-                .build().tupleTable
+        builder.add(tuple1);
 
     }
 }
