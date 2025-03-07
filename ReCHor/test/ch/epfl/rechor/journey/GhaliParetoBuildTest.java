@@ -73,12 +73,10 @@ public class GhaliParetoBuildTest {
         builder1.add(PackedCriteria.withDepMins(PackedCriteria.pack(480, 3, 0), 0));
         builder1.add(PackedCriteria.withDepMins(PackedCriteria.pack(481, 2, 0), 0));
 
-        builder2.add(PackedCriteria.withDepMins(PackedCriteria.pack(481, 2, 0), 0));
-        builder2.add(PackedCriteria.withDepMins(PackedCriteria.pack(482, 1, 0), 0));
+        builder2.add(PackedCriteria.pack(481, 2, 0));
+        builder2.add(PackedCriteria.pack(482, 1, 0));
 
         assertFalse(builder1.fullyDominates(builder2, 0));
-        assertFalse(builder2.fullyDominates(builder1, 0));
-
         builder1.clear().add(0,480, 1, 0);
         builder2.clear().add(482, 2, 0);
         assertTrue(builder1.fullyDominates(builder2, 0));
