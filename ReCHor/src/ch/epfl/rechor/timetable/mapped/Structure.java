@@ -1,9 +1,31 @@
 package ch.epfl.rechor.timetable.mapped;
 
+import ch.epfl.rechor.Preconditions;
+
 import java.util.Objects;
 
 public class Structure {
 
+    private int totalSize;
+    private int[] indexTable;
+
+    //fields: list of fields documented in structure
+    //throws IllegalArgumentException if the fields are not ordered by index
+    Structure(Field... fields){
+
+        for(int i=0;i< fields.length;i++){
+            Preconditions.checkArgument(fields[i].index()==i);
+            totalSize+=fields[i].index();
+        }
+    }
+
+    int totalSize(){
+        return totalSize;
+    }
+
+    int offset(int fieldIndex, int elementIndex){
+        return -1;
+    }
 
 
 
@@ -24,6 +46,10 @@ public class Structure {
     public record Field(int index,FieldType type){
         public Field{
             Objects.requireNonNull(type);
+        }
+        // return an instance of Field with the given parameters
+        public static Field field(int index, FieldType type){
+            return new Field(index,type);
         }
     }
 
