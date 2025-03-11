@@ -196,6 +196,9 @@ class ParetoFrontTest {
         b2.add(65, 4, 2);
         b2.add(70, 3, 3);
 
+//        System.out.println(b1.build());
+//        System.out.println(b2.build());
+
         assertTrue(b1.fullyDominates(b2, 49));
         assertTrue(b1.fullyDominates(b2, 50));
         assertFalse(b1.fullyDominates(b2, 51));

@@ -154,19 +154,18 @@ public class ParetoFront {
 
         // pas terrible le code --> à refaire mieux
         public boolean fullyDominates(Builder that, int depMins){
-            if (size==that.size && size==0) return true;
+            if (that.size==0) return true;
             boolean domination;
             for (int j=0; j<size; j++) {
-                domination = true;
-                for (int i=0; i<that.size && domination;i++ ) {
-//                    System.out.println(packToString(tupleTable[j])+" "+packToString(withDepMins(that.tupleTable[i],depMins)));
-                    if (!dominatesOrIsEqual(tupleTable[j], withDepMins(that.tupleTable[i],depMins))) {
-                        domination = false;
+                domination = false;
+                for (int i=0; i<that.size;i++ ) {
+                    if (dominatesOrIsEqual(tupleTable[i], withDepMins(that.tupleTable[j],depMins))) {
+                        domination = true;
                     }
                 }
-                if (domination) return true;
+                if (!domination) return false;
             }
-            return false;
+            return true;
         }
 
         // /!\ c'est du copié collé
