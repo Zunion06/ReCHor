@@ -12,7 +12,7 @@ public class Structure {
     //fields: list of fields documented in structure
     //document the total size and the starting index of each field in octets
     //throws IllegalArgumentException if the fields are not ordered by index
-    Structure(Field... fields){
+    public Structure(Field... fields){
         totalSize=0;
         indexTable=new byte[fields.length];
         for(int i=0;i< fields.length;i++){
@@ -29,11 +29,11 @@ public class Structure {
         }
     }
 
-    int totalSize(){
+    public int totalSize(){
         return totalSize;
     }
 
-    int offset(int fieldIndex, int elementIndex){
+    public int offset(int fieldIndex, int elementIndex){
         return elementIndex*totalSize+fieldIndex;
     }
 
