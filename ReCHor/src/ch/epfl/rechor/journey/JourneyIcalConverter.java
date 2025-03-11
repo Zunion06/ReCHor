@@ -14,6 +14,10 @@ import static ch.epfl.rechor.IcalBuilder.Name.*;
 public class JourneyIcalConverter {
     private JourneyIcalConverter(){}
 
+    /**
+     * @param journey Journey that will be converted to the Icalendar form
+     * @return a string containing the visual representation of the journey according to the Icalendar norms
+     */
     public static String toIcalendar(Journey journey){
         IcalBuilder builder = new IcalBuilder();
 

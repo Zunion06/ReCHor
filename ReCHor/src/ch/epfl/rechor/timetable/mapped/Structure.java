@@ -6,16 +6,19 @@ import java.util.Objects;
 
 public class Structure {
 
-    private int totalSize;
-    private int[] indexTable;
+    private short totalSize;
+    private short[] indexTable;
 
     //fields: list of fields documented in structure
+    //document the total size and the starting index of each field in octets
     //throws IllegalArgumentException if the fields are not ordered by index
     Structure(Field... fields){
-
+        totalSize=0;
+        indexTable=new short[fields.length];
         for(int i=0;i< fields.length;i++){
             Preconditions.checkArgument(fields[i].index()==i);
-            totalSize+=fields[i].index();
+            indexTable[i]=totalSize;
+            totalSize+= (short) fields[i].type.getSize();
         }
     }
 
@@ -24,11 +27,12 @@ public class Structure {
     }
 
     int offset(int fieldIndex, int elementIndex){
-        return -1;
+        return indexTable[elementIndex];
     }
 
 
 
+    //peut on avoir un argument dans les classes?
     public enum FieldType{
         U8(1),   // 8 bits (1 octet), non signé
         U16(2),  // 16 bits (2 octets), non signé
@@ -38,6 +42,10 @@ public class Structure {
 
         FieldType(int size) {
             this.size = size;
+        }
+
+        public int getSize() {
+            return size;
         }
     }
 
