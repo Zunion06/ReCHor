@@ -7,18 +7,25 @@ import java.util.Objects;
 public class Structure {
 
     private short totalSize;
-    private short[] indexTable;
+    private byte[] indexTable;
 
     //fields: list of fields documented in structure
     //document the total size and the starting index of each field in octets
     //throws IllegalArgumentException if the fields are not ordered by index
     Structure(Field... fields){
         totalSize=0;
-        indexTable=new short[fields.length];
+        indexTable=new byte[fields.length];
         for(int i=0;i< fields.length;i++){
             Preconditions.checkArgument(fields[i].index()==i);
-            indexTable[i]=totalSize;
-            totalSize+= (short) fields[i].type.getSize();
+            indexTable[i]=(byte) totalSize;
+            totalSize+= switch (fields[i].type()){
+                case U8:
+                    yield (short)1;
+                case U16:
+                    yield (short)2;
+                case S32:
+                    yield (short) 4;
+            };
         }
     }
 
@@ -27,26 +34,16 @@ public class Structure {
     }
 
     int offset(int fieldIndex, int elementIndex){
-        return indexTable[elementIndex];
+        return elementIndex*totalSize+fieldIndex;
     }
 
 
 
     //peut on avoir un argument dans les classes?
     public enum FieldType{
-        U8(1),   // 8 bits (1 octet), non signé
-        U16(2),  // 16 bits (2 octets), non signé
-        S32(4);  // 32 bits (4 octets), signé
-
-        private final int size; // Nombre d'octets occupés par ce type
-
-        FieldType(int size) {
-            this.size = size;
-        }
-
-        public int getSize() {
-            return size;
-        }
+        U8,   // 8 bits (1 octet), non signé
+        U16,  // 16 bits (2 octets), non signé
+        S32;  // 32 bits (4 octets), signé
     }
 
     //index: index of the given field
