@@ -9,22 +9,27 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.S32;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 public final class BufferedStations implements Stations {
-    StructuredBuffer structuredBuffer;
-    String[] stringTable;
+    private final StructuredBuffer structuredBuffer;
+    private final List<String> stringTable;
 
-    public final static int NAME_ID=0;
-    public final static int LONGITUDE_ID=1;
-    public final static int LATITUDE_ID=2;
+    public final static int NAME_ID_INDEX =0;
+    public final static int LONGITUDE_ID_INDEX=1;
+    public final static int LATITUDE_ID_INDEX=2;
+
+    private final int size;
 
     /**
      * @param stringTable table of string documenting the stations
      * @param buffer values to be set in the stations information
      */
     public BufferedStations(List<String> stringTable, ByteBuffer buffer){
-        this.structuredBuffer=new StructuredBuffer(new Structure(new Structure.Field(NAME_ID, U16),
-                new Structure.Field(LONGITUDE_ID,S32),new Structure.Field(LATITUDE_ID,S32)),buffer);
-        this.stringTable=new String[stringTable.size()];
-        stringTable.toArray(this.stringTable);
+        Structure stationStructure = new Structure(
+                new Structure.Field(NAME_ID_INDEX, U16),
+                new Structure.Field(LONGITUDE_ID_INDEX,S32),
+                new Structure.Field(LATITUDE_ID_INDEX,S32));
+        this.structuredBuffer=new StructuredBuffer(stationStructure,buffer);
+        this.stringTable=stringTable;
+        size = structuredBuffer.size() / stationStructure.totalSize();
     }
 
     /**
@@ -34,7 +39,7 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public String name(int id) {
-        return stringTable[structuredBuffer.getU8(NAME_ID,id)];
+        return stringTable.get(structuredBuffer.getU8(NAME_ID_INDEX,id));
     }
 
     /**
@@ -44,8 +49,7 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public double longitude(int id) {
-        return StrictMath.scalb(360*structuredBuffer.getS32(LONGITUDE_ID,id),-32);
-        //return StrictMath.scalb(structuredBuffer.getS32(LONGITUDE_ID, id), -30);
+        return StrictMath.scalb(360*structuredBuffer.getS32(LONGITUDE_ID_INDEX,id),-32);
     }
 
     /**
@@ -55,7 +59,7 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public double latitude(int id) {
-        return StrictMath.scalb(360*structuredBuffer.getS32(LATITUDE_ID,id),-32);
+        return StrictMath.scalb(360*structuredBuffer.getS32(LATITUDE_ID_INDEX,id),-32);
     }
 
     /**
@@ -63,6 +67,6 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public int size() {
-        return structuredBuffer.size();
+        return size;
     }
 }

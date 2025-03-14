@@ -44,7 +44,7 @@ final class SignatureChecks_4 {
 
     void checkBufferedStations() {
         v06 = (ch.epfl.rechor.timetable.Stations) v12;
-        v12 = new ch.epfl.rechor.timetable.mapped.BufferedStations(v13, v11);
+        v12 = new MyBufferedStations(v13, v11);
         v14 = v12.latitude(v03);
         v14 = v12.longitude(v03);
         v08 = v12.name(v03);
@@ -78,7 +78,7 @@ final class SignatureChecks_4 {
     ch.epfl.rechor.timetable.mapped.Structure.FieldType[] v09;
     ch.epfl.rechor.timetable.mapped.StructuredBuffer v10;
     java.nio.ByteBuffer v11;
-    ch.epfl.rechor.timetable.mapped.BufferedStations v12;
+    MyBufferedStations v12;
     java.util.List<java.lang.String> v13;
     double v14;
     ch.epfl.rechor.timetable.mapped.BufferedStationAliases v15;
