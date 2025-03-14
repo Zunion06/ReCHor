@@ -51,4 +51,23 @@ public class MyBufferedPlatformTest {
         });
 
     }
+
+    @Test
+    void BufferedPlatformThrowsOnWeirdCase() {
+        HexFormat hexFormat = HexFormat.ofDelimiter(" ");
+        byte[] bytes = hexFormat.parseHex("");
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+
+        List<String> stringList = List.of("1", "70");
+        BufferedPlatforms bufferedPlatforms = new BufferedPlatforms(stringList,buffer);
+
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            bufferedPlatforms.name(0);
+        });
+
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            bufferedPlatforms.name(3);
+        });
+
+    }
 }
