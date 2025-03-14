@@ -9,9 +9,11 @@ public class Structure {
     private short totalSize;
     private byte[] indexTable;
 
-    //fields: list of fields documented in structure
-    //document the total size and the starting index of each field in octets
-    //throws IllegalArgumentException if the fields are not ordered by index
+    /**
+     * document the total size and the starting index of each field in octets
+     * @param fields list of fields documented in structure
+     * @throws IllegalArgumentException if the fields are not ordered by index
+     */
     public Structure(Field... fields){
         totalSize=0;
         indexTable=new byte[fields.length];
@@ -29,10 +31,18 @@ public class Structure {
         }
     }
 
+    /**
+     * @return the totalSize in octet of each elements
+     */
     public int totalSize(){
         return totalSize;
     }
 
+    /**
+     * @param fieldIndex index of the field
+     * @param elementIndex index of the element
+     * @return the offset value at the given field and element
+     */
     public int offset(int fieldIndex, int elementIndex){
         return elementIndex*totalSize+fieldIndex;
     }
@@ -46,16 +56,22 @@ public class Structure {
         S32;  // 32 bits (4 octets), signé
     }
 
-    //index: index of the given field
-    //type: type of field
-    public record Field(int index,FieldType type){
-        public Field{
+    /**
+     * @param index index of the given field
+     * @param type type of field
+     */
+    public record Field(int index,FieldType type) {
+        public Field {
             Objects.requireNonNull(type);
-        }
-        // return an instance of Field with the given parameters
-        public static Field field(int index, FieldType type){
-            return new Field(index,type);
         }
     }
 
+    /**
+     * @param index index to be given to the field
+     * @param type type to be given to the field
+     * @return an instance of Field with the given parameters
+     */
+    public static Field field(int index, FieldType type){
+        return new Field(index,type);
+    }
 }
