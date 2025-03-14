@@ -8,8 +8,8 @@ import java.util.List;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 public final class BufferedPlatforms implements Platforms {
-    public final static int NAME_ID=0;
-    public final static int STATION_ID=1;
+    private final static int NAME_ID=0;
+    private final static int STATION_ID=1;
 
     private final StructuredBuffer structuredBuffer;
     private final List<String> stringTable;

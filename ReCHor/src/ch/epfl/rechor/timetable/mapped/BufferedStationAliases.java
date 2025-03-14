@@ -9,10 +9,10 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.S32;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 public final class BufferedStationAliases implements StationAliases {
-    public final static int ALIAS_ID=0;
-    public final static int STATION_NAME_ID=1;
+    private final static int ALIAS_ID=0;
+    private final static int STATION_NAME_ID=1;
 
-    public final StructuredBuffer structuredBuffer;
+    private final StructuredBuffer structuredBuffer;
     private final List<String> stringTable;
 
     public BufferedStationAliases(List<String> stringTable, ByteBuffer buffer){
