@@ -15,7 +15,7 @@ public class StructuredBuffer {
     }
 
     public int size() {
-       return buffer.capacity();
+       return buffer.capacity() / structure.totalSize();
     }
 
     public int getU8(int fieldIndex, int elementIndex) {

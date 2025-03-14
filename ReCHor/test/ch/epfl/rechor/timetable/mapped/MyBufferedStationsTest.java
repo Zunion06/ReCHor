@@ -13,9 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class MyBufferedStationsTest {
-
+    ArrayList<String> stringList = new ArrayList<>();
     public BufferedStations dummyStation(){
-        ArrayList<String> stringList = new ArrayList<>();
         stringList.add("name 0");
         stringList.add("name 1");
         stringList.add("name 2");
@@ -33,6 +32,7 @@ public class MyBufferedStationsTest {
     public void StationsNameTest(){
 
         BufferedStations bufferedStations = dummyStation();
+        System.out.println(stringList.get(1));
         //name test
         assertEquals("name 0", bufferedStations.name(0));
         assertEquals("name 1",bufferedStations.name(1));

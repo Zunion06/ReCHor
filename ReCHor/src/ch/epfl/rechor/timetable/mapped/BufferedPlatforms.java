@@ -13,7 +13,6 @@ public final class BufferedPlatforms implements Platforms {
 
     private final StructuredBuffer structuredBuffer;
     private final List<String> stringTable;
-    private final int size;
 
     /**
      * @param stringTable table of string documenting the platforms
@@ -25,7 +24,6 @@ public final class BufferedPlatforms implements Platforms {
                 new Structure.Field(STATION_ID,U16));
         this.structuredBuffer=new StructuredBuffer(plateformStructure,buffer);
         this.stringTable = stringTable;
-        size = structuredBuffer.size() / plateformStructure.totalSize();
     }
 
     /**
@@ -53,6 +51,6 @@ public final class BufferedPlatforms implements Platforms {
      */
     @Override
     public int size() {
-        return size;
+        return structuredBuffer.size();
     }
 }

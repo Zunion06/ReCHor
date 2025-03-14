@@ -16,8 +16,6 @@ public final class BufferedStations implements Stations {
     public final static int LONGITUDE_ID_INDEX=1;
     public final static int LATITUDE_ID_INDEX=2;
 
-    private final int size;
-
     /**
      * @param stringTable table of string documenting the stations
      * @param buffer values to be set in the stations information
@@ -29,7 +27,6 @@ public final class BufferedStations implements Stations {
                 new Structure.Field(LATITUDE_ID_INDEX,S32));
         this.structuredBuffer=new StructuredBuffer(stationStructure,buffer);
         this.stringTable=stringTable;
-        size = structuredBuffer.size() / stationStructure.totalSize();
     }
 
     /**
@@ -39,7 +36,7 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public String name(int id) {
-        return stringTable.get(structuredBuffer.getU8(NAME_ID_INDEX,id));
+        return stringTable.get(structuredBuffer.getU16(NAME_ID_INDEX,id));
     }
 
     /**
@@ -67,6 +64,6 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public int size() {
-        return size;
+        return structuredBuffer.size();
     }
 }
