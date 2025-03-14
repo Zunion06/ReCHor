@@ -44,7 +44,7 @@ public class Structure {
      * @return the offset value at the given field and element
      */
     public int offset(int fieldIndex, int elementIndex){
-        return elementIndex*totalSize+fieldIndex;
+        return elementIndex*totalSize+indexTable[fieldIndex];
     }
 
 
