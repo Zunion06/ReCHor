@@ -40,14 +40,25 @@ public class MyBufferedStationsTest {
     }
 
     @Test
-    public void StationsLongitudeTest(){
+    public void StationsLongitudeTest() {
 
         BufferedStations bufferedStations = dummyStation();
 
-//        assertEquals("name 0", bufferedStations.longitude(0));
-//        assertEquals("name 1",bufferedStations.longitude(1));
-//        assertEquals("name 2",bufferedStations.longitude(2));
-        System.out.println(bufferedStations.structuredBuffer.getS32(1,0));
-        System.out.println(bufferedStations.longitude(0));
+        assertEquals(6.629092, bufferedStations.longitude(0),1e-6);
+        assertEquals(6.837875, bufferedStations.longitude(1),1e-6);
+        assertEquals(6.837875, bufferedStations.longitude(2),1e-6);
+//        System.out.println(bufferedStations.structuredBuffer.getS32(1,0));
+//        //System.out.println(bufferedStations.structuredBuffer.getS32(1,0)*360*);
+//        System.out.println(bufferedStations.longitude(0));
+    }
+
+    @Test
+    public void StationsLatitudeTest() {
+
+        BufferedStations bufferedStations = dummyStation();
+
+        assertEquals(46.516792, bufferedStations.latitude(0),1e-5);
+        assertEquals(46.542764, bufferedStations.latitude(1),1e-5);
+        assertEquals(46.542764, bufferedStations.latitude(2),1e-5);
     }
 }
