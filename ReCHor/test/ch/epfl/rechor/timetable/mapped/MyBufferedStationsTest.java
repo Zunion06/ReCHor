@@ -1,15 +1,14 @@
 package ch.epfl.rechor.timetable.mapped;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Array;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HexFormat;
-import java.util.List;
+import java.util.NoSuchElementException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class MyBufferedStationsTest {
@@ -32,7 +31,6 @@ public class MyBufferedStationsTest {
     public void StationsNameTest(){
 
         BufferedStations bufferedStations = dummyStation();
-        System.out.println(stringList.get(1));
         //name test
         assertEquals("name 0", bufferedStations.name(0));
         assertEquals("name 1",bufferedStations.name(1));
@@ -60,5 +58,21 @@ public class MyBufferedStationsTest {
         assertEquals(46.516792, bufferedStations.latitude(0),1e-5);
         assertEquals(46.542764, bufferedStations.latitude(1),1e-5);
         assertEquals(46.542764, bufferedStations.latitude(2),1e-5);
+    }
+
+    @Test
+    public void StationSizeTest(){
+        BufferedStations bufferedStations = dummyStation();
+        assertEquals(3,bufferedStations.size());
+
+    }
+
+    @Test
+    public void invalidIndexTest(){
+        BufferedStations bufferedStations = dummyStation();
+
+        assertThrows(IndexOutOfBoundsException.class, () -> bufferedStations.name(3));
+        assertThrows(IndexOutOfBoundsException.class, () -> bufferedStations.longitude(3));
+        assertThrows(IndexOutOfBoundsException.class, () -> bufferedStations.latitude(3));
     }
 }
