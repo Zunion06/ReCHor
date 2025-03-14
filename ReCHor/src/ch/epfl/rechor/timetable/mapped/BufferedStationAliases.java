@@ -12,7 +12,7 @@ public final class BufferedStationAliases implements StationAliases {
     public final static int ALIAS_ID=0;
     public final static int STATION_NAME_ID=1;
 
-    private final StructuredBuffer structuredBuffer;
+    public final StructuredBuffer structuredBuffer;
     private final List<String> stringTable;
     private final int size;
 

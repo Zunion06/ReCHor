@@ -9,7 +9,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.S32;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 public final class BufferedStations implements Stations {
-    private final StructuredBuffer structuredBuffer;
+    public final StructuredBuffer structuredBuffer;
     private final List<String> stringTable;
 
     public final static int NAME_ID_INDEX =0;
