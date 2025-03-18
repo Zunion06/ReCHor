@@ -387,7 +387,7 @@ public class Semaine4TESTS {
 //                    System.out.println(buffer.get(1));
 //                }
 //                System.out.println(structuredBuffer);
-                System.out.println(j);
+                System.out.println("j="+j+" i="+i+" n="+n);
                 if(j!= structuredBuffer.getU16(j, 0)) {
                     System.out.println(j);
                     System.out.println(structuredBuffer.getU16(j, 0));

@@ -45,9 +45,9 @@ public class MyBufferedStationsTest {
         assertEquals(6.629092, bufferedStations.longitude(0),1e-6);
         assertEquals(6.837875, bufferedStations.longitude(1),1e-6);
         assertEquals(6.837875, bufferedStations.longitude(2),1e-6);
-//        System.out.println(bufferedStations.structuredBuffer.getS32(1,0));
+        //System.out.println(bufferedStations.structuredBuffer.getS32(1,0));
 //        System.out.println(bufferedStations.structuredBuffer.getS32(1,0)*360*);
-//        System.out.println(bufferedStations.longitude(0));
+        //System.out.println(bufferedStations.longitude(0));
     }
 
     @Test

@@ -46,7 +46,7 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public double longitude(int id) {
-        return StrictMath.scalb(360*((float)structuredBuffer.getS32(LONGITUDE_ID_INDEX,id)),-32);
+        return StrictMath.scalb(360.0*(structuredBuffer.getS32(LONGITUDE_ID_INDEX,id)),-32);
     }
 
     /**
@@ -56,7 +56,7 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public double latitude(int id) {
-        return StrictMath.scalb(360*((float)structuredBuffer.getS32(LATITUDE_ID_INDEX,id)),-32);
+        return StrictMath.scalb(360.0*(structuredBuffer.getS32(LATITUDE_ID_INDEX,id)),-32);
     }
 
     /**
