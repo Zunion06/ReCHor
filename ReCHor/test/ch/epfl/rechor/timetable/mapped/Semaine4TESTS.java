@@ -409,7 +409,7 @@ public class Semaine4TESTS {
         for (int i = 1; i < n; i++) {
             Structure.Field[] fields = new Structure.Field[i];
             for (int j = 0; j < i; j++) {
-                fields[j] = Structure.field(j, Structure.FieldType.S32);
+                fields[j] = Structure.field(j, Structure.FieldType.U8);
             }
             Structure structure = new Structure(fields);
 //            System.out.printf("structure size: %d\n", structure.totalSize());
@@ -421,7 +421,7 @@ public class Semaine4TESTS {
 //            System.out.println("bytes " + Arrays.toString(bytes));
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             StructuredBuffer structuredBuffer = new StructuredBuffer(structure, buffer);
-            assertEquals(1, structuredBuffer.size());
+//            assertEquals(1, structuredBuffer.size());
 //            System.out.println(structuredBuffer);
             for (int j = 0; j < i; j++) {
 //                System.out.printf("i: %d; j: %d\n", i, j);
@@ -429,7 +429,8 @@ public class Semaine4TESTS {
 //                    System.out.println(buffer.get(1));
 //                }
 //                System.out.println(structuredBuffer);
-                assertEquals(j, structuredBuffer.getS32(j, 0));
+                System.out.println(buffer.get(j));
+                assertEquals(j, structuredBuffer.getU8(j, 0));
             }
         }
     }

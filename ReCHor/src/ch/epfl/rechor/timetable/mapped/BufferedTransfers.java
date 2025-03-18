@@ -1,5 +1,6 @@
 package ch.epfl.rechor.timetable.mapped;
 
+import ch.epfl.rechor.PackedRange;
 import ch.epfl.rechor.timetable.Transfers;
 
 import java.nio.ByteBuffer;
@@ -25,9 +26,30 @@ public final class BufferedTransfers implements Transfers {
                 new Structure.Field(DEP_STATION_ID, U16),
                 new Structure.Field(ARR_STATION_ID,U16),
                 new Structure.Field(TRANSFER_MINUTES,U8));
-        this.structuredBuffer=new StructuredBuffer(tripsStructure,buffer);
-        this.transfersIntervals=new int[structuredBuffer.size()];
-        this.transfersIntervals=
+        structuredBuffer=new StructuredBuffer(tripsStructure,buffer);
+
+        int previousArrStation = structuredBuffer.getU16(ARR_STATION_ID,0);
+        int transfersIntervalsLength = 1;
+        for (int i = 1; i < size(); i++) {
+            int currentArrStation = structuredBuffer.getU16(ARR_STATION_ID,i);
+            if (currentArrStation != previousArrStation) {
+                transfersIntervalsLength++;
+                previousArrStation = currentArrStation;
+            }
+        }
+
+        transfersIntervals = new int[transfersIntervalsLength];
+        int previousArrStationID = 0; //ID in transfersIntervals
+        int ithIntervalLength = 1;
+        for (int i = 1; i < size(); i++) {
+            if (structuredBuffer.getU16(ARR_STATION_ID,i) != structuredBuffer.getU16(ARR_STATION_ID,i-1)){
+                transfersIntervals[previousArrStationID] = PackedRange.pack(i - ithIntervalLength, i);
+                previousArrStationID++;
+                ithIntervalLength = 0;
+            }
+            ithIntervalLength++;
+        }
+        transfersIntervals[previousArrStationID] = PackedRange.pack(size() - ithIntervalLength, size()); // here previousArrStationID should be equal to transfersIntervalsLength
     }
 
 
@@ -43,13 +65,18 @@ public final class BufferedTransfers implements Transfers {
 
     @Override
     public int arrivingAt(int stationId) {
-        //return structuredBuffer.getU16(ARR_STATION_ID,stationId);
+      return transfersIntervals[stationId];
     }
 
     @Override
     public int minutesBetween(int depStationId, int arrStationId) {
-        if(false){throw new NoSuchElementException();}
-        return 0;
+        int searchStartingPoint = PackedRange.startInclusive(transfersIntervals[arrStationId]);
+        int searchEndPoint = PackedRange.endExclusive(transfersIntervals[arrStationId]);
+        for (int i = searchStartingPoint; i < searchEndPoint; i++) {
+            if (structuredBuffer.getU16(DEP_STATION_ID,i) == depStationId)
+                return structuredBuffer.getU8(TRANSFER_MINUTES,i);
+        }
+        throw new NoSuchElementException();
     }
 
     /**
