@@ -31,6 +31,7 @@ public final class BufferedStations implements Stations {
     }
 
     /**
+     * gives the name
      * @param id station id
      * @return the name of the station for a given index
      * @throws IndexOutOfBoundsException for invalid index
