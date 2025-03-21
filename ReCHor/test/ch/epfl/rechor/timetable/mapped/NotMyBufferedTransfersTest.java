@@ -34,7 +34,11 @@ class NotMyBufferedTransfersTest {
         buffer.put((byte) 15); // minutes = 15
         buffer.flip();
 
-
+//        for (int i = 0; i < buffer.capacity(); i+=5) {
+//            System.out.println(buffer.getShort(i));
+//            System.out.println(buffer.getShort(i+2));
+//            System.out.println(buffer.get(i+4));
+//        }
         bufferedTransfers = new BufferedTransfers(buffer);
     }
 
@@ -63,6 +67,7 @@ class NotMyBufferedTransfersTest {
 
     @Test
     void arrivingAtReturnsCorrectPackedRange() {
+        setUp();
         int range = bufferedTransfers.arrivingAt(5);
         assertEquals(0, PackedRange.startInclusive(range));
         assertEquals(2, PackedRange.endExclusive(range));

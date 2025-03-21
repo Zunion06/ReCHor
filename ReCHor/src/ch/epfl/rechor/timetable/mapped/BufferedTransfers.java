@@ -28,23 +28,20 @@ public final class BufferedTransfers implements Transfers {
                 new Structure.Field(TRANSFER_MINUTES,U8));
         structuredBuffer=new StructuredBuffer(tripsStructure,buffer);
 
-        int previousArrStation = structuredBuffer.getU16(ARR_STATION_ID,0);
-        int transfersIntervalsLength = 1;
+        int maxArrStationIndex = 0;
         for (int i = 1; i < size(); i++) {
-            int currentArrStation = structuredBuffer.getU16(ARR_STATION_ID,i);
-            if (currentArrStation != previousArrStation) {
-                transfersIntervalsLength++;
-                previousArrStation = currentArrStation;
-            }
+            int currentArrStationIndex = structuredBuffer.getU16(ARR_STATION_ID,i);
+            if (currentArrStationIndex > maxArrStationIndex)
+                maxArrStationIndex = currentArrStationIndex;
         }
 
-        transfersIntervals = new int[transfersIntervalsLength];
-        int previousArrStationID = 0; //ID in transfersIntervals
+        transfersIntervals = new int[maxArrStationIndex+1];
+        int previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID,0); //ID in transfersIntervals
         int ithIntervalLength = 1;
         for (int i = 1; i < size(); i++) {
             if (structuredBuffer.getU16(ARR_STATION_ID,i) != structuredBuffer.getU16(ARR_STATION_ID,i-1)){
                 transfersIntervals[previousArrStationID] = PackedRange.pack(i - ithIntervalLength, i);
-                previousArrStationID++;
+                previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID,i);
                 ithIntervalLength = 0;
             }
             ithIntervalLength++;
