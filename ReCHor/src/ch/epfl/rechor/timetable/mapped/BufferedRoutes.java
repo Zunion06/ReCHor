@@ -26,7 +26,7 @@ public final class BufferedRoutes implements Routes {
                 new Structure.Field(NAME_ID, U16),
                 new Structure.Field(KIND,U8));
         this.structuredBuffer=new StructuredBuffer(routesStructure,buffer);
-        this.stringTable = stringTable;
+        this.stringTable = List.copyOf(stringTable);
     }
 
     /**

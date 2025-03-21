@@ -27,7 +27,7 @@ public final class BufferedStations implements Stations {
                 new Structure.Field(LONGITUDE_ID_INDEX,S32),
                 new Structure.Field(LATITUDE_ID_INDEX,S32));
         this.structuredBuffer=new StructuredBuffer(stationStructure,buffer);
-        this.stringTable=stringTable;
+        this.stringTable=List.copyOf(stringTable);
     }
 
     /**

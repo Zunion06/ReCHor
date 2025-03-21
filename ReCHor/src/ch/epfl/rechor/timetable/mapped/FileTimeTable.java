@@ -20,7 +20,7 @@ import java.util.List;
 public record FileTimeTable(Path directory, List<String> stringTable, Stations stations, StationAliases stationAliases, Platforms platforms, Routes routes, Transfers transfers) implements TimeTable {
 
     public TimeTable in(Path directory) throws IOException {
-        return new FileTimeTable()
+        return null;
     }
 
     @Override

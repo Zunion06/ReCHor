@@ -26,7 +26,7 @@ public final class BufferedTrips implements Trips {
                 new Structure.Field(ROUTE_ID, U16),
                 new Structure.Field(DESTINATION_ID,U16));
         this.structuredBuffer=new StructuredBuffer(tripsStructure,buffer);
-        this.stringTable = stringTable;
+        this.stringTable = List.copyOf(stringTable);
     }
 
     /**

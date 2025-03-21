@@ -23,7 +23,7 @@ public final class BufferedPlatforms implements Platforms {
                 new Structure.Field(NAME_ID, U16),
                 new Structure.Field(STATION_ID,U16));
         this.structuredBuffer=new StructuredBuffer(plateformStructure,buffer);
-        this.stringTable = stringTable;
+        this.stringTable = List.copyOf(stringTable);
     }
 
     /**

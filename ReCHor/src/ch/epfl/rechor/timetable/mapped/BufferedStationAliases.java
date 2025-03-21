@@ -25,7 +25,7 @@ public final class BufferedStationAliases implements StationAliases {
                 new Structure.Field(ALIAS_ID, U16),
                 new Structure.Field(STATION_NAME_ID,U16));
         this.structuredBuffer=new StructuredBuffer(stationALiasStructure, buffer);
-        this.stringTable=stringTable;
+        this.stringTable=List.copyOf(stringTable);
     }
 
     /**
