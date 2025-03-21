@@ -21,7 +21,7 @@ public final class BufferedRoutes implements Routes {
      * @param stringTable table of string documenting the platforms
      * @param buffer values to be set in the platforms information
      */
-    BufferedRoutes(List<String> stringTable, ByteBuffer buffer){
+    public BufferedRoutes(List<String> stringTable, ByteBuffer buffer){
         Structure routesStructure = new Structure(
                 new Structure.Field(NAME_ID, U16),
                 new Structure.Field(KIND,U8));
@@ -46,11 +46,12 @@ public final class BufferedRoutes implements Routes {
      */
     @Override
     public Vehicle vehicle(int id) {
-        return Vehicle.ALL.get(id);
+        return Vehicle.ALL.get(structuredBuffer.getU8(KIND,id));
     }
 
     /**
-     * @return the number of route indexed
+     * gives the size of the Buffer used (number of elements)
+     * @return the number of routes indexed
      */
     @Override
     public int size() {

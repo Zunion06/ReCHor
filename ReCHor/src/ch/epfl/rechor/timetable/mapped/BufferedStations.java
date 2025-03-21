@@ -17,6 +17,7 @@ public final class BufferedStations implements Stations {
     private final static int LATITUDE_ID_INDEX=2;
 
     /**
+     * create an instance of BufferedStations to stock informations
      * @param stringTable table of string documenting the stations
      * @param buffer values to be set in the stations information
      */
@@ -60,6 +61,7 @@ public final class BufferedStations implements Stations {
     }
 
     /**
+     * gives the size of the Buffer used (number of elements)
      * @return the number of stations indexed
      */
     @Override

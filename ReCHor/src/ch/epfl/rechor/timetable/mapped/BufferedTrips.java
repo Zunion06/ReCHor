@@ -17,18 +17,20 @@ public final class BufferedTrips implements Trips {
     private final List<String> stringTable;
 
     /**
+     * create an instance of bufferedTrips to stock information about trips
      * @param stringTable table of string documenting the platforms
      * @param buffer values to be set in the platforms information
      */
-    BufferedTrips(List<String> stringTable, ByteBuffer buffer){
+    public BufferedTrips(List<String> stringTable, ByteBuffer buffer){
         Structure tripsStructure = new Structure(
                 new Structure.Field(ROUTE_ID, U16),
-                new Structure.Field(DESTINATION_ID,U8));
+                new Structure.Field(DESTINATION_ID,U16));
         this.structuredBuffer=new StructuredBuffer(tripsStructure,buffer);
         this.stringTable = stringTable;
     }
 
     /**
+     * gives the id of the route taken by the trip
      * @param id stop id
      * @return the route id for a given index
      * @throws IndexOutOfBoundsException for invalid index
@@ -39,6 +41,7 @@ public final class BufferedTrips implements Trips {
     }
 
     /**
+     * gives the destination of the trip
      * @param id route id
      * @return the name of a trip's destination for a given index
      * @throws IndexOutOfBoundsException for invalid index
@@ -49,7 +52,8 @@ public final class BufferedTrips implements Trips {
     }
 
     /**
-     * @return the number of route indexed
+     * gives the size of the Buffer used (number of elements)
+     * @return the number of trips indexed
      */
     @Override
     public int size() {

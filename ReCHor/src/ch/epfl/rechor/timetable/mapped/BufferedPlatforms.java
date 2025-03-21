@@ -47,7 +47,8 @@ public final class BufferedPlatforms implements Platforms {
     }
 
     /**
-     * @return the number of stations indexed
+     * gives the size of the Buffer used (number of elements)
+     * @return the number of platforms indexed
      */
     @Override
     public int size() {
