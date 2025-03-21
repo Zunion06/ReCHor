@@ -9,8 +9,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents a journey consisting of multiple legs (steps), alternating between walking and transport.
+ */
 public record Journey(List<Leg> legs) {
     /**
+     * Constructs a Journey ensuring that legs alternate between Foot and Transport, and that time and stops align.
      * @param legs list of steps to be taken for the journey
      * @throws IllegalArgumentException if legs is empty, if Foot steps do not
      * alternate with Transport steps, if the start time and end time do not align
@@ -48,14 +52,14 @@ public record Journey(List<Leg> legs) {
     }
 
     /**
-     * @return at what time the journey end
+     * @return at what time the journey start
      */
     public LocalDateTime depTime(){
         return legs.getFirst().depTime();
     }
 
     /**
-     * @return at what time the journey starts
+     * @return at what time the journey end
      */
     public LocalDateTime arrTime(){
         return legs.getLast().arrTime();
@@ -69,16 +73,34 @@ public record Journey(List<Leg> legs) {
                 legs.getLast().arrTime());
     }
 
+    /**
+     * Represents a leg of a journey, which can be either walking (Foot) or using transport (Transport).
+     */
     public sealed interface Leg {
 
+        /**
+         * @return The departure stop of the leg.
+         */
         abstract Stop depStop();
 
+        /**
+         * @return The departure time of the leg.
+         */
         abstract LocalDateTime depTime();
 
+        /**
+         * @return The arrival stop of the leg.
+         */
         abstract Stop arrStop();
 
+        /**
+         * @return The arrival time of the leg.
+         */
         abstract LocalDateTime arrTime();
 
+        /**
+         * @return A list of intermediate stops during this leg.
+         */
         abstract List<IntermediateStop> intermediateStops();
 
         /**
@@ -88,8 +110,12 @@ public record Journey(List<Leg> legs) {
             return Duration.between(depTime(),arrTime());
         }
 
+        /**
+         * Represents an intermediate stop within a transport leg.
+         */
         public record IntermediateStop (Stop stop,LocalDateTime arrTime,LocalDateTime depTime) {
             /**
+             * Constructs an IntermediateStop with arrival and departure times.
              * @param stop given Intermediate Stop
              * @param arrTime arrival time at the stop
              * @param depTime depart time from the stop
@@ -102,10 +128,15 @@ public record Journey(List<Leg> legs) {
                         arrTime.isEqual(depTime));
             }
         }
+
+        /**
+         * Represents a transport leg of a journey.
+         */
         public record Transport (Stop depStop, LocalDateTime depTime, Stop arrStop,
                                  LocalDateTime arrTime, List<IntermediateStop> intermediateStops,
                                  Vehicle vehicle,String route,String destination) implements Leg {
             /**
+             * Constructs a Transport leg.
              * @param depStop departing stop
              * @param depTime departing time
              * @param arrStop arrival stop
@@ -130,8 +161,13 @@ public record Journey(List<Leg> legs) {
                intermediateStops=List.copyOf(intermediateStops);
             }
         }
+
+        /**
+         * Represents a walking leg of a journey.
+         */
         public record Foot(Stop depStop,LocalDateTime depTime,Stop arrStop,LocalDateTime arrTime) implements Leg {
             /**
+             * Constructs a Foot leg.
              * @param depStop departing stop
              * @param depTime departing time
              * @param arrStop arrival stop
@@ -156,6 +192,7 @@ public record Journey(List<Leg> legs) {
             }
 
             /**
+             * check if the foot leg is a transfer
              * @return true if the step is a transfer
              */
             public boolean isTransfer(){

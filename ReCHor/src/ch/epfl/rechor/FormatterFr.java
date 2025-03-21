@@ -15,6 +15,7 @@ import static java.lang.Character.isLetter;
 
 public final class FormatterFr {
     /**
+     * format a duration into a string
      * @param duration Duration to be formated (in seconds)
      * @return duration formated as a String ( ...h...min or ...min)
      */
@@ -27,6 +28,7 @@ public final class FormatterFr {
     }
 
     /**
+     * format a time into a string
      * @param dateTime date to be formated
      * @return datetime formated as a String (...h...min)
      * @throws NullPointerException if dateTime is null
@@ -43,7 +45,7 @@ public final class FormatterFr {
     }
 
     /**
-     *
+     * format a platform into a string
      * @param stop platform to be formated
      * @return stop formated as a String
      * @throws NullPointerException if stop is null
@@ -63,6 +65,7 @@ public final class FormatterFr {
     }
 
     /**
+     * format a footLeg into a string
      * @param footLeg step of the journey by foot to be formated
      * @return footLeg formated as a string
      * @throws NullPointerException if footLeg is null
@@ -82,6 +85,7 @@ public final class FormatterFr {
     }
 
     /**
+     * format a transport leg into a string
      * @param leg step of the journey by transports to be formated
      * @return leg formated as a string
      * @throws NullPointerException if leg is null
@@ -106,6 +110,7 @@ public final class FormatterFr {
     }
 
     /**
+     * format a transport leg's destination into a string
      * @param transportLeg step of the journey via transport to be formated
      * @return a String formating the direction of the step
      * @throws NullPointerException if transportLeg is null

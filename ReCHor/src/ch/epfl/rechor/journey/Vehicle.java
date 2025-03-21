@@ -13,5 +13,8 @@ public enum Vehicle {
     FUNICULAR
     ;
 
+    /**
+     * list of all type of vehicles with their enum values as index
+     */
     public static final List<Vehicle> ALL = List.of(Vehicle.values());
 }

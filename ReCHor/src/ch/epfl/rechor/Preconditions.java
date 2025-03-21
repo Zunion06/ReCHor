@@ -4,6 +4,7 @@ public final class Preconditions {
     private Preconditions() {}
 
     /**
+     * Checks the argument and throws IllegalArgumentException if false
      * @param shouldBeTrue assertion that should be true if the program works correctly
      * @throws IllegalArgumentException if shouldBeTrue is false
      */

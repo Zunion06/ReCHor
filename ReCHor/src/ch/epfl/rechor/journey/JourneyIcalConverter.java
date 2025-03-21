@@ -11,10 +11,14 @@ import static ch.epfl.rechor.IcalBuilder.Component.VCALENDAR;
 import static ch.epfl.rechor.IcalBuilder.Component.VEVENT;
 import static ch.epfl.rechor.IcalBuilder.Name.*;
 
+/**
+ * used to convert a journey into the ICalendar format
+ */
 public class JourneyIcalConverter {
     private JourneyIcalConverter(){}
 
     /**
+     * create a String following the ICalendar format of the journey
      * @param journey Journey that will be converted to the Icalendar form
      * @return a string containing the visual representation of the journey according to the Icalendar norms
      */
