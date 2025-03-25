@@ -51,13 +51,19 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
         return stationFront.get(stationId);
     }
 
-    public final class Builder {
+    public final static class Builder {
         TimeTable timeTable;
         LocalDate date;
         int arrStationId;
         ParetoFront.Builder[] stationBuilderFront;
         ParetoFront.Builder[] tripBuilderFront;
 
+        /**
+         * create an instance of Profile Builder with the given information in order to create a profile
+         * @param timeTable timeTable containing the information of the travel and dates
+         * @param date date of the future profile
+         * @param arrStationId arrival station of the future profile
+         */
         public Builder(TimeTable timeTable, LocalDate date, int arrStationId){
             this.timeTable=timeTable;
             this.date=date;
@@ -104,10 +110,17 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
             tripBuilderFront[tripId]=builder;
         }
 
+        /**
+         * Create an instance of Profile with informations given to the builder (frontier builder who haven't been initialised will create empty frontiers)
+         * @return an instance of Profile with the information given to the builder
+         */
         public Profile build(){
+            List<ParetoFront> stationFront=new ArrayList<>();
             for(ParetoFront.Builder builder : stationBuilderFront){
-
+                if(builder==null){stationFront.add(ParetoFront.EMPTY);}
+                else{stationFront.add(builder.build());}
             }
+            return new Profile(timeTable,date,arrStationId,stationFront);
         }
 
 
