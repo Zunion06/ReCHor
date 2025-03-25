@@ -1,16 +1,16 @@
 package ch.epfl.rechor.timetable.mapped;
 
-
-
 import ch.epfl.rechor.Bits32_24_8;
 import ch.epfl.rechor.timetable.Connections;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.List;
 
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.*;
 
+/**
+ * used to access a list of connections represented as flattened values
+ */
 public final class BufferedConnections implements Connections {
     private final static int DEP_STOP_ID=0;
     private final static int DEP_MINUTES=1;

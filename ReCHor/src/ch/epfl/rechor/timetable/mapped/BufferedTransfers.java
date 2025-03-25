@@ -9,6 +9,9 @@ import java.util.NoSuchElementException;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U8;
 
+/**
+ * used to access a list of transfers represented as flattened values
+ */
 public final class BufferedTransfers implements Transfers {
     private final static int DEP_STATION_ID=0;
     private final static int ARR_STATION_ID=1;

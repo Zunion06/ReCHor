@@ -1,5 +1,8 @@
 package ch.epfl.rechor;
 
+/**
+ * used to throw given exceptions in some cases
+ */
 public final class Preconditions {
     private Preconditions() {}
 

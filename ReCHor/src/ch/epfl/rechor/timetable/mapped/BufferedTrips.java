@@ -9,6 +9,9 @@ import java.util.List;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U8;
 
+/**
+ * used to access a list of trips represented as flattened values
+ */
 public final class BufferedTrips implements Trips {
     private final static int ROUTE_ID=0;
     private final static int DESTINATION_ID=1;

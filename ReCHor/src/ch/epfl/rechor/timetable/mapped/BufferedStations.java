@@ -8,6 +8,9 @@ import java.util.List;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.S32;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
+/**
+ * used to access a list of stations represented as flattened values
+ */
 public final class BufferedStations implements Stations {
     private final StructuredBuffer structuredBuffer;
     private final List<String> stringTable;

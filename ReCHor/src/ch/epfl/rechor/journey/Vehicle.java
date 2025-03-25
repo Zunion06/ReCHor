@@ -2,6 +2,9 @@ package ch.epfl.rechor.journey;
 
 import java.util.List;
 
+/**
+ * contains all the possible vehicle that can be used for the journeys
+ */
 public enum Vehicle {
 
     TRAM,

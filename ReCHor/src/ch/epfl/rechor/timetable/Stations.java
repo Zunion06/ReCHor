@@ -1,5 +1,8 @@
 package ch.epfl.rechor.timetable;
 
+/**
+ * represent the stations indexed
+ */
 public interface Stations extends Indexed {
 
     /**

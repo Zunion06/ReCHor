@@ -4,6 +4,9 @@ import ch.epfl.rechor.Preconditions;
 
 import java.util.Objects;
 
+/**
+ * used to ease the description of the structure of flattened values
+ */
 public class Structure {
 
     private short totalSize;
@@ -32,6 +35,7 @@ public class Structure {
     }
 
     /**
+     * gives the totalSize in octet of each elements
      * @return the totalSize in octet of each elements
      */
     public int totalSize(){
@@ -39,6 +43,7 @@ public class Structure {
     }
 
     /**
+     * find the offset of a given field of a given element in the entire structure
      * @param fieldIndex index of the field
      * @param elementIndex index of the element
      * @return the offset value at the given field and element
@@ -48,25 +53,29 @@ public class Structure {
     }
 
 
-
-    //peut on avoir un argument dans les classes?
+    /**
+     * all different type a field can take with different size
+     */
     public enum FieldType{
         U8,   // 8 bits (1 octet), non signé
         U16,  // 16 bits (2 octets), non signé
         S32;  // 32 bits (4 octets), signé
     }
 
-    /**
-     * @param index index of the given field
-     * @param type type of field
-     */
+
     public record Field(int index,FieldType type) {
+        /**
+         * create a field for the structure for a specific type of information to be stocked
+         * @param index index of the given field
+         * @param type type of field
+         */
         public Field {
             Objects.requireNonNull(type);
         }
     }
 
     /**
+     * create an instance of Field with the given parameters
      * @param index index to be given to the field
      * @param type type to be given to the field
      * @return an instance of Field with the given parameters

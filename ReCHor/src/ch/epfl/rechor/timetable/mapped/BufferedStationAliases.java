@@ -8,6 +8,9 @@ import java.util.List;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.S32;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
+/**
+ * used to access a list of stations aliases represented as flattened values
+ */
 public final class BufferedStationAliases implements StationAliases {
     private final static int ALIAS_ID=0;
     private final static int STATION_NAME_ID=1;

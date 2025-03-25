@@ -1,32 +1,63 @@
 package ch.epfl.rechor.timetable;
 
+/**
+ * represent the indexed connections
+ */
 public interface Connections extends Indexed{
 
-    // Returns the index of the departure stop for the given connection index
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the stop id of the first stop
+     * @param id connection id
+     * @return id of the first stop of the connection
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int depStopId(int id);
 
-    // Returns the departure time in minutes after midnight for the given connection index
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the length in minutes of the connection
+     * @param id connection id
+     * @return the length of the connection (in minutes)
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int depMins(int id);
 
-    // Returns the index of the arrival stop for the given connection index
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the arrival stop id of the connection
+     * @param id connection id
+     * @return the id of the last stop of the connection
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int arrStopId(int id);
 
-    // Returns the arrival time in minutes after midnight for the given connection index
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the arrival time of the connection
+     * @param id connection id
+     * @return arrival time of the connection (in minutes)
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int arrMins(int id);
 
-    // Returns the index of the trip to which the given connection belongs
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the id of the trip containing the connection
+     * @param id connection id
+     * @return the id of the trip containing the connection
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int tripId(int id);
 
-    // Returns the position of the given connection in its trip (first connection is 0)
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the position of the connection in its trip it belongs to
+     * @param id connection id
+     * @return the position of the connection in its trip
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int tripPos(int id);
 
-    // Returns the index of the next connection in the trip, or the first if it's the last
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the id of the following connection in a trip
+     * @param id current connection id
+     * @return the id of the next connection
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int nextConnectionId(int id);
 }

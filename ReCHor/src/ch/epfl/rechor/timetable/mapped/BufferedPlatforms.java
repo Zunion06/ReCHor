@@ -7,6 +7,9 @@ import java.util.List;
 
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
+/**
+ * used to access a list of platforms represented as flattened values
+ */
 public final class BufferedPlatforms implements Platforms {
     private final static int NAME_ID=0;
     private final static int STATION_ID=1;
@@ -15,6 +18,7 @@ public final class BufferedPlatforms implements Platforms {
     private final List<String> stringTable;
 
     /**
+     * create an instance of BufferedPlatforms with the needed informations
      * @param stringTable table of string documenting the platforms
      * @param buffer values to be set in the platforms information
      */
@@ -27,6 +31,7 @@ public final class BufferedPlatforms implements Platforms {
     }
 
     /**
+     * gives the name a given platform
      * @param id platform id
      * @return the name of the station for a given index
      * @throws IndexOutOfBoundsException for invalid index
@@ -37,6 +42,7 @@ public final class BufferedPlatforms implements Platforms {
     }
 
     /**
+     * gives the stationId of a given platform
      * @param id platform id
      * @return the station id for the given platform id
      * @throws IndexOutOfBoundsException for invalid index

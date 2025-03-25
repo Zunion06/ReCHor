@@ -86,7 +86,7 @@ public final class IcalBuilder {
     }
 
     /**
-     * Component are either
+     * All possible component (components can be started and ended)
      */
     public enum Component{
         VCALENDAR,
@@ -94,6 +94,9 @@ public final class IcalBuilder {
         ;
     }
 
+    /**
+     * all possible name
+     */
     public enum Name{
         BEGIN,
         END,

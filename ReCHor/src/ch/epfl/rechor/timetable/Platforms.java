@@ -1,14 +1,23 @@
 package ch.epfl.rechor.timetable;
 
-import ch.epfl.rechor.journey.Vehicle;
-
+/**
+ * represent the indexed platforms
+ */
 public interface Platforms extends Indexed{
 
-    //return the name of the platform of the given index
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the name a given platform
+     * @param id platform id
+     * @return the name of the station for a given index
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract String name(int id);
 
-    //return the station index of the given platform index
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the stationId of a given platform
+     * @param id platform id
+     * @return the station id for the given platform id
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int stationId(int id);
 }

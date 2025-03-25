@@ -1,8 +1,14 @@
 package ch.epfl.rechor.timetable;
 
+/**
+ * destined to be extended by every interface indexing elements to be able to implement the abstract method size().
+ */
 public interface Indexed {
 
-    //return the size (number of element)
+    /**
+     * gives the size of the index list used (number of elements)
+     * @return the number of indexed elements in the index list
+     */
     public abstract int size();
 
 

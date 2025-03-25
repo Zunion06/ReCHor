@@ -1,21 +1,42 @@
 package ch.epfl.rechor.timetable;
 
+import java.util.NoSuchElementException;
+
+/**
+ * represent the transfers indexed (only between stations)
+ */
 public interface Transfers extends Indexed{
 
-    //return the index of the departing station for a given transfer id
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the id of the departing station in a given transfer
+     * @param id transfer id
+     * @return the id of the departing station of the transfer
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int depStationId(int id);
 
-    //return the length (in minutes) for a given transfer id
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the length of the transfer (in minutes)
+     * @param id transfer id
+     * @return the length of the transfer (in minutes)
+     * @throws IndexOutOfBoundsException for invalid index
+     */
     abstract int minutes(int id);
 
-    //return the packed interval following the conventions used in PackedRange for a given transfer id
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * gives the interval for all transfers arriving to this station
+     * @param stationId id of the arrival station
+     * @return packed interval of all transfer ids arriving at this station
+     * @throws IndexOutOfBoundsException if stationId is invalid
+     */
     abstract int arrivingAt(int stationId);
 
-    //return the length (in minute) of a transfer between two stations of given id
-    //throws NoSuchElementException if no transfer is possible between both stations
-    //throw IndexOutOfBoundsException for invalid index
+    /**
+     * return the time taken (in minutes) for the transfer between the two stations
+     * @param depStationId departing station id
+     * @param arrStationId arriving station id
+     * @return transfer length in minutes
+     * @throws NoSuchElementException if there is no such transfers between both stations
+     */
     abstract int minutesBetween(int depStationId, int arrStationId);
 }

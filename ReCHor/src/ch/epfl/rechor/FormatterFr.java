@@ -13,6 +13,9 @@ import java.util.Objects;
 import static java.lang.Character.isDigit;
 import static java.lang.Character.isLetter;
 
+/**
+ * used to format values into a String text
+ */
 public final class FormatterFr {
     /**
      * format a duration into a string

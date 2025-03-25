@@ -9,6 +9,9 @@ import java.util.List;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U8;
 
+/**
+ * used to access a list of routes represented as flattened values
+ */
 public final class BufferedRoutes implements Routes {
 
     private final static int NAME_ID=0;
@@ -18,6 +21,7 @@ public final class BufferedRoutes implements Routes {
     private final List<String> stringTable;
 
     /**
+     * create an instance of BufferedRoutes with the needed informations
      * @param stringTable table of string documenting the platforms
      * @param buffer values to be set in the platforms information
      */
@@ -30,6 +34,7 @@ public final class BufferedRoutes implements Routes {
     }
 
     /**
+     * gives the name of a given route
      * @param id route id
      * @return the name of the route for a given index
      * @throws IndexOutOfBoundsException for invalid index
@@ -40,6 +45,7 @@ public final class BufferedRoutes implements Routes {
     }
 
     /**
+     * gives the kind of vehicle used on a given route
      * @param id route id
      * @return the type of vehicle used on a given route
      * @throws IndexOutOfBoundsException for invalid index

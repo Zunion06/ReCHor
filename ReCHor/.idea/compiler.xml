@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <excludeFromCompile>
       <file url="file://$PROJECT_DIR$/src/ch/epfl/sigcheck/SignatureChecks_1.java" />
+      <file url="file://$PROJECT_DIR$/src/ch/epfl/sigcheck/SignatureChecks_6.java" />
     </excludeFromCompile>
   </component>
 </project>

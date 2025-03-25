@@ -38,6 +38,7 @@ public record Journey(List<Leg> legs) {
     }
 
     /**
+     * gives the first Stop of the journey
      * @return the first Stop of the journey
      */
     public Stop depStop() {
@@ -45,6 +46,7 @@ public record Journey(List<Leg> legs) {
     }
 
     /**
+     * gives the last Stop of the journey
      * @return the last Stop of the journey
      */
     public Stop arrStop(){
@@ -52,6 +54,7 @@ public record Journey(List<Leg> legs) {
     }
 
     /**
+     * gives at what time the journey start
      * @return at what time the journey start
      */
     public LocalDateTime depTime(){
@@ -59,6 +62,7 @@ public record Journey(List<Leg> legs) {
     }
 
     /**
+     * gives at what time the journey end
      * @return at what time the journey end
      */
     public LocalDateTime arrTime(){
@@ -66,6 +70,7 @@ public record Journey(List<Leg> legs) {
     }
 
     /**
+     * gives the duration of the journey (between its start and end)
      * @return the duration of the journey (between its start and end)
      */
     public Duration duration(){
@@ -79,31 +84,37 @@ public record Journey(List<Leg> legs) {
     public sealed interface Leg {
 
         /**
+         * gives The departure stop of the leg.
          * @return The departure stop of the leg.
          */
         abstract Stop depStop();
 
         /**
+         * gives The departure time of the leg.
          * @return The departure time of the leg.
          */
         abstract LocalDateTime depTime();
 
         /**
+         * gives The arrival stop of the leg.
          * @return The arrival stop of the leg.
          */
         abstract Stop arrStop();
 
         /**
+         * gives The arrival time of the leg.
          * @return The arrival time of the leg.
          */
         abstract LocalDateTime arrTime();
 
         /**
+         * gives A list of intermediate stops during this leg.
          * @return A list of intermediate stops during this leg.
          */
         abstract List<IntermediateStop> intermediateStops();
 
         /**
+         * gives the duration of the journey step
          * @return the duration of the journey step
          */
         default Duration duration(){
@@ -185,6 +196,7 @@ public record Journey(List<Leg> legs) {
             }
 
             /**
+             * gives an empty list because travel by Foot does not have intermediate stops
              * @return an empty list because travel by Foot does not have intermediate stops
              */
             public List<IntermediateStop> intermediateStops(){
