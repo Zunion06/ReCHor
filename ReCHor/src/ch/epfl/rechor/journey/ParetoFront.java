@@ -35,10 +35,6 @@ public class ParetoFront {
         }
     }
 
-    public long[] toArray() {
-        return tupleTable;
-    }
-
     public String toString(){
         StringBuilder builder = new StringBuilder();
         for (long tuple : tupleTable) {
@@ -57,9 +53,9 @@ public class ParetoFront {
                     .append(',')
                     .append(changes(tuple))
                     .append(')')
-                    .append('\n');
-
-            builder.append(payload(tuple));
+                    .append('\n')
+                    .append(' ')
+                    .append(payload(tuple));
         }
         return builder.toString();
     }
