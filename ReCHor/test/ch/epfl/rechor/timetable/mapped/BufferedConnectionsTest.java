@@ -8,7 +8,7 @@ import java.util.HexFormat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class BufferedConnectionsTest {
+class MyBufferedConnectionsTest {
     private static ByteBuffer byteBuffer(String hex) {
         return ByteBuffer
                 .wrap(HexFormat.ofDelimiter(" ").parseHex(hex))

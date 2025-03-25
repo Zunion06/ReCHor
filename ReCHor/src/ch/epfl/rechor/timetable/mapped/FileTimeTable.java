@@ -10,12 +10,14 @@ import java.io.UncheckedIOException;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 
 import static java.nio.channels.FileChannel.MapMode.READ_ONLY;
 import static java.nio.file.Files.readAllLines;
+import static java.time.temporal.WeekFields.ISO;
 
 /**
  * represent the timetable of public transports for the given values
@@ -30,7 +32,7 @@ import static java.nio.file.Files.readAllLines;
 public record FileTimeTable(Path directory, List<String> stringTable, Stations stations, StationAliases stationAliases, Platforms platforms, Routes routes, Transfers transfers) implements TimeTable {
 
     public static TimeTable in(Path directory) throws IOException {
-        List<String> string =  List.copyOf(readAllLines(directory.resolve("strings.txt")));
+        List<String> string =  List.copyOf(readAllLines(directory.resolve("strings.txt"), StandardCharsets.ISO_8859_1));
         BufferedStations bufferedStations;
         BufferedPlatforms bufferedPlatforms;
         BufferedRoutes bufferedRoutes;

@@ -4,7 +4,9 @@ import ch.epfl.rechor.timetable.Connections;
 import ch.epfl.rechor.timetable.TimeTable;
 import ch.epfl.rechor.timetable.Trips;
 
+import java.sql.Time;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,5 +49,67 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
      */
     public ParetoFront forStation(int stationId){
         return stationFront.get(stationId);
+    }
+
+    public final class Builder {
+        TimeTable timeTable;
+        LocalDate date;
+        int arrStationId;
+        ParetoFront.Builder[] stationBuilderFront;
+        ParetoFront.Builder[] tripBuilderFront;
+
+        public Builder(TimeTable timeTable, LocalDate date, int arrStationId){
+            this.timeTable=timeTable;
+            this.date=date;
+            this.arrStationId=arrStationId;
+            this.stationBuilderFront=new ParetoFront.Builder[timeTable.stations().size()];
+            this.tripBuilderFront=new ParetoFront.Builder[timeTable.tripsFor(date).size()];
+        }
+
+        /**
+         * gives the pareto builder associated to the given station index
+         * @param stationId station index of the builder
+         * @throws IndexOutOfBoundsException for invalid index
+         */
+        public ParetoFront.Builder forStation(int stationId){
+            return stationBuilderFront[stationId];
+        }
+
+        /**
+         * associate the paretoBuilder to the pareto front for the given station index
+         * @param stationId station index of the builder
+         * @param builder builder to associated
+         * @throws IndexOutOfBoundsException for invalid index
+         */
+        public void setForStation(int stationId, ParetoFront.Builder builder){
+            stationBuilderFront[stationId]=builder;
+        }
+
+        /**
+         * gives the pareto builder associated to the given trip index
+         * @param tripId trip index of the builder
+         * @throws IndexOutOfBoundsException for invalid index
+         */
+        public ParetoFront.Builder forTrip(int tripId){
+            return tripBuilderFront[tripId];
+        }
+
+        /**
+         * associate the paretoBuilder to the pareto front for the given trip index
+         * @param tripId trip index of the builder
+         * @param builder builder to associated
+         * @throws IndexOutOfBoundsException for invalid index
+         */
+        public void setForTrip(int tripId, ParetoFront.Builder builder){
+            tripBuilderFront[tripId]=builder;
+        }
+
+        public Profile build(){
+            for(ParetoFront.Builder builder : stationBuilderFront){
+
+            }
+        }
+
+
     }
 }
