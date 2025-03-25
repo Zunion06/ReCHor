@@ -34,7 +34,7 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
     }
 
     /**
-     * gives thetrip for the date of the profile
+     * gives the trip for the date of the profile
      * @return the trip at the date of the profile
      */
     public Trips trips(){
