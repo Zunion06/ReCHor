@@ -5,20 +5,36 @@ import java.util.function.LongConsumer;
 
 import static ch.epfl.rechor.journey.PackedCriteria.*;
 
+/**
+ * used to create a Pareto Frontier to compare tuple between each other
+ */
 public class ParetoFront {
     private final long[] tupleTable;
     public static final ParetoFront EMPTY = new ParetoFront(new long[0]);
 
+    /**
+     * create an instance of ParetoFront with the list of tuple as the tuple table
+     * @param tupleTable table to be set as the tuple table
+     */
     private ParetoFront(long[] tupleTable){
         this.tupleTable=tupleTable;
     }
 
-    // Returns the size of the Pareto front (number of optimization tuples).
+    /**
+     * gives the size of the Pareto front (number of optimization tuples).
+     * @return the size of the Pareto front (number of optimization tuples).
+     */
     public int size(){
         return tupleTable.length;
     }
 
-    // Returns the packed optimization criteria for the given arrival time and changes, or throws NoSuchElementException if not found.
+    /**
+     * search a tuple in the frontier
+     * @param arrMins arrival time of the tuple
+     * @param changes number of changes of the tuple
+     * @return the packed optimization criteria for the given arrival time and changes, or throws NoSuchElementException if not found.
+     * @throws NoSuchElementException if tuple is not found
+     */
     public long get(int arrMins, int changes){
         for (int i=0;i<size();i++) {
             if ((arrMins(tupleTable[i]) == arrMins) && (changes(tupleTable[i]) == changes)) {
@@ -28,13 +44,20 @@ public class ParetoFront {
         throw new NoSuchElementException();
     }
 
-    // Calls the given LongConsumer action for each criterion in the Pareto front, in order.
+    /**
+     * Calls the given LongConsumer action for each element in the Pareto front, in order.
+     * @param action action to be done for each tuple of the frontier
+     */
     public void forEach(LongConsumer action){
         for (int i=0;i<size();i++) {
             action.accept(tupleTable[i]);
         }
     }
 
+    /**
+     * convert the frontier into a text format for testing
+     * @return the frontier as a String
+     */
     public String toString(){
         StringBuilder builder = new StringBuilder();
         for (long tuple : tupleTable) {
@@ -61,29 +84,52 @@ public class ParetoFront {
     }
 
 
+    /**
+     * used to build step by step a Pareto Frontier
+     */
     public static class Builder {
         private long[] tupleTable;
         private int size;
 
+        /**
+         * create an instance of builder with a base tuple table length of 2
+         */
         public Builder(){
             tupleTable=new long[2];
         }
 
+        /**
+         * create an instance of Builder copying the values of another builder
+         * @param that builder who's value will be copied
+         */
         public Builder(Builder that){
             this.tupleTable=that.tupleTable;
             this.size=that.size;
         }
 
+        /**
+         * checks if the number of element in the table is equal to 0
+         * @return true if the tuple table is empty
+         */
         public boolean isEmpty(){
             return size==0;
         }
 
+        /**
+         * removes all elements of the builder
+         * @return the builder itself
+         */
         public Builder clear(){
             tupleTable=new long[tupleTable.length];
             this.size=0;
             return this;
         }
 
+        /**
+         * add a tuple to the frontier and remove it or other tuple if needed
+         * @param packedTuple tuple to be added
+         * @return the builder itself
+         */
         public Builder add(long packedTuple){
             int placementIndex = 0;
             for (int i=0;i<size;i++){
@@ -117,6 +163,12 @@ public class ParetoFront {
             return this;
         }
 
+        /**
+         * reorder the tuple table ???
+         * @param startIndex
+         * @param packedTuple
+         * @return
+         */
         private int reordering(int startIndex,long packedTuple){
             int dst = startIndex;
             for (int src = startIndex; src < size; src += 1) {
@@ -130,17 +182,37 @@ public class ParetoFront {
             return dst;
         }
 
+        /**
+         * add a tuple to the table with the given packed values
+         * @param arrMins arrival time of the tuple
+         * @param changes number of changes of the tuple
+         * @param payload payload of the tuple
+         * @return the builder itself
+         */
         public Builder add(int arrMins, int changes, int payload){
             add(pack(arrMins,changes,payload));
             return this;
         }
 
+        /**
+         * add a tuple to the table with the given packed values
+         * @param depMins depart time of the tuple
+         * @param arrMins arrival time of the tuple
+         * @param changes number of changes of the tuple
+         * @param payload payload of the tuple
+         * @return the builder itself
+         */
         public Builder add(int depMins, int arrMins, int changes, int payload){
             long tuple = withDepMins(pack(arrMins,changes,payload),depMins);
             add(tuple);
             return this;
         }
 
+        /**
+         * add all the tuple of that in the build
+         * @param that builder whose elements will all be copied
+         * @return the builder itself
+         */
         public Builder addAll(Builder that){
             for(int i=0;i<that.size;i++){
                 add(that.tupleTable[i]);
@@ -148,7 +220,12 @@ public class ParetoFront {
             return this;
         }
 
-        // pas terrible le code --> à refaire mieux
+        /**
+         * ???
+         * @param that
+         * @param depMins
+         * @return
+         */
         public boolean fullyDominates(Builder that, int depMins){
             if (that.size==0) return true;
             boolean domination;
@@ -164,13 +241,21 @@ public class ParetoFront {
             return true;
         }
 
-        // /!\ c'est du copié collé
+
+        /**
+         * Calls the given LongConsumer action for each element in the builder, in order.
+         * @param action action to be done for each tuple of the builder
+         */
         public void forEach(LongConsumer action){
             for (int i=0;i<size;i++) {
                 action.accept(tupleTable[i]);
             }
         }
 
+        /**
+         * create an instance of ParetoFront with the tuple given to the builder
+         * @return an instance of ParetoFront with the tuple given to the builder
+         */
         public ParetoFront build(){
             long[] finalTable = new long[size];
             System.arraycopy(tupleTable,0,finalTable,0,size);
