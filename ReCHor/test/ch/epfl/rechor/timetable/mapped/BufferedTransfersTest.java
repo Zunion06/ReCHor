@@ -90,6 +90,9 @@ class BufferedTransfersTest {
 
         for (var i = 0; i < STATIONS_COUNT; i += 1) {
             var expArrivingAt = PackedRange.pack(i * STATIONS_COUNT, (i + 1) * STATIONS_COUNT);
+//            System.out.println("expected : "+Integer.toBinaryString(expArrivingAt));
+//            System.out.println("actual : "+Integer.toBinaryString(t.arrivingAt(ARR_STATIONS.get(i))));
+//            System.out.println("start : "+PackedRange.startInclusive(t.arrivingAt(ARR_STATIONS.get(i)))+" length : "+PackedRange.length(t.arrivingAt(ARR_STATIONS.get(i))));
             assertEquals(expArrivingAt, t.arrivingAt(ARR_STATIONS.get(i)));
         }
     }

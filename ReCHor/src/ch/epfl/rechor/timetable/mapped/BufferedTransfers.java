@@ -28,25 +28,29 @@ public final class BufferedTransfers implements Transfers {
                 new Structure.Field(TRANSFER_MINUTES,U8));
         structuredBuffer=new StructuredBuffer(tripsStructure,buffer);
 
-        int maxArrStationIndex = 0;
-        for (int i = 1; i < size(); i++) {
-            int currentArrStationIndex = structuredBuffer.getU16(ARR_STATION_ID,i);
-            if (currentArrStationIndex > maxArrStationIndex)
-                maxArrStationIndex = currentArrStationIndex;
-        }
-
-        transfersIntervals = new int[maxArrStationIndex+1];
-        int previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID,0); //ID in transfersIntervals
-        int ithIntervalLength = 1;
-        for (int i = 1; i < size(); i++) {
-            if (structuredBuffer.getU16(ARR_STATION_ID,i) != structuredBuffer.getU16(ARR_STATION_ID,i-1)){
-                transfersIntervals[previousArrStationID] = PackedRange.pack(i - ithIntervalLength, i);
-                previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID,i);
-                ithIntervalLength = 0;
+        if (size() != 0){
+            int maxArrStationIndex = 0;
+            for (int i = 1; i < size(); i++) {
+                int currentArrStationIndex = structuredBuffer.getU16(ARR_STATION_ID,i);
+                if (currentArrStationIndex > maxArrStationIndex)
+                    maxArrStationIndex = currentArrStationIndex;
             }
-            ithIntervalLength++;
+
+            transfersIntervals = new int[maxArrStationIndex+1];
+            int previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, 0); //ID in transfersIntervals
+            int intervalLength = 1;
+            for (int i = 1; i < size(); i++) {
+                if (structuredBuffer.getU16(ARR_STATION_ID, i) != structuredBuffer.getU16(ARR_STATION_ID, i - 1)) {
+                    transfersIntervals[previousArrStationID] = PackedRange.pack(i - intervalLength, i);
+                    previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, i);
+                    intervalLength = 0;
+                }
+                intervalLength++;
+            }
+            transfersIntervals[previousArrStationID] = PackedRange.pack(size() - intervalLength, size()); // here previousArrStationID should be equal to transfersIntervalsLength
         }
-        transfersIntervals[previousArrStationID] = PackedRange.pack(size() - ithIntervalLength, size()); // here previousArrStationID should be equal to transfersIntervalsLength
+        else
+            transfersIntervals = new int[0];
     }
 
 
