@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class MyBufferedConnectionsTest {
+class MyBufferedConnectionsTest2 {
     private BufferedConnections bufferedConnections;
 
 
