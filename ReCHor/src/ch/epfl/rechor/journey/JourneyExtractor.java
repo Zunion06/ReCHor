@@ -3,7 +3,6 @@ package ch.epfl.rechor.journey;
 import ch.epfl.rechor.Bits32_24_8;
 import ch.epfl.rechor.timetable.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -24,13 +23,14 @@ public final class JourneyExtractor {
         pf.forEach((profileCriteria) -> {
             List<Journey.Leg> legsList = new ArrayList<>();
 
+            LocalDateTime transportArrTime;
             int connectionID = Bits32_24_8.unpack24(payload(profileCriteria));
             Stop transportDepStop = createStop(connections.depStopId(connectionID),profile);
             Stop transportArrStop;
             long currentCriteria = profileCriteria;
             for (int i = 0; i <= changes(profileCriteria); i++) {
                 LocalDateTime transportDepTime = createLocalDateTime(connections.depMins(connectionID),profile);
-                int initialConnectionID = connectionID;
+                int depStopID = connections.depStopId(connectionID);
 
                 List<Journey.Leg.IntermediateStop> intermediateStops = new ArrayList<>();
                 int numberOfIntermediateStops = Bits32_24_8.unpack8(payload(currentCriteria));
@@ -45,11 +45,8 @@ public final class JourneyExtractor {
                     connectionID = connections.nextConnectionId(connectionID);
                 }
 
-                int depStopID = connections.depStopId(initialConnectionID);
-                int arrStopID = connections.arrStopId(connectionID);
-
                 transportArrStop = createStop(connections.arrStopId(connectionID),profile);
-                LocalDateTime transportArrTime=createLocalDateTime(connections.arrMins(connectionID),profile);
+                transportArrTime = createLocalDateTime(connections.arrMins(connectionID),profile);
 
                 legsList.add(new Journey.Leg.Transport(
                         transportDepStop,
@@ -64,22 +61,18 @@ public final class JourneyExtractor {
 
                 if (changes(currentCriteria) != 0){
 
-                    int footStationDepId = profile.timeTable().isStationId(connections.arrStopId(connectionID)) ?
-                            connections.depStopId(connectionID):
-                            profile.timeTable().platforms().stationId(profile.timeTable().stationId(connections.arrStopId(connectionID)));
+                    int footStationDepId = getStationId(connections.arrStopId(connectionID),profile);
 
                     LocalDateTime footDepTime = createLocalDateTime(connections.arrMins(connectionID),profile);
 
                     currentCriteria = profile.forStation(footStationDepId).get(arrMins(currentCriteria),changes(currentCriteria)-1);
                     connectionID = Bits32_24_8.unpack24(payload(currentCriteria));
 
-                    int footStationArrId = profile.timeTable().isStationId(connections.depStopId(connectionID)) ?
-                            connections.depStopId(connectionID):
-                            profile.timeTable().platforms().stationId(profile.timeTable().stationId(connections.depStopId(connectionID)));
+                    int footStationArrId = getStationId(connections.depStopId(connectionID),profile);
 
                     LocalDateTime footArrTime = footDepTime.plusMinutes(profile.timeTable().transfers().minutesBetween(footStationDepId,footStationArrId));
 
-                    transportDepStop = createStop(footStationArrId,profile);
+                    transportDepStop = createStop(connections.depStopId(connectionID),profile);
 
                     legsList.add(new Journey.Leg.Foot(
                             transportArrStop,
@@ -100,18 +93,15 @@ public final class JourneyExtractor {
         return journeysList;
     }
 
-    private static Stop createStop(int stopID, Profile profile){
-        Platforms platforms = profile.timeTable().platforms();
+    private static Stop createStop(int stopId, Profile profile){
         Stations stations = profile.timeTable().stations();
         TimeTable timeTable = profile.timeTable();
 
-        int stationId = timeTable.isStationId(stopID) ?
-                stopID:
-                profile.timeTable().platforms().stationId(profile.timeTable().stationId(stopID));
+        int stationId = getStationId(stopId,profile);
 
         return new Stop(
                 stations.name(stationId),
-                timeTable.platformName(stopID),
+                timeTable.platformName(stopId),
                 stations.longitude(stationId),
                 stations.latitude(stationId)
         );
@@ -121,4 +111,9 @@ public final class JourneyExtractor {
         return LocalDateTime.of(profile.date(), LocalTime.of(0, 0, 0)).plusMinutes(mins);
     }
 
+    private static int getStationId(int stopId, Profile profile) {
+        return profile.timeTable().isStationId(stopId) ?
+                stopId:
+                profile.timeTable().platforms().stationId(profile.timeTable().stationId(stopId));
+    }
 }
