@@ -11,6 +11,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U8;
 
 /**
  * used to access a list of trips represented as flattened values
+ * @author Matthias Gibon
  */
 public final class BufferedTrips implements Trips {
     private final static int ROUTE_ID=0;

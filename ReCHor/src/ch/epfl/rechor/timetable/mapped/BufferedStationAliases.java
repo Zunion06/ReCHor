@@ -10,6 +10,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 /**
  * used to access a list of stations aliases represented as flattened values
+ * @author Matthias Gibon
  */
 public final class BufferedStationAliases implements StationAliases {
     private final static int ALIAS_ID=0;

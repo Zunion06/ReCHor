@@ -11,6 +11,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U8;
 
 /**
  * used to access a list of routes represented as flattened values
+ * @author Matthias Gibon
  */
 public final class BufferedRoutes implements Routes {
 

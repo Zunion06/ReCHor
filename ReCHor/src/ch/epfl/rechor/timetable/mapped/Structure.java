@@ -16,6 +16,7 @@ public class Structure {
      * document the total size and the starting index of each field in octets
      * @param fields list of fields documented in structure
      * @throws IllegalArgumentException if the fields are not ordered by index
+     * @author Matthias Gibon
      */
     public Structure(Field... fields){
         totalSize=0;

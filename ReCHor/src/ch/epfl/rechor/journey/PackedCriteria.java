@@ -4,6 +4,7 @@ import ch.epfl.rechor.Preconditions;
 
 /**
  * class utilitaire pour pack et unpack des information dans des long
+ * @author Guillaume Pommier
  */
 public final class PackedCriteria {
     private static final int NUMBER_OF_BITS_FOR_TIMES = 12;

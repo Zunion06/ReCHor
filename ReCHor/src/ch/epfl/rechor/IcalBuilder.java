@@ -7,6 +7,7 @@ import java.util.StringJoiner;
 
 /**
  * used to create step by step the ICalendar format of a journey
+ * @author Matthias Gibon
  */
 public final class IcalBuilder {
     private final StringBuilder builder = new StringBuilder();

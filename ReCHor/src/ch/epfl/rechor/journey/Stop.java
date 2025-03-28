@@ -5,9 +5,13 @@ import ch.epfl.rechor.Preconditions;
 import java.util.Objects;
 
 
+/**
+ * A stop is either a station or a platform, with a name and position
+ * @author Matthias Gibon
+ */
 public record Stop(String name, String platformName, double longitude, double latitude) {
     /**
-     * a Stop is either a station or a platform, with a name and position
+     * create an instance of Stop with a name and position
      * @param name stop name, can't be null
      * @param platformName platform name
      * @param longitude longitude coordinate of the stop (between 180 and -180)

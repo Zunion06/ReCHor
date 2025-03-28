@@ -15,6 +15,7 @@ import static java.lang.Character.isLetter;
 
 /**
  * used to format values into a String text
+ * @author Matthias Gibon
  */
 public final class FormatterFr {
     /**

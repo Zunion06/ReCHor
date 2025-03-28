@@ -10,6 +10,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.*;
 
 /**
  * used to access a list of connections represented as flattened values
+ * @author Matthias Gibon
  */
 public final class BufferedConnections implements Connections {
     private final static int DEP_STOP_ID=0;

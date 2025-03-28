@@ -11,6 +11,7 @@ import java.util.Objects;
 
 /**
  * Represents a journey consisting of multiple legs (steps), alternating between walking and transport.
+ * @author Matthias Gibon, Guillaume Pommier
  */
 public record Journey(List<Leg> legs) {
     /**
@@ -80,6 +81,7 @@ public record Journey(List<Leg> legs) {
 
     /**
      * Represents a leg of a journey, which can be either walking (Foot) or using transport (Transport).
+     * @author Matthias Gibon, Guillaume Pommier
      */
     public sealed interface Leg {
 
@@ -123,6 +125,7 @@ public record Journey(List<Leg> legs) {
 
         /**
          * Represents an intermediate stop within a transport leg.
+         * @author Matthias Gibon, Guillaume Pommier
          */
         public record IntermediateStop (Stop stop,LocalDateTime arrTime,LocalDateTime depTime) {
             /**
@@ -142,6 +145,7 @@ public record Journey(List<Leg> legs) {
 
         /**
          * Represents a transport leg of a journey.
+         * @author Matthias Gibon, Guillaume Pommier
          */
         public record Transport (Stop depStop, LocalDateTime depTime, Stop arrStop,
                                  LocalDateTime arrTime, List<IntermediateStop> intermediateStops,
@@ -175,6 +179,7 @@ public record Journey(List<Leg> legs) {
 
         /**
          * Represents a walking leg of a journey.
+         * @author Matthias Gibon, Guillaume Pommier
          */
         public record Foot(Stop depStop,LocalDateTime depTime,Stop arrStop,LocalDateTime arrTime) implements Leg {
             /**

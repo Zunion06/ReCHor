@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * table containing the timeTable, date, arrival station and paretoFront list for each stops of a travel
+ * @author Matthias Gibon
  */
 public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, List<ParetoFront> stationFront) {
     /**
@@ -55,6 +56,7 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
 
     /**
      * Builder used to create an instance of Profile
+     * @author Matthias Gibon
      */
     public final static class Builder {
         TimeTable timeTable;

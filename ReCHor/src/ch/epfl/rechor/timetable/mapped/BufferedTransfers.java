@@ -11,6 +11,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U8;
 
 /**
  * used to access a list of transfers represented as flattened values
+ * @author Matthias Gibon, Guillaume Pommier
  */
 public final class BufferedTransfers implements Transfers {
     private final static int DEP_STATION_ID=0;
@@ -103,7 +104,7 @@ public final class BufferedTransfers implements Transfers {
         int searchEndPoint = PackedRange.endExclusive(transfersIntervals[arrStationId]);
         for (int i = searchStartingPoint; i < searchEndPoint; i++) {
             if (structuredBuffer.getU16(DEP_STATION_ID,i) == depStationId)
-                return structuredBuffer.getU8(TRANSFER_MINUTES,i);
+                return minutes(i);
         }
         throw new NoSuchElementException();
     }

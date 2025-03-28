@@ -2,6 +2,7 @@ package ch.epfl.rechor.timetable;
 
 /**
  * represent the station aliases indexed
+ * @author Matthias Gibon
  */
 public interface StationAliases extends Indexed {
 

@@ -9,6 +9,7 @@ public final class Bits32_24_8 {
      * @param bits8 an integer of 1 byte
      * @return a packaged an int with the integer of 3 bytes and the integer of 1 byte
      * @throws IllegalArgumentException if bits24 has more than 24 bits of information, if bits8 has more than 8 bits of information
+     * @author Guillaume Pommier
      */
     public static int pack(int bits24, int bits8){
         Preconditions.checkArgument(bits24 >> 24 == 0);

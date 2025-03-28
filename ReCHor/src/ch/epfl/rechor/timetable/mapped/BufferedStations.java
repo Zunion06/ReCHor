@@ -10,6 +10,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 /**
  * used to access a list of stations represented as flattened values
+ * @author Matthias Gibon
  */
 public final class BufferedStations implements Stations {
     private final StructuredBuffer structuredBuffer;

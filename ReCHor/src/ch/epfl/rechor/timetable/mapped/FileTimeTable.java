@@ -23,6 +23,7 @@ import static java.nio.file.Files.readAllLines;
  * @param platforms all platforms of the timetable
  * @param routes all routes of the timetable
  * @param transfers all transfers of the timetable
+ * @author Matthias Gibon
  */
 public record FileTimeTable(Path directory, List<String> stringTable, Stations stations, StationAliases stationAliases, Platforms platforms, Routes routes, Transfers transfers) implements TimeTable {
 

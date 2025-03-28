@@ -2,6 +2,7 @@ package ch.epfl.rechor.timetable;
 
 /**
  * represent the trips indexed
+ * @author Matthias Gibon
  */
 public interface Trips extends Indexed{
 

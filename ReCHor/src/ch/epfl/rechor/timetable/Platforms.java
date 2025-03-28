@@ -2,6 +2,7 @@ package ch.epfl.rechor.timetable;
 
 /**
  * represent the indexed platforms
+ * @author Matthias Gibon
  */
 public interface Platforms extends Indexed{
 
