@@ -50,15 +50,6 @@ public class MyJourneyExtractorTest {
             TimeTable t = FileTimeTable.in(Path.of("timetable"));
             LocalDate date = LocalDate.of(2025, Month.MARCH, 18);
             Profile p = readProfile(t, date, 11486);
-
-//            System.out.println(p.trips().destination(1));
-
-//            for (int i = 0; i < p.timeTable().platforms().size(); i++) {
-//                if(p.timeTable().stations().name(p.timeTable().platforms().stationId(i)).charAt(0)=='E')
-//                if (i==3659)
-//                    System.out.println(i +" : "+p.timeTable().stations().name(p.timeTable().platforms().stationId(i)));
-//            }
-
             List<Journey> js = JourneyExtractor.journeys(p, 7872);
             String j = JourneyIcalConverter.toIcalendar(js.get(32));
             System.out.println(j);
@@ -143,4 +134,11 @@ public class MyJourneyExtractorTest {
         }
         assertEquals(Set.of(), requiredNames);
     }
+
+    @Test
+    void TestIfJourneyCanStartWithFoot() {
+
+    }
+
 }
+

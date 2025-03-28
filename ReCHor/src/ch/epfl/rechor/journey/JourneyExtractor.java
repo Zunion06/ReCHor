@@ -3,6 +3,7 @@ package ch.epfl.rechor.journey;
 import ch.epfl.rechor.Bits32_24_8;
 import ch.epfl.rechor.timetable.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -26,7 +27,17 @@ public final class JourneyExtractor {
             LocalDateTime transportArrTime;
             int connectionID = Bits32_24_8.unpack24(payload(profileCriteria));
             Stop transportDepStop = createStop(connections.depStopId(connectionID),profile);
-            Stop transportArrStop;
+
+            if (depStationId != getStationId(connections.depStopId(connectionID),profile)) {
+                legsList.add(new Journey.Leg.Foot(
+                        createStop(depStationId,profile),
+                        createLocalDateTime(depMins(profileCriteria),profile),
+                        transportDepStop,
+                        createLocalDateTime(depMins(profileCriteria)+profile.timeTable().transfers().minutesBetween(depStationId,getStationId(connections.depStopId(connectionID),profile)),profile)
+                ));
+            }
+
+            Stop transportArrStop = null;
             long currentCriteria = profileCriteria;
             for (int i = 0; i <= changes(profileCriteria); i++) {
                 LocalDateTime transportDepTime = createLocalDateTime(connections.depMins(connectionID),profile);
@@ -82,6 +93,16 @@ public final class JourneyExtractor {
                     ));
                 }
             }
+            if (profile.arrStationId() != getStationId(connections.arrStopId(connectionID),profile)){
+                LocalDateTime footDepTime = createLocalDateTime(connections.arrMins(connectionID),profile);
+                LocalDateTime footArrTime = footDepTime.plusMinutes(profile.timeTable().transfers().minutesBetween(profile.arrStationId(), getStationId(connections.arrStopId(connectionID),profile)));
+                legsList.add(new Journey.Leg.Foot(
+                        transportArrStop,
+                        footDepTime,
+                        createStop(profile.arrStationId(),profile),
+                        footArrTime
+                ));
+            }
             journeysList.add(new Journey(legsList));
 
         });
@@ -106,6 +127,16 @@ public final class JourneyExtractor {
                 stations.latitude(stationId)
         );
     }
+
+//    private static Journey.Leg.Foot createLegFoot(int depStopId, int arrStopId, Profile profile) {
+//        int footStationDepId = getStationId(depStopId,profile);
+//        int footStationArrId = getStationId(arrStopId,profile);
+//        LocalDateTime footDepTime = createLocalDateTime(depStopId,profile);
+//        LocalDateTime footArrTime = footDepTime.plusMinutes(profile.timeTable().transfers().minutesBetween(footStationDepId,footStationArrId));
+//        return new Journey.Leg.Foot(
+//
+//        )
+//    }
 
     private static LocalDateTime createLocalDateTime(int mins,Profile profile){
         return LocalDateTime.of(profile.date(), LocalTime.of(0, 0, 0)).plusMinutes(mins);

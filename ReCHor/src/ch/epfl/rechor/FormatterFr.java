@@ -98,13 +98,13 @@ public final class FormatterFr {
         StringBuilder builder = new StringBuilder(100);
         builder.append(formatTime(leg.depTime())).append(' ');
         builder.append(leg.depStop().name());
-        if(leg.depStop().platformName()!=null){
+        if(leg.depStop().platformName()!=null && !leg.depStop().platformName().isEmpty()){
             builder.append(" (").append(formatPlatformName(leg.depStop())).append(')');
         }
         builder.append(" → ");
         builder.append(leg.arrStop().name()).append(" (arr. ");
         builder.append(formatTime(leg.arrTime()));
-        if(leg.arrStop().platformName()!=null) {
+        if(leg.arrStop().platformName()!=null && !leg.arrStop().platformName().isEmpty()) {
             builder.append(' ').append(formatPlatformName(leg.arrStop()));
         }
         builder.append(')');
