@@ -3,7 +3,9 @@ package ch.epfl.rechor.journey;
 import ch.epfl.rechor.Bits32_24_8;
 import ch.epfl.rechor.Preconditions;
 
-// should it be final ?
+/**
+ * class utilitaire pour pack et unpack des information dans des long
+ */
 public final class PackedCriteria {
     private static final int NUMBER_OF_BITS_FOR_TIMES = 12;
     private static final int NUMBER_OF_BITS_FOR_CHANGES = 7;

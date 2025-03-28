@@ -10,6 +10,9 @@ import static ch.epfl.rechor.journey.PackedCriteria.*;
  */
 public class ParetoFront {
     private final long[] tupleTable;
+    /**
+     * empty pareto frontier used to avoid using null
+     */
     public static final ParetoFront EMPTY = new ParetoFront(new long[0]);
 
     /**

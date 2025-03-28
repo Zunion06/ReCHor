@@ -51,6 +51,9 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
         return stationFront.get(stationId);
     }
 
+    /**
+     * Builder used to create an instance of Profile
+     */
     public final static class Builder {
         TimeTable timeTable;
         LocalDate date;

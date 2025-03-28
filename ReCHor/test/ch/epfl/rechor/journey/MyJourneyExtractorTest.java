@@ -140,5 +140,29 @@ public class MyJourneyExtractorTest {
 
     }
 
+    Journey ExampleIfJourney1Foot1Transport(){
+        var s1 = new Stop("Ecublens VD, EPFL", null, 6.566141, 46.522196);
+        var s2 = new Stop("Renens VD, gare", null, 6.578519, 46.537619);
+        var s3 = new Stop("Renens VD", "4", 6.578935, 46.537042);
+
+
+        var d = LocalDate.of(2025, Month.FEBRUARY, 18);
+
+        var l1 = new Journey.Leg.Foot(s1, d.atTime(16, 13), s2, d.atTime(16, 29));
+
+        var l2 = new Journey.Leg.Transport(
+                s2,
+                d.atTime(16, 19),
+                s3,
+                d.atTime(16, 22),
+                List.of(),
+                Vehicle.METRO,
+                "m1",
+                "Renens VD");
+
+
+        return new Journey(List.of(l1, l2));
+    }
+
 }
 
