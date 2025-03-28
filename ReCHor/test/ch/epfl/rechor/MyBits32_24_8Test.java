@@ -60,14 +60,14 @@ public class MyBits32_24_8Test {
         assertEquals(expectedReturn, Bits32_24_8.unpack8(bits32));
     }
 
-    @Test
-    void DoesErasureBitsWorks() {
-        long allOne = -1L;
-        long actualReturn = Bits32_24_8.bitsErasure(allOne, 32, 1);
-        long expectedReturn = -1L << 6 | 0b000001;
-        System.out.println(Long.toBinaryString(actualReturn));
-//        assertEquals(expectedReturn,actualReturn);
-    }
+//    @Test
+//    void DoesErasureBitsWorks() {
+//        long allOne = -1L;
+//        long actualReturn = Bits32_24_8.bitsErasure(allOne, 32, 1);
+//        long expectedReturn = -1L << 6 | 0b000001;
+//        System.out.println(Long.toBinaryString(actualReturn));
+////        assertEquals(expectedReturn,actualReturn);
+//    }
 
     //####################### Test d'aliénor ##################################
 

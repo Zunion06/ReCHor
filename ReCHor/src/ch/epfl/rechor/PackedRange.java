@@ -4,10 +4,8 @@ public final class PackedRange {
     private PackedRange() {}
 
     public static int pack(int startInclusive, int endExclusive) {
-        Preconditions.checkBitLength(startInclusive,24);
         Preconditions.checkArgument(startInclusive<=endExclusive);
         int length = endExclusive - startInclusive;
-        Preconditions.checkBitLength(length,8);
         return Bits32_24_8.pack(startInclusive,length);
     }
 

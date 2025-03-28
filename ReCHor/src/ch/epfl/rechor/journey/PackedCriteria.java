@@ -1,6 +1,5 @@
 package ch.epfl.rechor.journey;
 
-import ch.epfl.rechor.Bits32_24_8;
 import ch.epfl.rechor.Preconditions;
 
 /**
@@ -17,6 +16,7 @@ public final class PackedCriteria {
     private static final int TIME_OFFSET = 240;
     private static final int CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT = 4095;
     private static final int MAXIMUM_CHANGES_POSSIBLE = 0x7F;
+    private static final int MAXIMUM_MINUTES_EXCLUDED = 2880;
 
     private PackedCriteria() {}
 
@@ -29,8 +29,8 @@ public final class PackedCriteria {
      * @throws IllegalArgumentException if changes has more bits than 7 bits, if arrTime is not between -240 and 2879
      */
     public static long pack(int arrMins, int changes, int payload) {
-        Preconditions.checkArgument(-240<=arrMins && arrMins < 2880);
-        Preconditions.checkBitLength(changes,NUMBER_OF_BITS_FOR_CHANGES);
+        Preconditions.checkArgument(-TIME_OFFSET<=arrMins && arrMins < MAXIMUM_MINUTES_EXCLUDED);
+        Preconditions.checkArgument(changes >> NUMBER_OF_BITS_FOR_CHANGES == 0);
         // No need to check "payload" as it is an int, therefore it has a maximum of 32 bits
         long arrMinsLong = Integer.toUnsignedLong(arrMins + TIME_OFFSET);
         long changesLong = Integer.toUnsignedLong(changes);
@@ -44,7 +44,7 @@ public final class PackedCriteria {
      * @return a boolean, true if the criteria contains a departure time in it, false otherwise
      */
     public static boolean hasDepMins(long criteria) {
-        long mask = Bits32_24_8.longMask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
+        long mask = longMask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
         return (criteria & mask) != 0;
     }
 
@@ -56,7 +56,7 @@ public final class PackedCriteria {
      */
     public static int depMins(long criteria) {
         Preconditions.checkArgument(hasDepMins(criteria));
-        long mask = Bits32_24_8.longMask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
+        long mask = longMask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
         int depMinsBeforeMidnight = CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT - (int) ((criteria & mask) >>> BIT_INDEX_OF_DEPARTURE_TIME); //taking the complement into account
         return depMinsBeforeMidnight - TIME_OFFSET ;
     }
@@ -67,7 +67,7 @@ public final class PackedCriteria {
      * @return the arriving time in the criteria in argument
      */
     public static int arrMins(long criteria) {
-        int mask =  Bits32_24_8.mask(NUMBER_OF_BITS_FOR_TIMES);
+        int mask =  mask(NUMBER_OF_BITS_FOR_TIMES);
         int arrMinsBeforeMidnight = (int) (criteria >>> BIT_INDEX_OF_ARRIVING_TIME) & mask;
         return arrMinsBeforeMidnight - TIME_OFFSET;
     }
@@ -78,7 +78,7 @@ public final class PackedCriteria {
      * @return the number of changes in the criteria in argument
      */
     public static int changes(long criteria) {
-        int mask =  Bits32_24_8.mask(NUMBER_OF_BITS_FOR_CHANGES);
+        int mask =  mask(NUMBER_OF_BITS_FOR_CHANGES);
         return (int) (criteria >>> BIT_INDEX_OF_CHANGES) & mask;
     }
 
@@ -114,7 +114,7 @@ public final class PackedCriteria {
      * @return the packaged criteria in argument without a departure time
      */
     public static long withoutDepMins(long criteria) {
-        return Bits32_24_8.bitsErasure(criteria,BIT_INDEX_OF_DEPARTURE_TIME,NUMBER_OF_BITS_FOR_TIMES);
+        return bitsErasure(criteria,BIT_INDEX_OF_DEPARTURE_TIME,NUMBER_OF_BITS_FOR_TIMES);
     }
 
     /**
@@ -124,7 +124,7 @@ public final class PackedCriteria {
      * @return the packaged criteria in argument with the departure time in argument
      */
     public static long withDepMins(long criteria, int depMins1) {
-        long resetedCriteria = Bits32_24_8.bitsErasure(criteria, BIT_INDEX_OF_DEPARTURE_TIME,NUMBER_OF_BITS_FOR_TIMES);
+        long resetedCriteria = bitsErasure(criteria, BIT_INDEX_OF_DEPARTURE_TIME,NUMBER_OF_BITS_FOR_TIMES);
         long depMinsComp = CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT - depMins1 - TIME_OFFSET;
         return depMinsComp << BIT_INDEX_OF_DEPARTURE_TIME | resetedCriteria;
     }
@@ -148,30 +148,35 @@ public final class PackedCriteria {
      * @return the packaged criteria with the payload included
      */
     public static long withPayload(long criteria, int payload1) {
-        long resetedCriteria = Bits32_24_8.bitsErasure(criteria,BIT_INDEX_OF_PAYLOAD,NUMBER_OF_BITS_FOR_PAYLOAD);
+        long resetedCriteria = bitsErasure(criteria,BIT_INDEX_OF_PAYLOAD,NUMBER_OF_BITS_FOR_PAYLOAD);
         return resetedCriteria | Integer.toUnsignedLong(payload1);
     }
 
-    public static String packToString(long criteria) {
-        StringBuilder builder = new StringBuilder();
-        builder.append('(');
-        if (hasDepMins(criteria)) {
-            int depMins = depMins(criteria);
-            builder.append(depMins/60)
-                    .append('h')
-                    .append(depMins%60)
-                    .append(',');
-        }
-        int arrMins = arrMins(criteria);
-        builder.append(arrMins/60)
-                .append('h')
-                .append(arrMins%60)
-                .append(',')
-                .append(changes(criteria))
-                .append(')')
-                .append(' ')
-                .append(payload(criteria))
-                .append('\n');
-        return builder.toString();
+
+
+    private static int mask(int nbOfOne) {
+        Preconditions.checkArgument(isLegalForInt(nbOfOne));
+        return nbOfOne == Integer.SIZE ? -1 : (1 << nbOfOne) - 1; // -1 means 32 bits of 1
+    }
+
+    private static long longMask(int nbOfOne) {
+        Preconditions.checkArgument(isLegalForLong(nbOfOne));
+        return nbOfOne == Long.SIZE ? -1L : (1L << nbOfOne) - 1; // -1L means 64 bits of 1
+    }
+
+    private static long bitsErasure(long number, int startIndex, int length) {
+        Preconditions.checkArgument(isLegalForLong(startIndex));
+        Preconditions.checkArgument(isLegalForLong(startIndex+length));
+//        Preconditions.checkArgument(0 < length);
+        long mask = longMask(length) << startIndex;
+        return number & ~mask;
+    }
+
+    private static boolean isLegalForLong(int index) {
+        return 0 <= index && index <= Long.SIZE;
+    }
+
+    private static boolean isLegalForInt(int index) {
+        return 0 <= index && index <= Integer.SIZE;
     }
 }

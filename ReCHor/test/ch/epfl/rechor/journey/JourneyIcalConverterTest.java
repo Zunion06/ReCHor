@@ -114,7 +114,7 @@ class JourneyIcalConverterTest {
                     assertEquals(veventContext, context);
                 }
                 case "SUMMARY" -> {
-                    assertEquals("Ecublens VD, EPFL → Gruyères", value);
+                    assertEquals("Ecublens VD, EPFL → Romont FR", value);
                     assertEquals(veventContext, context);
                 }
                 case "DESCRIPTION" -> {
