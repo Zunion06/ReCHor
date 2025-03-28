@@ -9,10 +9,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * table containing the timeTable, date, arrival station and paretoFront list for each stops of a travel
+ */
 public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, List<ParetoFront> stationFront) {
     /**
-     * table containing the timeTable, date, arrival station and paretoFront list for each stops of a travel
+     * create an instance of Profile
      * @param timeTable list of transports and their dates
      * @param date date of the profile
      * @param arrStationId arrival station
