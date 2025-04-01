@@ -12,7 +12,7 @@ public interface Connections extends Indexed{
      * @return id of the first stop of the connection
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int depStopId(int id);
+    public abstract int depStopId(int id);
 
     /**
      * gives the length in minutes of the connection
@@ -20,7 +20,7 @@ public interface Connections extends Indexed{
      * @return the length of the connection (in minutes)
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int depMins(int id);
+    public abstract int depMins(int id);
 
     /**
      * gives the arrival stop id of the connection
@@ -28,7 +28,7 @@ public interface Connections extends Indexed{
      * @return the id of the last stop of the connection
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int arrStopId(int id);
+    public abstract int arrStopId(int id);
 
     /**
      * gives the arrival time of the connection
@@ -36,7 +36,7 @@ public interface Connections extends Indexed{
      * @return arrival time of the connection (in minutes)
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int arrMins(int id);
+    public abstract int arrMins(int id);
 
     /**
      * gives the id of the trip containing the connection
@@ -44,7 +44,7 @@ public interface Connections extends Indexed{
      * @return the id of the trip containing the connection
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int tripId(int id);
+    public abstract int tripId(int id);
 
     /**
      * gives the position of the connection in its trip it belongs to
@@ -52,7 +52,7 @@ public interface Connections extends Indexed{
      * @return the position of the connection in its trip
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int tripPos(int id);
+    public abstract int tripPos(int id);
 
     /**
      * gives the id of the following connection in a trip
@@ -60,5 +60,5 @@ public interface Connections extends Indexed{
      * @return the id of the next connection
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int nextConnectionId(int id);
+    public abstract int nextConnectionId(int id);
 }

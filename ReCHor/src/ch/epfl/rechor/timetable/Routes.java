@@ -14,7 +14,7 @@ public interface Routes extends Indexed{
      * @return the type of vehicle used on a given route
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract Vehicle vehicle(int id);
+    public abstract Vehicle vehicle(int id);
 
     /**
      * gives the name of a given route
@@ -22,5 +22,5 @@ public interface Routes extends Indexed{
      * @return the name of the route for a given index
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract String name(int id);
+    public abstract String name(int id);
 }

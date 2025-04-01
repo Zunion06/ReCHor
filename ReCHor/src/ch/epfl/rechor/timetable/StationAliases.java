@@ -11,12 +11,12 @@ public interface StationAliases extends Indexed {
      * @param id station aliases id
      * @return the alias corresponding to the given id
      */
-    abstract String alias(int id);
+    public abstract String alias(int id);
 
     /**
      * returns the name corresponding to the given StationAliases id
      * @param id station aliases id
      * @return the name corresponding to the given id
      */
-    abstract String stationName(int id);
+    public abstract String stationName(int id);
 }

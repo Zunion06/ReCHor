@@ -12,7 +12,7 @@ public interface Platforms extends Indexed{
      * @return the name of the station for a given index
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract String name(int id);
+    public abstract String name(int id);
 
     /**
      * gives the stationId of a given platform
@@ -20,5 +20,5 @@ public interface Platforms extends Indexed{
      * @return the station id for the given platform id
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int stationId(int id);
+    public abstract int stationId(int id);
 }

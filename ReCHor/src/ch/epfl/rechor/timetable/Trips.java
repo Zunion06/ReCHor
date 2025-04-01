@@ -12,7 +12,7 @@ public interface Trips extends Indexed{
      * @return the route id for a given index
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int routeId(int id);
+    public abstract int routeId(int id);
 
     /**
      * gives the destination of the trip
@@ -20,6 +20,5 @@ public interface Trips extends Indexed{
      * @return the name of a trip's destination for a given index
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract String destination(int id);
-
+    public abstract String destination(int id);
 }

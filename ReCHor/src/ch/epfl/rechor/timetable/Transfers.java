@@ -14,7 +14,7 @@ public interface Transfers extends Indexed{
      * @return the id of the departing station of the transfer
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int depStationId(int id);
+    public abstract int depStationId(int id);
 
     /**
      * gives the length of the transfer (in minutes)
@@ -22,7 +22,7 @@ public interface Transfers extends Indexed{
      * @return the length of the transfer (in minutes)
      * @throws IndexOutOfBoundsException for invalid index
      */
-    abstract int minutes(int id);
+    public abstract int minutes(int id);
 
     /**
      * gives the interval for all transfers arriving to this station
@@ -30,7 +30,7 @@ public interface Transfers extends Indexed{
      * @return packed interval of all transfer ids arriving at this station
      * @throws IndexOutOfBoundsException if stationId is invalid
      */
-    abstract int arrivingAt(int stationId);
+    public abstract int arrivingAt(int stationId);
 
     /**
      * return the time taken (in minutes) for the transfer between the two stations
@@ -39,5 +39,5 @@ public interface Transfers extends Indexed{
      * @return transfer length in minutes
      * @throws NoSuchElementException if there is no such transfers between both stations
      */
-    abstract int minutesBetween(int depStationId, int arrStationId);
+    public abstract int minutesBetween(int depStationId, int arrStationId);
 }
