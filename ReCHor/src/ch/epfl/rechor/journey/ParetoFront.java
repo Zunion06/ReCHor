@@ -9,7 +9,7 @@ import static ch.epfl.rechor.journey.PackedCriteria.*;
  * used to create a Pareto Frontier to compare tuple between each other
  * @author Matthias Gibon, Guillaume Pommier
  */
-public class ParetoFront {
+public final class ParetoFront {
     private final long[] tupleTable;
     /**
      * empty pareto frontier used to avoid using null
@@ -105,7 +105,7 @@ public class ParetoFront {
 
         /**
          * create an instance of Builder copying the values of another builder
-         * @param that builder whose value will be copied
+         * @param that builder whose values will be copied
          */
         public Builder(Builder that){
             this.tupleTable=that.tupleTable;
@@ -133,16 +133,12 @@ public class ParetoFront {
         /**
          * add a tuple to the frontier and remove it or other tuple if needed
          * @param packedTuple tuple to be added
-         * @return the builder itself
+         * @return the builder itself modified according to what is the tuple in parameter
          */
         public Builder add(long packedTuple){
             int placementIndex = 0;
             for (int i=0;i<size;i++){
                 if (dominatesOrIsEqual(tupleTable[i],packedTuple)){
-//                    System.out.println("loul");
-//                    System.out.println(arrMins(packedTuple)+" "+arrMins(tupleTable[i]));
-//                    System.out.println(changes(packedTuple)+" "+changes(tupleTable[i]));
-//                    System.out.println(dominatesOrIsEqual(tupleTable[i],packedTuple));
                     return this;
                 }
                 if (packedTuple < tupleTable[i]){
@@ -150,7 +146,6 @@ public class ParetoFront {
                 }
                 placementIndex=i+1;
             }
-//            System.out.println(placementIndex);
             size = reordering(placementIndex,packedTuple);
             if (size<tupleTable.length){
                 System.arraycopy(tupleTable, placementIndex,tupleTable,placementIndex+1,size-placementIndex);
@@ -169,16 +164,17 @@ public class ParetoFront {
         }
 
         /**
-         * reorder the tuple table ???
-         * @param startIndex
-         * @param packedTuple
-         * @return
+         * Eliminates elements dominated by the new Tuple can be done by iterating over those that follow the
+         * insertion position and copying those that are not dominated downward so that they are placed right after
+         * the insertion position
+         * @param startIndex the index to which to start the iteration (useful to save time)
+         * @param packedTuple the new packed Tuple we want to insert
+         * @return the new effective size of the tupleTable
          */
         private int reordering(int startIndex,long packedTuple){
             int dst = startIndex;
-            for (int src = startIndex; src < size; src += 1) {
+            for (int src = startIndex; src < size; src ++) {
                 if (dominatesOrIsEqual(packedTuple,tupleTable[src])) {
-                    //System.out.println("loul");
                     continue;
                 }
                 if (dst != src) tupleTable[dst] = tupleTable[src];
@@ -195,8 +191,7 @@ public class ParetoFront {
          * @return the builder itself
          */
         public Builder add(int arrMins, int changes, int payload){
-            add(pack(arrMins,changes,payload));
-            return this;
+            return add(pack(arrMins,changes,payload));
         }
 
         /**
@@ -209,8 +204,7 @@ public class ParetoFront {
          */
         public Builder add(int depMins, int arrMins, int changes, int payload){
             long tuple = withDepMins(pack(arrMins,changes,payload),depMins);
-            add(tuple);
-            return this;
+            return add(tuple);
         }
 
         /**
@@ -226,10 +220,12 @@ public class ParetoFront {
         }
 
         /**
-         * ???
-         * @param that
-         * @param depMins
-         * @return
+         * Check if each tuple in the given frontier, once its departure time is set to the given one, is dominated by
+         * or equal to at least one tuple in the receiver
+         * @param that the Builder we want to compare to the receiver
+         * @param depMins the departure time to be set on the tuple of "that"
+         * @return False if there exist a tuple of "that" that, for all tuples of the receiver, is not dominated or equal,
+         * returns True otherwise
          */
         public boolean fullyDominates(Builder that, int depMins){
             if (that.size==0) return true;

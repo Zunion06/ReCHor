@@ -3,7 +3,7 @@ package ch.epfl.rechor.journey;
 import ch.epfl.rechor.Preconditions;
 
 /**
- * utilitarian class used to pack and unpack information in longs
+ * utilitarian class used to pack and unpack, in longs, tuples containing departure Time, Arriving Time and changes, and also add a payload
  * @author Guillaume Pommier
  */
 public final class PackedCriteria {
@@ -45,7 +45,7 @@ public final class PackedCriteria {
      * @return a boolean, true if the criteria contains a departure time in it, false otherwise
      */
     public static boolean hasDepMins(long criteria) {
-        long mask = longMask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
+        long mask = mask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
         return (criteria & mask) != 0;
     }
 
@@ -57,7 +57,7 @@ public final class PackedCriteria {
      */
     public static int depMins(long criteria) {
         Preconditions.checkArgument(hasDepMins(criteria));
-        long mask = longMask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
+        long mask = mask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
         int depMinsBeforeMidnight = CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT - (int) ((criteria & mask) >>> BIT_INDEX_OF_DEPARTURE_TIME); //taking the complement into account
         return depMinsBeforeMidnight - TIME_OFFSET ;
     }
@@ -68,8 +68,7 @@ public final class PackedCriteria {
      * @return the arriving time in the criteria in argument
      */
     public static int arrMins(long criteria) {
-        int mask =  mask(NUMBER_OF_BITS_FOR_TIMES);
-        int arrMinsBeforeMidnight = (int) (criteria >>> BIT_INDEX_OF_ARRIVING_TIME) & mask;
+        int arrMinsBeforeMidnight = (int) ((criteria >>> BIT_INDEX_OF_ARRIVING_TIME) & mask(NUMBER_OF_BITS_FOR_TIMES));
         return arrMinsBeforeMidnight - TIME_OFFSET;
     }
 
@@ -79,8 +78,7 @@ public final class PackedCriteria {
      * @return the number of changes in the criteria in argument
      */
     public static int changes(long criteria) {
-        int mask =  mask(NUMBER_OF_BITS_FOR_CHANGES);
-        return (int) (criteria >>> BIT_INDEX_OF_CHANGES) & mask;
+        return (int) ((criteria >>> BIT_INDEX_OF_CHANGES) & mask(NUMBER_OF_BITS_FOR_CHANGES));
     }
 
     /**
@@ -153,31 +151,28 @@ public final class PackedCriteria {
         return resetedCriteria | Integer.toUnsignedLong(payload1);
     }
 
-
-
-    private static int mask(int nbOfOne) {
-        Preconditions.checkArgument(isLegalForInt(nbOfOne));
-        return nbOfOne == Integer.SIZE ? -1 : (1 << nbOfOne) - 1; // -1 means 32 bits of 1
+    /**
+     * Create of mask of a given length
+     * @param length the length of the mask
+     * @return a long in which the bits of index between 0 and "length" (excluded) are all 1
+     */
+    private static long mask(int length) {
+        Preconditions.checkArgument(0 <= length && length <= Long.SIZE);
+        return length == Long.SIZE ? -1L : (1L << length) - 1; // -1L means 64 bits of 1
     }
 
-    private static long longMask(int nbOfOne) {
-        Preconditions.checkArgument(isLegalForLong(nbOfOne));
-        return nbOfOne == Long.SIZE ? -1L : (1L << nbOfOne) - 1; // -1L means 64 bits of 1
-    }
-
+    /**
+     * Turns into 0 all bits at a certain position
+     * @param number the number to be modified
+     * @param startIndex the index of where the transformation into 0 should begin to be applied
+     * @param length the number of bits that should be transformed after the startIndex
+     * @return the number but with all bits of index [startIndex, starIndex + length] turned into 0
+     * @throws IllegalArgumentException if the startIndex is not valid (i.e. if not between 0 and 63 included)
+     */
     private static long bitsErasure(long number, int startIndex, int length) {
-        Preconditions.checkArgument(isLegalForLong(startIndex));
-        Preconditions.checkArgument(isLegalForLong(startIndex+length));
-//        Preconditions.checkArgument(0 < length);
-        long mask = longMask(length) << startIndex;
+        Preconditions.checkArgument(0 <= startIndex && startIndex <= Long.SIZE);
+        long mask = mask(length) << startIndex;
         return number & ~mask;
     }
 
-    private static boolean isLegalForLong(int index) {
-        return 0 <= index && index <= Long.SIZE;
-    }
-
-    private static boolean isLegalForInt(int index) {
-        return 0 <= index && index <= Integer.SIZE;
-    }
 }

@@ -15,7 +15,7 @@ import static ch.epfl.rechor.IcalBuilder.Name.*;
  * used to convert a journey into the ICalendar format
  * @author Matthias Gibon
  */
-public class JourneyIcalConverter {
+public final class JourneyIcalConverter {
     private JourneyIcalConverter(){}
 
     /**

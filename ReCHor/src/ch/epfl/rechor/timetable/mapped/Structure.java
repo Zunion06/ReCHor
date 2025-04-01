@@ -6,17 +6,17 @@ import java.util.Objects;
 
 /**
  * used to ease the description of the structure of flattened values
+ * @author Matthias Gibon
  */
-public class Structure {
+public final class Structure {
 
     private short totalSize;
-    private byte[] indexTable;
+    private final byte[] indexTable;
 
     /**
      * document the total size and the starting index of each field in octets
      * @param fields list of fields documented in structure
      * @throws IllegalArgumentException if the fields are not ordered by index
-     * @author Matthias Gibon
      */
     public Structure(Field... fields){
         totalSize=0;
@@ -37,7 +37,7 @@ public class Structure {
 
     /**
      * gives the totalSize in octet of each element
-     * @return the totalSize in octet of each elements
+     * @return the totalSize in octet of each element
      */
     public int totalSize(){
         return totalSize;
