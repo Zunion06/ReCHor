@@ -42,11 +42,17 @@ public final class JourneyExtractor {
 
             //first add a Leg.Foot to legsList if necessary
             if (depStationId != getStationId(connections.depStopId(connectionID), timeTable)) {
+                LocalDateTime footDepTime = createLocalDateTime(depMins(profileCriteria), profile);
+                LocalDateTime footArrTime = footDepTime.plusMinutes(
+                        timeTable.transfers().minutesBetween(
+                                depStationId,
+                                getStationId(connections.depStopId(connectionID), timeTable)
+                        ));
                 legsList.add(new Journey.Leg.Foot(
                         createStop(depStationId, timeTable),
-                        createLocalDateTime(depMins(profileCriteria), profile),
+                        footDepTime,
                         transportDepStop,
-                        createLocalDateTime(depMins(profileCriteria) + timeTable.transfers().minutesBetween(depStationId, getStationId(connections.depStopId(connectionID), timeTable)), profile)
+                        footArrTime
                 ));
             }
 
@@ -87,11 +93,14 @@ public final class JourneyExtractor {
                     int footStationDepId = getStationId(connections.arrStopId(connectionID), timeTable);
                     LocalDateTime footDepTime = createLocalDateTime(connections.arrMins(connectionID), profile);
 
-                    currentCriteria = profile.forStation(footStationDepId).get(arrMins(currentCriteria), changes(currentCriteria) - 1);
+                    currentCriteria = profile.forStation(footStationDepId)
+                            .get(arrMins(currentCriteria), changes(currentCriteria) - 1);
                     connectionID = Bits32_24_8.unpack24(payload(currentCriteria));
 
                     int footStationArrId = getStationId(connections.depStopId(connectionID), timeTable);
-                    LocalDateTime footArrTime = footDepTime.plusMinutes(timeTable.transfers().minutesBetween(footStationDepId, footStationArrId));
+                    LocalDateTime footArrTime = footDepTime.plusMinutes(
+                            timeTable.transfers().minutesBetween(footStationDepId, footStationArrId)
+                    );
 
                     transportDepStop = createStop(connections.depStopId(connectionID), timeTable);
 
@@ -107,7 +116,12 @@ public final class JourneyExtractor {
             //add a final Leg.Foot if necessary
             if (profile.arrStationId() != getStationId(connections.arrStopId(connectionID), timeTable)) {
                 LocalDateTime footDepTime = createLocalDateTime(connections.arrMins(connectionID), profile);
-                LocalDateTime footArrTime = footDepTime.plusMinutes(timeTable.transfers().minutesBetween(profile.arrStationId(), getStationId(connections.arrStopId(connectionID), timeTable)));
+                LocalDateTime footArrTime = footDepTime.plusMinutes(
+                        timeTable.transfers().minutesBetween(
+                                profile.arrStationId(),
+                                getStationId(connections.arrStopId(connectionID), timeTable)
+                        ));
+
                 legsList.add(new Journey.Leg.Foot(
                         transportArrStop,
                         footDepTime,
