@@ -3,7 +3,7 @@ package ch.epfl.rechor.journey;
 import ch.epfl.rechor.Preconditions;
 
 /**
- * class utilitaire pour pack et unpack des information dans des long
+ * utilitarian class used to pack and unpack information in longs
  * @author Guillaume Pommier
  */
 public final class PackedCriteria {

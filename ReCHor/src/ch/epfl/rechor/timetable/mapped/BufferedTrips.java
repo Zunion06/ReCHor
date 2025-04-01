@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
-import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U8;
 
 /**
  * used to access a list of trips represented as flattened values

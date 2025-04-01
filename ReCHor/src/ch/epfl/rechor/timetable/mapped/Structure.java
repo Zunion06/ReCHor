@@ -36,7 +36,7 @@ public class Structure {
     }
 
     /**
-     * gives the totalSize in octet of each elements
+     * gives the totalSize in octet of each element
      * @return the totalSize in octet of each elements
      */
     public int totalSize(){
@@ -60,7 +60,7 @@ public class Structure {
     public enum FieldType{
         U8,   // 8 bits (1 octet), non signé
         U16,  // 16 bits (2 octets), non signé
-        S32;  // 32 bits (4 octets), signé
+        S32  // 32 bits (4 octets), signé
     }
 
 

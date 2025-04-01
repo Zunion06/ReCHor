@@ -24,7 +24,7 @@ public final class BufferedConnections implements Connections {
     private final IntBuffer nextConnectionIntBuffer;
 
     /**
-     * create an instance of BufferedConnections stocking the corresponding informations
+     * create an instance of BufferedConnections stocking the corresponding information
      * @param buffer values to be set in the connections information
      * @param succBuffer values to be set as the next connections information
      */

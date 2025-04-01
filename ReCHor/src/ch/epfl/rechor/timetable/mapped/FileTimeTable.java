@@ -41,23 +41,23 @@ public record FileTimeTable(Path directory, List<String> stringTable, Stations s
         BufferedStationAliases bufferedStationAliases;
         BufferedTransfers bufferedTransfers;
 
-        try(FileChannel channel = FileChannel.open(directory.resolve("stations.bin"));) {
+        try(FileChannel channel = FileChannel.open(directory.resolve("stations.bin"))) {
             bufferedStations = new BufferedStations(string,channel.map(READ_ONLY,0,channel.size()));
         }
 
-        try(FileChannel channel = FileChannel.open(directory.resolve("platforms.bin"));) {
+        try(FileChannel channel = FileChannel.open(directory.resolve("platforms.bin"))) {
             bufferedPlatforms = new BufferedPlatforms(string,channel.map(READ_ONLY,0,channel.size()));
         }
 
-        try(FileChannel channel = FileChannel.open(directory.resolve("routes.bin"));) {
+        try(FileChannel channel = FileChannel.open(directory.resolve("routes.bin"))) {
             bufferedRoutes = new BufferedRoutes(string,channel.map(READ_ONLY,0,channel.size()));
         }
 
-        try(FileChannel channel = FileChannel.open(directory.resolve("station-aliases.bin"));) {
+        try(FileChannel channel = FileChannel.open(directory.resolve("station-aliases.bin"))) {
             bufferedStationAliases = new BufferedStationAliases(string,channel.map(READ_ONLY,0,channel.size()));
         }
 
-        try(FileChannel channel = FileChannel.open(directory.resolve("transfers.bin"));) {
+        try(FileChannel channel = FileChannel.open(directory.resolve("transfers.bin"))) {
             bufferedTransfers = new BufferedTransfers(channel.map(READ_ONLY,0,channel.size()));
         }
 

@@ -19,7 +19,7 @@ public final class BufferedPlatforms implements Platforms {
     private final List<String> stringTable;
 
     /**
-     * create an instance of BufferedPlatforms with the needed informations
+     * create an instance of BufferedPlatforms with the needed information
      * @param stringTable table of string documenting the platforms
      * @param buffer values to be set in the platforms information
      */

@@ -3,7 +3,6 @@ package ch.epfl.rechor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.StringJoiner;
 
 /**
  * used to create step by step the ICalendar format of a journey
@@ -11,7 +10,7 @@ import java.util.StringJoiner;
  */
 public final class IcalBuilder {
     private final StringBuilder builder = new StringBuilder();
-    private final ArrayList<Component> components = new ArrayList<Component>();
+    private final ArrayList<Component> components = new ArrayList<>();
     private final String CRLF = "\r\n ";
 
     /**
@@ -24,16 +23,15 @@ public final class IcalBuilder {
 
         //if the text is smaller than 75 characters
         if(value.length() < 75-name.toString().length()){
-            builder.append(name.toString()).append(":").append(value).append("\r\n");
+            builder.append(name).append(":").append(value).append("\r\n");
             return this;
 
         }
 
-        builder.append(name.toString()).append(":").append(value.substring(0,74-name.toString().length())).append(CRLF);
+        builder.append(name).append(":").append(value, 0, 74-name.toString().length()).append(CRLF);
         value=value.substring(74-name.toString().length());
-        int characterIndex=74-name.toString().length();
         while(value.length()>74){
-            builder.append(value.substring(0,74)).append(CRLF);
+            builder.append(value, 0, 74).append(CRLF);
             value=value.substring(74);
         }
         builder.append(value).append("\r\n");
@@ -92,7 +90,6 @@ public final class IcalBuilder {
     public enum Component{
         VCALENDAR,
         VEVENT
-        ;
     }
 
     /**
@@ -109,6 +106,5 @@ public final class IcalBuilder {
         DTEND,
         SUMMARY,
         DESCRIPTION
-        ;
     }
 }

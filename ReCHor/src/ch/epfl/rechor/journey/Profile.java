@@ -4,7 +4,6 @@ import ch.epfl.rechor.timetable.Connections;
 import ch.epfl.rechor.timetable.TimeTable;
 import ch.epfl.rechor.timetable.Trips;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,7 +117,7 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
         }
 
         /**
-         * Create an instance of Profile with informations given to the builder (frontier builder who haven't been initialised will create empty frontiers)
+         * Create an instance of Profile with information given to the builder (frontier builder who haven't been initialised will create empty frontiers)
          * @return an instance of Profile with the information given to the builder
          */
         public Profile build(){

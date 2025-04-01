@@ -22,7 +22,7 @@ public final class BufferedRoutes implements Routes {
     private final List<String> stringTable;
 
     /**
-     * create an instance of BufferedRoutes with the needed informations
+     * create an instance of BufferedRoutes with the needed information
      * @param stringTable table of string documenting the platforms
      * @param buffer values to be set in the platforms information
      */

@@ -5,7 +5,6 @@ import ch.epfl.rechor.timetable.StationAliases;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.S32;
 import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 /**

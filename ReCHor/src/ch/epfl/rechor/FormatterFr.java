@@ -45,7 +45,7 @@ public final class FormatterFr {
                 .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
                 .toFormatter();
         fmt.format(dateTime);
-        return (fmt.format(dateTime).toString());
+        return (fmt.format(dateTime));
     }
 
     /**

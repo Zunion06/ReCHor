@@ -105,7 +105,7 @@ public class ParetoFront {
 
         /**
          * create an instance of Builder copying the values of another builder
-         * @param that builder who's value will be copied
+         * @param that builder whose value will be copied
          */
         public Builder(Builder that){
             this.tupleTable=that.tupleTable;
