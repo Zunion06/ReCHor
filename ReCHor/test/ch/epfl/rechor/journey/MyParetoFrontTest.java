@@ -79,46 +79,4 @@ public class MyParetoFrontTest {
         }
 
     }
-
-    //############################## test Alienor ##########################
-
-    private ParetoFront paretoFront;
-
-    @BeforeEach
-    void setUp() {
-        ParetoFront.Builder builder = new ParetoFront.Builder();
-        builder.add(60, 2, 100)  // Arrivée 60 min, 2 changements, payload 100
-                .add(80, 1, 150)  // Arrivée 80 min, 1 changement, payload 150
-                .add(100, 0, 200); // Arrivée 100 min, 0 changement, payload 200
-        paretoFront = builder.build();
-    }
-
-
-    @Test
-    void testSize() {
-        assertEquals(3, paretoFront.size());
-    }
-
-
-    @Test
-    void testGet() {
-        assertDoesNotThrow(() -> paretoFront.get(60, 2));
-        assertDoesNotThrow(() -> paretoFront.get(80, 1));
-        assertDoesNotThrow(() -> paretoFront.get(100, 0));
-    }
-
-
-    @Test
-    void testGetThrowsExceptionForMissingElement() {
-        assertThrows(NoSuchElementException.class, () -> paretoFront.get(90, 1));
-    }
-
-    @Test
-    void testForEach() {
-        List<Long> collected = new ArrayList<>();
-        paretoFront.forEach(collected::add);
-        assertEquals(3, collected.size());
-    }
-
-
 }

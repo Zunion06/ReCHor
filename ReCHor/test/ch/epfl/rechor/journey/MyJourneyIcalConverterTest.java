@@ -1,18 +1,24 @@
 package ch.epfl.rechor.journey;
 
-//import org.testng.annotations.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
 public class MyJourneyIcalConverterTest {
-    public static String testJourney1() {
+    public static Journey exampleJourney() {
         var s1 = new Stop("Ecublens VD, EPFL", null, 6.566141, 46.522196);
         var s2 = new Stop("Renens VD, gare", null, 6.578519, 46.537619);
         var s3 = new Stop("Renens VD", "4", 6.578935, 46.537042);
@@ -92,32 +98,107 @@ public class MyJourneyIcalConverterTest {
         String icalString = JourneyIcalConverter.toIcalendar(journey);
 
         // 5. Print and check
-        return (icalString);
+        return journey;
 
     }
 
+//    @Test
+//    void EqualTest() {
+//        String expected = "BEGIN:VCALENDAR\n" +
+//                "VERSION:2.0\n" +
+//                "PRODID:ReCHor\n" +
+//                "BEGIN:VEVENT\n" +
+//                "UID:bbff399f-d276-4052-8798-9c2f227353de\n" +
+//                "DTSTAMP:20250216T182750\n" +
+//                "DTSTART:20250218T161300\n" +
+//                "DTEND:20250218T175700\n" +
+//                "SUMMARY:Ecublens VD, EPFL → Gruyères\n" +
+//                "DESCRIPTION:16h13 Ecublens VD, EPFL → Renens VD, gare (arr. 16h19)\\ntrajet \n" +
+//                " à pied (3 min)\\n16h26 Renens VD (voie 4) → Lausanne (arr. 16h33 voie 5)\\nc\n" +
+//                " hangement (5 min)\\n16h40 Lausanne (voie 1) → Romont FR (arr. 17h13 voie 2)\n" +
+//                " \\nchangement (3 min)\\n17h22 Romont FR (voie 1) → Bulle (arr. 17h41 voie 2)\n" +
+//                " \\nchangement (3 min)\\n17h50 Bulle (voie 4) → Gruyères (arr. 17h57 voie 2)\n" +
+//                "END:VEVENT\n" +
+//                "END:VCALENDAR";
+//        System.out.println(testJourney1());
+//        System.out.println(expected);
+//        assertEquals(testJourney1(), expected);
+//
+//
+//    }
+
     @Test
-    void EqualTest() {
-        String expected = "BEGIN:VCALENDAR\n" +
-                "VERSION:2.0\n" +
-                "PRODID:ReCHor\n" +
-                "BEGIN:VEVENT\n" +
-                "UID:bbff399f-d276-4052-8798-9c2f227353de\n" +
-                "DTSTAMP:20250216T182750\n" +
-                "DTSTART:20250218T161300\n" +
-                "DTEND:20250218T175700\n" +
-                "SUMMARY:Ecublens VD, EPFL → Gruyères\n" +
-                "DESCRIPTION:16h13 Ecublens VD, EPFL → Renens VD, gare (arr. 16h19)\\ntrajet \n" +
-                " à pied (3 min)\\n16h26 Renens VD (voie 4) → Lausanne (arr. 16h33 voie 5)\\nc\n" +
-                " hangement (5 min)\\n16h40 Lausanne (voie 1) → Romont FR (arr. 17h13 voie 2)\n" +
-                " \\nchangement (3 min)\\n17h22 Romont FR (voie 1) → Bulle (arr. 17h41 voie 2)\n" +
-                " \\nchangement (3 min)\\n17h50 Bulle (voie 4) → Gruyères (arr. 17h57 voie 2)\n" +
-                "END:VEVENT\n" +
-                "END:VCALENDAR";
-        System.out.println(testJourney1());
-        System.out.println(expected);
-        assertEquals(testJourney1(), expected);
+    void journeyIcalConverterToIcalendarWorks() {
+        var dateFmt = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
+        var vcalendarContext = List.of("VCALENDAR");
+        var veventContext = List.of("VCALENDAR", "VEVENT");
 
+        var actual = JourneyIcalConverter.toIcalendar(exampleJourney());
+        var unfoldedActual = actual.replaceAll("\r\n ", "");
+        var context = new ArrayList<String>();
+        var requiredNames = new HashSet<>(
+                Set.of("VERSION", "PRODID", "UID", "DTSTAMP", "DTSTART", "SUMMARY", "DESCRIPTION"));
 
+        for (var line : unfoldedActual.split("\r\n")) {
+            var colonLoc = line.indexOf(':');
+            var name = line.substring(0, colonLoc);
+            var value = line.substring(colonLoc + 1);
+            requiredNames.remove(name);
+            switch (name) {
+                case "BEGIN" ->
+                        context.addLast(value);
+                case "END" -> {
+                    assertFalse(context.isEmpty());
+                    context.removeLast();
+                }
+                case "VERSION" -> {
+                    Assertions.assertEquals("2.0", value);
+                    Assertions.assertEquals(vcalendarContext, context);
+                }
+                case "PRODID" -> {
+                    Assertions.assertEquals("ReCHor", value);
+                    Assertions.assertEquals(vcalendarContext, context);
+                }
+                case "UID" -> {
+                    assertFalse(value.isBlank());
+                    Assertions.assertEquals(veventContext, context);
+                }
+                case "DTSTAMP" -> {
+                    var timeStamp = LocalDateTime.parse(value, dateFmt);
+                    var elapsed = Duration.between(timeStamp, LocalDateTime.now()).abs();
+                    assertTrue(elapsed.compareTo(Duration.ofSeconds(10)) < 0);
+                    Assertions.assertEquals(veventContext, context);
+                }
+                case "DTSTART" -> {
+                    var timeStart = LocalDateTime.parse(value, dateFmt);
+                    Assertions.assertEquals(exampleJourney().depTime(), timeStart);
+                    Assertions.assertEquals(veventContext, context);
+                }
+                case "DTEND" -> {
+                    var timeEnd = LocalDateTime.parse(value, dateFmt);
+                    Assertions.assertEquals(exampleJourney().arrTime(), timeEnd);
+                    Assertions.assertEquals(veventContext, context);
+                }
+                case "SUMMARY" -> {
+                    Assertions.assertEquals("Ecublens VD, EPFL → Gruyères", value);
+                    Assertions.assertEquals(veventContext, context);
+                }
+                case "DESCRIPTION" -> {
+                    Assertions.assertEquals(
+                            "16h13 Ecublens VD, EPFL → Renens VD, gare (arr. 16h19)\\n" +
+                                    "trajet à pied (3 min)\\n" +
+                                    "16h26 Renens VD (voie 4) → Lausanne (arr. 16h33 voie 5)\\n" +
+                                    "changement (5 min)\\n" +
+                                    "16h40 Lausanne (voie 1) → Romont FR (arr. 17h13 voie 2)\\n" +
+                                    "changement (3 min)\\n" +
+                                    "17h22 Romont FR (voie 1) → Bulle (arr. 17h41 voie 2)\\n" +
+                                    "changement (3 min)\\n" +
+                                    "17h50 Bulle (voie 4) → Gruyères (arr. 17h57 voie 2)"
+                            , value);
+                    Assertions.assertEquals(veventContext, context);
+                }
+            }
+        }
+        Assertions.assertEquals(Set.of(), requiredNames);
     }
 }

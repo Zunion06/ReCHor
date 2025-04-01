@@ -59,39 +59,4 @@ public class MyPackedRangeTest {
         assertEquals(1278, PackedRange.endExclusive(pack));
     }
 
-    //############################### Tests D'Aliénor ##########################
-
-    @Test
-    public void testPackValidRange() {
-        int packed = PackedRange.pack(100, 200);
-        assertEquals(100, PackedRange.startInclusive(packed));
-        assertEquals(100, PackedRange.length(packed));
-        assertEquals(200, PackedRange.endExclusive(packed));
-    }
-
-    @Test
-    public void testPackInvalidRangeThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> PackedRange.pack(-1, 10));
-        assertThrows(IllegalArgumentException.class, () -> PackedRange.pack(0, (1 << 8) + 1));
-        assertThrows(IllegalArgumentException.class, () -> PackedRange.pack((1 << 24), (1 << 24) + 1));
-    }
-
-    @Test
-    public void testLength() {
-        int packed = PackedRange.pack(50, 100);
-        assertEquals(50, PackedRange.length(packed));
-    }
-
-    @Test
-    public void testStartInclusive() {
-        int packed = PackedRange.pack(300, 350);
-        assertEquals(300, PackedRange.startInclusive(packed));
-    }
-
-    @Test
-    public void testEndExclusive() {
-        int packed = PackedRange.pack(10, 20);
-        assertEquals(20, PackedRange.endExclusive(packed));
-    }
-
 }

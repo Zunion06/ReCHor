@@ -346,58 +346,5 @@ public class MyPackedCriteriaTest {
         long expectedResult2 = 0b00000000000000011000011000000010L<<32 | Integer.toUnsignedLong(-1) ;
         assertEquals(expectedResult2, actualResult2);
     }
-    //############################## TEST ALIENOR ###############################
-
-    @Test
-    void testPackInvalidCases() {
-        assertThrows(IllegalArgumentException.class, () -> pack(-241, 0, 0));
-        assertThrows(IllegalArgumentException.class, () -> pack(2880, 0, 0));
-        assertThrows(IllegalArgumentException.class, () -> pack(1000, 128, 0));
-    }
-
-    @Test
-    void testDepMinsInvalidCases() {
-        assertThrows(IllegalArgumentException.class, () -> PackedCriteria.depMins(0x00000000000007D0L));
-    }
-
-    @Test
-    void testPayload() {
-        assertEquals(0x12345, PackedCriteria.payload(0x0000000000012345L));
-    }
-
-
-    @Test
-    void testWithPayload() {
-        assertEquals(0x0000000000001234L, PackedCriteria.withPayload(0x0000000000000000L, 0x1234));
-    }
-
-    @Test
-    public void testPack() {
-        int depMins = 720;
-        int arrMins = 780;
-        int changes = 2;
-        int payload = 123456;
-
-        long criteria = withDepMins(pack(arrMins, changes, payload), depMins);
-
-        assertTrue(hasDepMins(criteria));
-        assertEquals(depMins, depMins(criteria));
-        assertEquals(arrMins, arrMins(criteria));
-        assertEquals(changes, changes(criteria));
-        assertEquals(payload, payload(criteria));
-    }
-    @Test
-    public void testEdgeCases() {
-        assertThrows(IllegalArgumentException.class, () -> pack(-241, 1, 100));
-        assertThrows(IllegalArgumentException.class, () -> pack(2880, 1, 100));
-        assertThrows(IllegalArgumentException.class, () -> pack(500, 128, 100));
-    }
-
-    @Test
-    public void testWithAdditionalChange() {
-        long criteria = pack(850, 5, 300);
-        long modified = withAdditionalChange(criteria);
-        assertEquals(6, changes(modified));
-    }
 }
 

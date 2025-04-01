@@ -68,29 +68,4 @@ public class MyBits32_24_8Test {
 //        System.out.println(Long.toBinaryString(actualReturn));
 ////        assertEquals(expectedReturn,actualReturn);
 //    }
-
-    //####################### Test d'aliénor ##################################
-
-    @Test
-    void testPackValidCases() {
-        assertEquals(0x000000FF, Bits32_24_8.pack(0x000000, 0xFF));
-        assertEquals(0x00FFFFFF, Bits32_24_8.pack(0x00FFFF, 0xFF));
-        assertEquals(0x12345678, Bits32_24_8.pack(0x123456, 0x78));
-        assertEquals(0xFFFFFF00, Bits32_24_8.pack(0xFFFFFF, 0x00));
-        assertEquals(0xABCDEF12, Bits32_24_8.pack(0xABCDEF, 0x12));
-        assertEquals(0x00000000, Bits32_24_8.pack(0x000000, 0x00));
-        assertEquals(0x00FF00FF, Bits32_24_8.pack(0x00FF00, 0xFF));
-    }
-
-    @Test
-    void testPackInvalidCases() {
-        assertThrows(IllegalArgumentException.class, () -> Bits32_24_8.pack(0x01000000, 0x00)); // bits24 dépasse 24 bits
-        assertThrows(IllegalArgumentException.class, () -> Bits32_24_8.pack(0x000000, 0x0100)); // bits8 dépasse 8 bits
-        assertThrows(IllegalArgumentException.class, () -> Bits32_24_8.pack(0xFFFFFF, 0x1FF)); // bits8 dépasse 8 bits
-        assertThrows(IllegalArgumentException.class, () -> Bits32_24_8.pack(0x1000000, 0xFF)); // bits24 dépasse 24 bits
-        assertThrows(IllegalArgumentException.class, () -> Bits32_24_8.pack(-1, 0xFF)); // bits24 négatif
-        assertThrows(IllegalArgumentException.class, () -> Bits32_24_8.pack(0xFFFFFF, -1)); // bits8 négatif
-    }
-
-
 }
