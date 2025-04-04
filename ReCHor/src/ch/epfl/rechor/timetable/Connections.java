@@ -2,7 +2,7 @@ package ch.epfl.rechor.timetable;
 
 /**
  * represent the indexed connections
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public interface Connections extends Indexed{
 

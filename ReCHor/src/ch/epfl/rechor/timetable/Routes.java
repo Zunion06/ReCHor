@@ -4,7 +4,7 @@ import ch.epfl.rechor.journey.Vehicle;
 
 /**
  * represent the indexed routes
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public interface Routes extends Indexed{
 

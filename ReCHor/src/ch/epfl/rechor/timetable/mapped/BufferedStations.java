@@ -10,7 +10,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 /**
  * used to access a list of stations represented as flattened values
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public final class BufferedStations implements Stations {
     private final StructuredBuffer structuredBuffer;
@@ -52,7 +52,8 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public double longitude(int id) {
-        return StrictMath.scalb(360.0*(structuredBuffer.getS32(LONGITUDE_ID_INDEX,id)),-32);
+        return StrictMath.scalb(360.0*(structuredBuffer.getS32(LONGITUDE_ID_INDEX,id))
+                ,-32);
     }
 
     /**
@@ -62,7 +63,8 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public double latitude(int id) {
-        return StrictMath.scalb(360.0*(structuredBuffer.getS32(LATITUDE_ID_INDEX,id)),-32);
+        return StrictMath.scalb(360.0*(structuredBuffer.getS32(LATITUDE_ID_INDEX,id))
+                ,-32);
     }
 
     /**

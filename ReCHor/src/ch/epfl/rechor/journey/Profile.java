@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * table containing the timeTable, date, arrival station and paretoFront list for each stops of a travel
- * @author Matthias Gibon
+ * table containing the timeTable, date, arrival station and paretoFront list for each stops of a
+ * travel
+ * @author Matthias Gibon (397827)
  */
-public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, List<ParetoFront> stationFront) {
+public record Profile(TimeTable timeTable, LocalDate date, int arrStationId,
+                      List<ParetoFront> stationFront) {
     /**
      * create an instance of Profile
      * @param timeTable list of transports and their dates
@@ -20,7 +22,8 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
      * @param arrStationId arrival station
      * @param stationFront list of ParetoFront for each stationId
      */
-    public Profile(TimeTable timeTable, LocalDate date, int arrStationId, List<ParetoFront> stationFront){
+    public Profile(TimeTable timeTable, LocalDate date, int arrStationId,
+                   List<ParetoFront> stationFront){
         this.timeTable=timeTable;
         this.date=date;
         this.arrStationId=arrStationId;
@@ -65,7 +68,8 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
         ParetoFront.Builder[] tripBuilderFront;
 
         /**
-         * create an instance of Profile Builder with the given information in order to create a profile
+         * create an instance of Profile Builder with the given information in order to create a
+         * profile
          * @param timeTable timeTable containing the information of the travel and dates
          * @param date date of the future profile
          * @param arrStationId arrival station of the future profile
@@ -117,13 +121,16 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId, Lis
         }
 
         /**
-         * Create an instance of Profile with information given to the builder (frontier builder who haven't been initialised will create empty frontiers)
+         * Create an instance of Profile with information given to the builder (frontier builder who
+         * haven't been initialised will create empty frontiers)
          * @return an instance of Profile with the information given to the builder
          */
         public Profile build(){
             List<ParetoFront> stationFront=new ArrayList<>();
             for(ParetoFront.Builder builder : stationBuilderFront){
-                if(builder==null){stationFront.add(ParetoFront.EMPTY);}
+                if(builder==null){
+                    stationFront.add(ParetoFront.EMPTY); //to avoid null ParetoFronts
+                }
                 else{stationFront.add(builder.build());}
             }
             return new Profile(timeTable,date,arrStationId,stationFront);

@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Represents a journey consisting of multiple legs (steps), alternating between walking and transport.
- * @author Matthias Gibon, Guillaume Pommier
+ * Represents a journey consisting of multiple legs (steps), alternating between walking and
+ * transport.
+ * @author Matthias Gibon (397827)
+ * @author Guillaume Pommier
  */
 public record Journey(List<Leg> legs) {
     /**
-     * Constructs a Journey ensuring that legs alternate between Foot and Transport, and that time and stops align.
+     * Constructs a Journey ensuring that legs alternate between Foot and Transport, and that
+     * time and stops align.
      * @param legs list of steps to be taken for the journey
      * @throws IllegalArgumentException if legs is empty, if Foot steps do not
      * alternate with Transport steps, if the start time and end time do not align
@@ -23,6 +26,7 @@ public record Journey(List<Leg> legs) {
         legs=List.copyOf(legs); //make a copy to be immutable
         Preconditions.checkArgument(!legs.isEmpty());
         Objects.requireNonNull(legs); //check for null list
+
         for(int i=1; i<legs.size();i++){
             if(legs.get(i) instanceof Leg.Foot){//check that foot steps alternate with transport
                 Preconditions.checkArgument(!(legs.get(i-1) instanceof Leg.Foot));
@@ -30,9 +34,14 @@ public record Journey(List<Leg> legs) {
             if(legs.get(i) instanceof Leg.Transport){
                 Preconditions.checkArgument(!(legs.get(i-1) instanceof Leg.Transport));
             }
-            Preconditions.checkArgument(legs.get(i-1).arrTime().isBefore(legs.get(i).depTime())||
-                    legs.get(i-1).arrTime().isEqual(legs.get(i).depTime()));
+
+            Preconditions.checkArgument(legs.get(i-1).arrTime()
+                    .isBefore(legs.get(i).depTime())|| legs.get(i-1).arrTime()
+                    .isEqual(legs.get(i).depTime()));
+            // arrTime of last step is not after depTime of next step
+
             Preconditions.checkArgument(legs.get(i-1).arrStop().equals(legs.get(i).depStop()));
+            // arrival stop of last step is the same as departing stop of next step
         }
     }
 
@@ -79,7 +88,8 @@ public record Journey(List<Leg> legs) {
 
     /**
      * Represents a leg of a journey, which can be either walking (Foot) or using transport (Transport).
-     * @author Matthias Gibon, Guillaume Pommier
+     * @author Matthias Gibon (397827)
+     * @author Guillaume Pommier
      */
     public sealed interface Leg {
 
@@ -159,7 +169,8 @@ public record Journey(List<Leg> legs) {
              * @param route name of the route taken
              * @param destination name of the destination
              * @throws NullPointerException if one of the arguments is null
-             * @throws IllegalArgumentException if arrival time is before or equal to the departing time
+             * @throws IllegalArgumentException if arrival time is before or equal to the
+             * departing time
              */
             public Transport{
                Objects.requireNonNull(depStop);
@@ -177,9 +188,11 @@ public record Journey(List<Leg> legs) {
 
         /**
          * Represents a walking leg of a journey.
-         * @author Matthias Gibon, Guillaume Pommier
+         * @author Matthias Gibon (397827)
+         * @author Guillaume Pommier
          */
-        public record Foot(Stop depStop,LocalDateTime depTime,Stop arrStop,LocalDateTime arrTime) implements Leg {
+        public record Foot(Stop depStop,LocalDateTime depTime,Stop arrStop,LocalDateTime arrTime)
+                implements Leg {
             /**
              * Constructs a Foot leg.
              * @param depStop departing stop
@@ -187,7 +200,8 @@ public record Journey(List<Leg> legs) {
              * @param arrStop arrival stop
              * @param arrTime arrival time
              * @throws NullPointerException if any of the parameters are null
-             * @throws IllegalArgumentException if arrival time is before or equal to the departing time
+             * @throws IllegalArgumentException if arrival time is before or equal to the departing
+             * time
              */
             public Foot{
                 Objects.requireNonNull(depStop);

@@ -2,7 +2,7 @@ package ch.epfl.rechor.timetable;
 
 /**
  * destined to be extended by every interface indexing elements to be able to implement the abstract method size().
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public interface Indexed {
 

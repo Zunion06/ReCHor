@@ -30,13 +30,15 @@ public final class PackedCriteria {
      * @throws IllegalArgumentException if changes has more bits than 7 bits, if arrTime is not between -240 and 2879
      */
     public static long pack(int arrMins, int changes, int payload) {
-        Preconditions.checkArgument(-TIME_OFFSET<=arrMins && arrMins < MAXIMUM_MINUTES_EXCLUDED);
+        Preconditions.checkArgument(-TIME_OFFSET<=arrMins
+                && arrMins < MAXIMUM_MINUTES_EXCLUDED);
         Preconditions.checkArgument(changes >> NUMBER_OF_BITS_FOR_CHANGES == 0);
         // No need to check "payload" as it is an int, therefore it has a maximum of 32 bits
         long arrMinsLong = Integer.toUnsignedLong(arrMins + TIME_OFFSET);
         long changesLong = Integer.toUnsignedLong(changes);
         long payloadLong = Integer.toUnsignedLong(payload);
-        return arrMinsLong << BIT_INDEX_OF_ARRIVING_TIME | changesLong << BIT_INDEX_OF_CHANGES | payloadLong;
+        return arrMinsLong << BIT_INDEX_OF_ARRIVING_TIME | changesLong << BIT_INDEX_OF_CHANGES
+                | payloadLong;
     }
 
     /**
@@ -58,7 +60,9 @@ public final class PackedCriteria {
     public static int depMins(long criteria) {
         Preconditions.checkArgument(hasDepMins(criteria));
         long mask = mask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
-        int depMinsBeforeMidnight = CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT - (int) ((criteria & mask) >>> BIT_INDEX_OF_DEPARTURE_TIME); //taking the complement into account
+        int depMinsBeforeMidnight = CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT
+                - (int) ((criteria & mask) >>> BIT_INDEX_OF_DEPARTURE_TIME);
+        //taking the complement into account
         return depMinsBeforeMidnight - TIME_OFFSET ;
     }
 
@@ -68,7 +72,8 @@ public final class PackedCriteria {
      * @return the arriving time in the criteria in argument
      */
     public static int arrMins(long criteria) {
-        int arrMinsBeforeMidnight = (int) ((criteria >>> BIT_INDEX_OF_ARRIVING_TIME) & mask(NUMBER_OF_BITS_FOR_TIMES));
+        int arrMinsBeforeMidnight = (int) ((criteria >>> BIT_INDEX_OF_ARRIVING_TIME)
+                & mask(NUMBER_OF_BITS_FOR_TIMES));
         return arrMinsBeforeMidnight - TIME_OFFSET;
     }
 
@@ -94,8 +99,10 @@ public final class PackedCriteria {
      * Checks if the first packed criteria dominates or is equal to the second packed criteria
      * @param criteria1 the first packed criteria
      * @param criteria2 the second packed criteria
-     * @return true if and only if the first packed criteria dominates or is equal to the second packed criteria, false otherwise
-     * @throws IllegalArgumentException if one packed criteria has a departure time and the other does not
+     * @return true if and only if the first packed criteria dominates or is equal to the second
+     * packed criteria, false otherwise
+     * @throws IllegalArgumentException if one packed criteria has a departure time and the other
+     * does not
      */
     public static boolean dominatesOrIsEqual(long criteria1, long criteria2) {
         Preconditions.checkArgument(hasDepMins(criteria1) == hasDepMins(criteria2));
@@ -123,7 +130,8 @@ public final class PackedCriteria {
      * @return the packaged criteria in argument with the departure time in argument
      */
     public static long withDepMins(long criteria, int depMins1) {
-        long resetedCriteria = bitsErasure(criteria, BIT_INDEX_OF_DEPARTURE_TIME,NUMBER_OF_BITS_FOR_TIMES);
+        long resetedCriteria = bitsErasure(criteria, BIT_INDEX_OF_DEPARTURE_TIME,
+                NUMBER_OF_BITS_FOR_TIMES);
         long depMinsComp = CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT - depMins1 - TIME_OFFSET;
         return depMinsComp << BIT_INDEX_OF_DEPARTURE_TIME | resetedCriteria;
     }
@@ -147,7 +155,8 @@ public final class PackedCriteria {
      * @return the packaged criteria with the payload included
      */
     public static long withPayload(long criteria, int payload1) {
-        long resetedCriteria = bitsErasure(criteria,BIT_INDEX_OF_PAYLOAD,NUMBER_OF_BITS_FOR_PAYLOAD);
+        long resetedCriteria = bitsErasure(criteria,BIT_INDEX_OF_PAYLOAD,
+                NUMBER_OF_BITS_FOR_PAYLOAD);
         return resetedCriteria | Integer.toUnsignedLong(payload1);
     }
 
@@ -167,7 +176,8 @@ public final class PackedCriteria {
      * @param startIndex the index of where the transformation into 0 should begin to be applied
      * @param length the number of bits that should be transformed after the startIndex
      * @return the number but with all bits of index [startIndex, starIndex + length] turned into 0
-     * @throws IllegalArgumentException if the startIndex is not valid (i.e. if not between 0 and 63 included)
+     * @throws IllegalArgumentException if the startIndex is not valid (i.e. if not between 0 and 63
+     * included)
      */
     private static long bitsErasure(long number, int startIndex, int length) {
         Preconditions.checkArgument(0 <= startIndex && startIndex <= Long.SIZE);

@@ -13,7 +13,7 @@ import static ch.epfl.rechor.IcalBuilder.Name.*;
 
 /**
  * used to convert a journey into the ICalendar format
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public final class JourneyIcalConverter {
     private JourneyIcalConverter(){}
@@ -21,13 +21,14 @@ public final class JourneyIcalConverter {
     /**
      * create a String following the ICalendar format of the journey
      * @param journey Journey that will be converted to the Icalendar form
-     * @return a string containing the visual representation of the journey according to the Icalendar norms
+     * @return a string containing the visual representation of the journey according to the
+     * Icalendar norms
      */
     public static String toIcalendar(Journey journey){
         IcalBuilder builder = new IcalBuilder();
 
         StringJoiner joiner = new StringJoiner("\\n");
-        for(int i=0;i<journey.legs().size();i++){
+        for(int i=0;i<journey.legs().size();i++){ //format each leg of the journey accordingly
             Journey.Leg step=journey.legs().get(i);
             switch (step) {
                 case Journey.Leg.Foot f ->

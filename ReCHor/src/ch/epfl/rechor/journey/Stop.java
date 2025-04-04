@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * A stop is either a station or a platform, with a name and position
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public record Stop(String name, String platformName, double longitude, double latitude) {
     /**

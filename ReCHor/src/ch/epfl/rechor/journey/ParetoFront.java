@@ -7,7 +7,8 @@ import static ch.epfl.rechor.journey.PackedCriteria.*;
 
 /**
  * used to create a Pareto Frontier to compare tuple between each other
- * @author Matthias Gibon, Guillaume Pommier
+ * @author Matthias Gibon (397827)
+ * @author Guillaume Pommier
  */
 public final class ParetoFront {
     private final long[] tupleTable;
@@ -36,7 +37,8 @@ public final class ParetoFront {
      * search a tuple in the frontier
      * @param arrMins arrival time of the tuple
      * @param changes number of changes of the tuple
-     * @return the packed optimization criteria for the given arrival time and changes, or throws NoSuchElementException if not found.
+     * @return the packed optimization criteria for the given arrival time and changes,
+     * or throws NoSuchElementException if not found.
      * @throws NoSuchElementException if tuple is not found
      */
     public long get(int arrMins, int changes){
@@ -45,7 +47,7 @@ public final class ParetoFront {
                 return tupleTable[i];
             }
         }
-        throw new NoSuchElementException();
+        throw new NoSuchElementException(); //if no tuple were found
     }
 
     /**
@@ -148,14 +150,16 @@ public final class ParetoFront {
             }
             size = reordering(placementIndex,packedTuple);
             if (size<tupleTable.length){
-                System.arraycopy(tupleTable, placementIndex,tupleTable,placementIndex+1,size-placementIndex);
+                System.arraycopy(tupleTable, placementIndex,tupleTable,placementIndex+1,
+                        size-placementIndex);
                 tupleTable[placementIndex]=packedTuple;
             }
             else {
                 int newTupleTableLength = tupleTable.length + tupleTable.length / 2;
                 long[] newTable = new long[newTupleTableLength];
                 System.arraycopy(tupleTable, 0,newTable,0,placementIndex);
-                System.arraycopy(tupleTable, placementIndex,newTable,placementIndex+1,size-placementIndex);
+                System.arraycopy(tupleTable, placementIndex,newTable,placementIndex+1,
+                        size-placementIndex);
                 newTable[placementIndex]=packedTuple;
                 tupleTable = newTable;
             }
@@ -164,8 +168,10 @@ public final class ParetoFront {
         }
 
         /**
-         * Eliminates elements dominated by the new Tuple can be done by iterating over those that follow the
-         * insertion position and copying those that are not dominated downward so that they are placed right after
+         * Eliminates elements dominated by the new Tuple can be done by iterating over those that
+         * follow the
+         * insertion position and copying those that are not dominated downward so that they are
+         * placed right after
          * the insertion position
          * @param startIndex the index to which to start the iteration (useful to save time)
          * @param packedTuple the new packed Tuple we want to insert
@@ -220,11 +226,13 @@ public final class ParetoFront {
         }
 
         /**
-         * Check if each tuple in the given frontier, once its departure time is set to the given one, is dominated by
+         * Check if each tuple in the given frontier, once its departure time is set to the given
+         * one, is dominated by
          * or equal to at least one tuple in the receiver
          * @param that the Builder we want to compare to the receiver
          * @param depMins the departure time to be set on the tuple of "that"
-         * @return False if there exist a tuple of "that" that, for all tuples of the receiver, is not dominated or equal,
+         * @return False if there exist a tuple of "that" that, for all tuples of the receiver,
+         * is not dominated or equal,
          * returns True otherwise
          */
         public boolean fullyDominates(Builder that, int depMins){
@@ -233,7 +241,8 @@ public final class ParetoFront {
             for (int j=0; j<size; j++) {
                 domination = false;
                 for (int i=0; i<that.size;i++ ) {
-                    if (dominatesOrIsEqual(tupleTable[i], withDepMins(that.tupleTable[j],depMins))) {
+                    if (dominatesOrIsEqual(tupleTable[i], withDepMins(that.tupleTable[j],
+                            depMins))) {
                         domination = true;
                     }
                 }

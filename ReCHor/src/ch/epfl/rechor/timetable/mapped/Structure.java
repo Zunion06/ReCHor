@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /**
  * used to ease the description of the structure of flattened values
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public final class Structure {
 
@@ -24,7 +24,7 @@ public final class Structure {
         for(int i=0;i< fields.length;i++){
             Preconditions.checkArgument(fields[i].index()==i);
             indexTable[i]=(byte) totalSize;
-            totalSize+= switch (fields[i].type()){
+            totalSize+= switch (fields[i].type()){ //increase the size depending on the field size
                 case U8:
                     yield (short)1;
                 case U16:
@@ -56,6 +56,7 @@ public final class Structure {
 
     /**
      * all different type a field can take with different size
+     * @author Matthias Gibon (397827)
      */
     public enum FieldType{
         U8,   // 8 bits (1 octet), non signé

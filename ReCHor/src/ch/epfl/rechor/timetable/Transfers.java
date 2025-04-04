@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 
 /**
  * represent the transfers indexed (only between stations)
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public interface Transfers extends Indexed{
 

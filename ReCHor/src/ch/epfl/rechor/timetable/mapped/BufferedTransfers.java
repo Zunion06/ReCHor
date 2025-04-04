@@ -11,7 +11,8 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U8;
 
 /**
  * used to access a list of transfers represented as flattened values
- * @author Matthias Gibon, Guillaume Pommier
+ * @author Matthias Gibon (397827)
+ * @author Guillaume Pommier
  */
 public final class BufferedTransfers implements Transfers {
     private final static int DEP_STATION_ID=0;
@@ -41,17 +42,22 @@ public final class BufferedTransfers implements Transfers {
             }
 
             transfersIntervals = new int[maxArrStationIndex+1];
-            int previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, 0); //ID in transfersIntervals
+            int previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, 0);
+            //ID in transfersIntervals
             int intervalLength = 1;
             for (int i = 1; i < size(); i++) {
-                if (structuredBuffer.getU16(ARR_STATION_ID, i) != structuredBuffer.getU16(ARR_STATION_ID, i - 1)) {
-                    transfersIntervals[previousArrStationID] = PackedRange.pack(i - intervalLength, i);
+                if (structuredBuffer.getU16(ARR_STATION_ID, i) != structuredBuffer
+                        .getU16(ARR_STATION_ID, i - 1)) {
+                    transfersIntervals[previousArrStationID] =
+                            PackedRange.pack(i - intervalLength, i);
                     previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, i);
                     intervalLength = 0;
                 }
                 intervalLength++;
             }
-            transfersIntervals[previousArrStationID] = PackedRange.pack(size() - intervalLength, size()); // here previousArrStationID should be equal to transfersIntervalsLength
+            transfersIntervals[previousArrStationID]
+                    = PackedRange.pack(size() - intervalLength, size());
+            // here previousArrStationID should be equal to transfersIntervalsLength
         }
         else
             transfersIntervals = new int[0];

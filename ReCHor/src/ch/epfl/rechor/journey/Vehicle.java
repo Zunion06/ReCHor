@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * contains all the possible vehicle that can be used for the journeys
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public enum Vehicle {
 

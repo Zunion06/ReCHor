@@ -9,7 +9,7 @@ import static ch.epfl.rechor.timetable.mapped.Structure.FieldType.U16;
 
 /**
  * used to access a list of platforms represented as flattened values
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public final class BufferedPlatforms implements Platforms {
     private final static int NAME_ID=0;
