@@ -10,6 +10,8 @@ import java.util.Objects;
  * @author Matthias Gibon (397827)
  */
 public record Stop(String name, String platformName, double longitude, double latitude) {
+    private final static int MAX_LONGITUDE = 180;
+    private final static int MAX_LATITUDE = 90;
     /**
      * create an instance of Stop with a name and position
      * @param name stop name, can't be null
@@ -21,6 +23,7 @@ public record Stop(String name, String platformName, double longitude, double la
      */
     public Stop{
         Objects.requireNonNull(name);
-        Preconditions.checkArgument(Math.abs(longitude)<=180&&Math.abs(latitude)<=90);
+        Preconditions.checkArgument(Math.abs(longitude) <= MAX_LONGITUDE
+                && Math.abs(latitude) <= MAX_LATITUDE);
     }
 }

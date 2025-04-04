@@ -45,6 +45,7 @@ public final class BufferedTransfers implements Transfers {
             int previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, 0);
             //ID in transfersIntervals
             int intervalLength = 1;
+
             for (int i = 1; i < size(); i++) {
                 if (structuredBuffer.getU16(ARR_STATION_ID, i) != structuredBuffer
                         .getU16(ARR_STATION_ID, i - 1)) {

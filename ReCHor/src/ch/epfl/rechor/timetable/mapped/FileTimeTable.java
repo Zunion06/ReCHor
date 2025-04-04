@@ -64,8 +64,8 @@ public record FileTimeTable(Path directory, List<String> stringTable, Stations s
         }
 
         try(FileChannel channel = FileChannel.open(directory.resolve("station-aliases.bin"))){
-            bufferedStationAliases = new
-                    BufferedStationAliases(string,channel.map(READ_ONLY,0,channel.size()));
+            bufferedStationAliases =
+                    new BufferedStationAliases(string,channel.map(READ_ONLY,0,channel.size()));
         }
 
         try(FileChannel channel = FileChannel.open(directory.resolve("transfers.bin"))) {
@@ -90,9 +90,11 @@ public record FileTimeTable(Path directory, List<String> stringTable, Stations s
                 .resolve("trips.bin"))) {
             bufferedTrips = new BufferedTrips(stringTable(),
                     channel.map(READ_ONLY,0,channel.size()));
+
         } catch (IOException e) { //catch IOExceptions because the method cannot can not throw it
             throw new UncheckedIOException(e);
         }
+
         return bufferedTrips;
     }
 
@@ -113,12 +115,14 @@ public record FileTimeTable(Path directory, List<String> stringTable, Stations s
         } catch (IOException e) { //catch IOExceptions because the method cannot can not throw it
             throw new UncheckedIOException(e);
         }
+
         try(FileChannel channel = FileChannel.open(directory.resolve(date.toString())
                 .resolve("connections-succ.bin"))){
             connectionSuccBuffer = channel.map(READ_ONLY,0,channel.size());
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+
         return new BufferedConnections(connectionBuffer,connectionSuccBuffer);
     }
 }

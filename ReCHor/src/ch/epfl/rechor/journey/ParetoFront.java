@@ -12,6 +12,7 @@ import static ch.epfl.rechor.journey.PackedCriteria.*;
  */
 public final class ParetoFront {
     private final long[] tupleTable;
+    private final static int SECONDS_IN_MINUTE = 60;
     /**
      * empty pareto frontier used to avoid using null
      */
@@ -70,15 +71,15 @@ public final class ParetoFront {
             builder.append('(');
             if (hasDepMins(tuple)) {
                 int depMins = depMins(tuple);
-                builder.append(depMins/60)
+                builder.append(depMins / SECONDS_IN_MINUTE)
                         .append('h')
-                        .append(depMins%60)
+                        .append(depMins % SECONDS_IN_MINUTE)
                         .append(',');
             }
             int arrMins = arrMins(tuple);
-            builder.append(arrMins/60)
+            builder.append(arrMins / SECONDS_IN_MINUTE)
                     .append('h')
-                    .append(arrMins%60)
+                    .append(arrMins % SECONDS_IN_MINUTE)
                     .append(',')
                     .append(changes(tuple))
                     .append(')')
