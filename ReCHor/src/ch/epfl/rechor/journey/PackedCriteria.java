@@ -3,7 +3,9 @@ package ch.epfl.rechor.journey;
 import ch.epfl.rechor.Preconditions;
 
 /**
- * utilitarian class used to pack and unpack, in longs, tuples containing departure Time, Arriving Time and changes, and also add a payload
+ * utilitarian class used to pack and unpack, in longs, tuples containing departure Time,
+ * Arriving Time and changes, and also add a payload
+ *
  * @author Guillaume Pommier (401065)
  */
 public final class PackedCriteria {

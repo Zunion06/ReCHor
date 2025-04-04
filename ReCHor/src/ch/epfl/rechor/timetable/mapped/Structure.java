@@ -27,9 +27,9 @@ public final class Structure {
             indexTable[i]=(byte) totalSize;
             totalSize+= switch (fields[i].type()){ //increase the size depending on the field size
                 case U8:
-                    yield (short)1;
+                    yield (short) 1;
                 case U16:
-                    yield (short)2;
+                    yield (short) 2;
                 case S32:
                     yield (short) 4;
             };
