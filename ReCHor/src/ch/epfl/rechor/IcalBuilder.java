@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * used to create step by step the ICalendar format of a journey
  *
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public final class IcalBuilder {
     private final StringBuilder builder = new StringBuilder();

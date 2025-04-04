@@ -12,7 +12,7 @@ import static ch.epfl.rechor.journey.PackedCriteria.*;
 
 /**
  * utilitarian class whose sole purpose is to extract a list of Journeys from a profile, given a stating point
- * @author Guillaume Pommier
+ * @author Guillaume Pommier (401065)
  */
 public final class JourneyExtractor {
     private JourneyExtractor() {}

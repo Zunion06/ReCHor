@@ -2,7 +2,7 @@ package ch.epfl.rechor;
 
 /**
  * used to throw given exceptions in some cases
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public final class Preconditions {
     private Preconditions() {}

@@ -2,7 +2,7 @@ package ch.epfl.rechor;
 
 /**
  * utilitarian class used to pack an interval into an integer of 32 bits, and unpack the relevant information
- * @author Guillaume Pommier
+ * @author Guillaume Pommier (401065)
  */
 public final class PackedRange {
     private PackedRange() {}

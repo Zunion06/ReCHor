@@ -11,7 +11,7 @@ import java.util.Objects;
  * Represents a journey consisting of multiple legs (steps), alternating between walking and
  * transport.
  * @author Matthias Gibon (397827)
- * @author Guillaume Pommier
+ * @author Guillaume Pommier (401065)
  */
 public record Journey(List<Leg> legs) {
     /**

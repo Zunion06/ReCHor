@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
 
 /**
  * represent a table of structured octet to ease the access to a list of flattened data
- * @author Guillaume Pommier
+ * @author Guillaume Pommier (401065)
  */
 public class StructuredBuffer {
     private final Structure structure;
