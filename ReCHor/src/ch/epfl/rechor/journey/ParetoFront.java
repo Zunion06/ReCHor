@@ -8,7 +8,7 @@ import static ch.epfl.rechor.journey.PackedCriteria.*;
 /**
  * used to create a Pareto Frontier to compare tuple between each other
  * @author Matthias Gibon (397827)
- * @author Guillaume Pommier
+ * @author Guillaume Pommier (401065)
  */
 public final class ParetoFront {
     private final long[] tupleTable;

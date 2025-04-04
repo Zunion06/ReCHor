@@ -2,7 +2,7 @@ package ch.epfl.rechor;
 
 /**
  * utilitarian class used to pack and unpack information into an integer of 32 bits
- * @author Guillaume Pommier
+ * @author Guillaume Pommier (401065)
  */
 public final class Bits32_24_8 {
     private Bits32_24_8() {}
