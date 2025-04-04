@@ -3,8 +3,8 @@ package ch.epfl.rechor.journey;
 import ch.epfl.rechor.Preconditions;
 
 /**
- * utilitarian class used to pack and unpack, in longs, tuples containing departure Time,
- * Arriving Time and changes, and also add a payload
+ * utilitarian class used to pack and unpack, in longs, tuples containing departure time,
+ * arriving time and changes, and also add a payload
  *
  * @author Guillaume Pommier (401065)
  */
@@ -65,7 +65,6 @@ public final class PackedCriteria {
         long mask = mask(NUMBER_OF_BITS_FOR_TIMES) << BIT_INDEX_OF_DEPARTURE_TIME;
         int depMinsBeforeMidnight = CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT
                 - (int) ((criteria & mask) >>> BIT_INDEX_OF_DEPARTURE_TIME);
-        //taking the complement into account
         return depMinsBeforeMidnight - TIME_OFFSET ;
     }
 

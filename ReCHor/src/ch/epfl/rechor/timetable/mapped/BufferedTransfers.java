@@ -34,6 +34,7 @@ public final class BufferedTransfers implements Transfers {
         structuredBuffer=new StructuredBuffer(tripsStructure,buffer);
 
         if (size() != 0){
+            //gets the size for the array of transfer intervals
             int maxArrStationIndex = 0;
             for (int i = 1; i < size(); i++) {
                 int currentArrStationIndex = structuredBuffer.getU16(ARR_STATION_ID,i);
@@ -42,15 +43,18 @@ public final class BufferedTransfers implements Transfers {
             }
 
             transfersIntervals = new int[maxArrStationIndex+1];
-            int previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, 0);
-            //ID in transfersIntervals
+            int previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, 0); //ID in transfersIntervals
             int intervalLength = 1;
 
+            //Fills the array of transfer intervals with the corresponding information
             for (int i = 1; i < size(); i++) {
-                if (structuredBuffer.getU16(ARR_STATION_ID, i) != structuredBuffer
-                        .getU16(ARR_STATION_ID, i - 1)) {
+                if (structuredBuffer.getU16(ARR_STATION_ID, i)
+                        != structuredBuffer.getU16(ARR_STATION_ID, i - 1)) {
                     transfersIntervals[previousArrStationID] =
-                            PackedRange.pack(i - intervalLength, i);
+                            PackedRange.pack(
+                                    i - intervalLength, //Start of the interval
+                                    i                   //End of the interval
+                            );
                     previousArrStationID = structuredBuffer.getU16(ARR_STATION_ID, i);
                     intervalLength = 0;
                 }
@@ -58,7 +62,6 @@ public final class BufferedTransfers implements Transfers {
             }
             transfersIntervals[previousArrStationID]
                     = PackedRange.pack(size() - intervalLength, size());
-            // here previousArrStationID should be equal to transfersIntervalsLength
         }
         else
             transfersIntervals = new int[0];
