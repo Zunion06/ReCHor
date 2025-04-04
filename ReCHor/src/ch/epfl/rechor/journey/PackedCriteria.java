@@ -18,6 +18,7 @@ public final class PackedCriteria {
     private static final int CONSTANT_FOR_TAKING_DEPARTURE_TIME_COMPLEMENT = 4095;
     private static final int MAXIMUM_CHANGES_POSSIBLE = 0x7F;
     private static final int MAXIMUM_MINUTES_EXCLUDED = 2880;
+    private static final long LONG_WITH_ONE_IN_EVERY_BITS = -1L;
 
     private PackedCriteria() {}
 
@@ -164,10 +165,12 @@ public final class PackedCriteria {
      * Create of mask of a given length
      * @param length the length of the mask
      * @return a long in which the bits of index between 0 and "length" (excluded) are all 1
+     * @throws IllegalArgumentException when the length of the mask is not valid for a long (i.e. if not between 0
+     * and 64 included)
      */
     private static long mask(int length) {
         Preconditions.checkArgument(0 <= length && length <= Long.SIZE);
-        return length == Long.SIZE ? -1L : (1L << length) - 1; // -1L means 64 bits of 1
+        return length == Long.SIZE ? LONG_WITH_ONE_IN_EVERY_BITS : (1L << length) - 1;
     }
 
     /**
@@ -176,7 +179,7 @@ public final class PackedCriteria {
      * @param startIndex the index of where the transformation into 0 should begin to be applied
      * @param length the number of bits that should be transformed after the startIndex
      * @return the number but with all bits of index [startIndex, starIndex + length] turned into 0
-     * @throws IllegalArgumentException if the startIndex is not valid (i.e. if not between 0 and 63
+     * @throws IllegalArgumentException if the startIndex is not valid (i.e. if not between 0 and 64
      * included)
      */
     private static long bitsErasure(long number, int startIndex, int length) {

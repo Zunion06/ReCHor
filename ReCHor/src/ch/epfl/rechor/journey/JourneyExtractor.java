@@ -48,6 +48,7 @@ public final class JourneyExtractor {
                                 depStationId,
                                 getStationId(connections.depStopId(connectionID), timeTable)
                         ));
+
                 legsList.add(new Journey.Leg.Foot(
                         createStop(depStationId, timeTable),
                         footDepTime,
@@ -61,6 +62,7 @@ public final class JourneyExtractor {
                 LocalDateTime transportDepTime = createLocalDateTime(connections.depMins(connectionID), profile);
                 int depStopID = connections.depStopId(connectionID);
 
+                //creates the list of IntermediateStops in order to create the Leg.Transport
                 List<Journey.Leg.IntermediateStop> intermediateStops = new ArrayList<>();
                 int numberOfIntermediateStops = Bits32_24_8.unpack8(payload(currentCriteria));
                 for (int j = 0; j < numberOfIntermediateStops; j++) {
@@ -74,6 +76,7 @@ public final class JourneyExtractor {
                     connectionID = connections.nextConnectionId(connectionID);
                 }
 
+                //add a Leg.Transport to the list of Legs
                 transportArrStop = createStop(connections.arrStopId(connectionID), timeTable);
                 transportArrTime = createLocalDateTime(connections.arrMins(connectionID), profile);
 
@@ -88,8 +91,8 @@ public final class JourneyExtractor {
                         trips.destination(depStopID)
                 ));
 
+                //add the Leg.Foot in between two Leg.Transport
                 if (changes(currentCriteria) != 0) {
-
                     int footStationDepId = getStationId(connections.arrStopId(connectionID), timeTable);
                     LocalDateTime footDepTime = createLocalDateTime(connections.arrMins(connectionID), profile);
 
@@ -101,7 +104,6 @@ public final class JourneyExtractor {
                     LocalDateTime footArrTime = footDepTime.plusMinutes(
                             timeTable.transfers().minutesBetween(footStationDepId, footStationArrId)
                     );
-
                     transportDepStop = createStop(connections.depStopId(connectionID), timeTable);
 
                     legsList.add(new Journey.Leg.Foot(
@@ -130,6 +132,7 @@ public final class JourneyExtractor {
                 ));
             }
 
+            //Create the Journey
             journeysList.add(new Journey(legsList));
         });
 
@@ -140,6 +143,12 @@ public final class JourneyExtractor {
         return journeysList;
     }
 
+    /**
+     * Creates a Stop with the given parameters
+     * @param stopId the index of the Stop
+     * @param timeTable the timeTable of the profile
+     * @return a Stop with all the necessary information
+     */
     private static Stop createStop(int stopId, TimeTable timeTable){
         Stations stations = timeTable.stations();
 
@@ -153,20 +162,22 @@ public final class JourneyExtractor {
         );
     }
 
-//    private static Journey.Leg.Foot createLegFoot(int depStopId, int arrStopId, Profile profile) {
-//        int footStationDepId = getStationId(depStopId,profile);
-//        int footStationArrId = getStationId(arrStopId,profile);
-//        LocalDateTime footDepTime = createLocalDateTime(depStopId,profile);
-//        LocalDateTime footArrTime = footDepTime.plusMinutes(profile.timeTable().transfers().minutesBetween(footStationDepId,footStationArrId));
-//        return new Journey.Leg.Foot(
-//
-//        )
-//    }
-
+    /**
+     * Creates a LocalDateTime with the given parameters
+     * @param mins the number of minutes past midnight
+     * @param profile the profile from which to extract the date
+     * @return a LocalDateTime with all the necessary information
+     */
     private static LocalDateTime createLocalDateTime(int mins,Profile profile){
         return LocalDateTime.of(profile.date(), LocalTime.of(0, 0, 0)).plusMinutes(mins);
     }
 
+    /**
+     * Gives the station index associated to a stop index
+     * @param stopId the stop index from which to extract the station index
+     * @param timeTable the timetable of the profile
+     * @return the station index associated to the stop index (stopId)
+     */
     private static int getStationId(int stopId, TimeTable timeTable) {
         return timeTable.isStationId(stopId) ?
                 stopId:
