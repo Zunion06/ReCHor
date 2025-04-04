@@ -19,6 +19,8 @@ public final class BufferedStations implements Stations {
     private final static int NAME_ID_INDEX =0;
     private final static int LONGITUDE_ID_INDEX=1;
     private final static int LATITUDE_ID_INDEX=2;
+    private final static int SCALE_FACTOR = -32;
+    private final static double TO_DEGREE = 360.0;
 
     /**
      * create an instance of BufferedStations to stock information
@@ -52,8 +54,8 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public double longitude(int id) {
-        return StrictMath.scalb(360.0*(structuredBuffer.getS32(LONGITUDE_ID_INDEX,id))
-                ,-32);
+        return StrictMath.scalb(TO_DEGREE * (structuredBuffer.getS32(LONGITUDE_ID_INDEX,id)),
+                SCALE_FACTOR);
     }
 
     /**
@@ -63,8 +65,8 @@ public final class BufferedStations implements Stations {
      */
     @Override
     public double latitude(int id) {
-        return StrictMath.scalb(360.0*(structuredBuffer.getS32(LATITUDE_ID_INDEX,id))
-                ,-32);
+        return StrictMath.scalb(TO_DEGREE * (structuredBuffer.getS32(LATITUDE_ID_INDEX,id)),
+                SCALE_FACTOR);
     }
 
     /**

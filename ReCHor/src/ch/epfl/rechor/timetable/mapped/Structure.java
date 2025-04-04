@@ -21,6 +21,7 @@ public final class Structure {
     public Structure(Field... fields){
         totalSize=0;
         indexTable=new byte[fields.length];
+
         for(int i=0;i< fields.length;i++){
             Preconditions.checkArgument(fields[i].index()==i);
             indexTable[i]=(byte) totalSize;

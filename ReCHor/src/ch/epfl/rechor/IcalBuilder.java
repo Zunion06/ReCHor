@@ -7,15 +7,19 @@ import java.util.ArrayList;
 /**
  * used to create step by step the ICalendar format of a journey
  *
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public final class IcalBuilder {
     private final StringBuilder builder = new StringBuilder();
     private final ArrayList<Component> components = new ArrayList<>();
-    private final String CRLF = "\r\n ";
+    private final String CRLF = "\r\n";
+    private final String CRLF_SPACE = "\r\n ";
+
+    private final static int SUBSTRING_MAX_SIZE = 74;
 
     /**
-     * add a Name with a description at the end of the current ICalendar format of the journey (name:value)
+     * add a Name with a description at the end of the current ICalendar
+     * format of the journey (name:value)
      *
      * @param name  type of name to be added
      * @param value description of the name
@@ -24,19 +28,24 @@ public final class IcalBuilder {
     public IcalBuilder add(Name name, String value) {
 
         //if the text is smaller than 75 characters
-        if (value.length() < 75 - name.toString().length()) {
-            builder.append(name).append(":").append(value).append("\r\n");
+        if (value.length() <= SUBSTRING_MAX_SIZE - name.toString().length()) {
+            builder.append(name).append(":").append(value).append(CRLF);
             return this;
 
         }
 
-        builder.append(name).append(":").append(value, 0, 74 - name.toString().length()).append(CRLF);
-        value = value.substring(74 - name.toString().length());
-        while (value.length() > 74) {
-            builder.append(value, 0, 74).append(CRLF);
-            value = value.substring(74);
+        builder.append(name)
+                .append(":")
+                .append(value, 0, SUBSTRING_MAX_SIZE - name.toString().length())
+                .append(CRLF_SPACE);
+
+        value = value.substring(SUBSTRING_MAX_SIZE - name.toString().length());
+
+        while (value.length() > SUBSTRING_MAX_SIZE) {
+            builder.append(value, 0, SUBSTRING_MAX_SIZE).append(CRLF_SPACE);
+            value = value.substring(SUBSTRING_MAX_SIZE);
         }
-        builder.append(value).append("\r\n");
+        builder.append(value).append(CRLF);
 
         return this;
     }
@@ -50,7 +59,10 @@ public final class IcalBuilder {
      */
     public IcalBuilder add(Name name, LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
-        builder.append(name.toString()).append(":").append(formatter.format(dateTime)).append("\r\n");
+        builder.append(name.toString())
+                .append(":")
+                .append(formatter.format(dateTime))
+                .append(CRLF);
         return this;
     }
 
@@ -62,7 +74,10 @@ public final class IcalBuilder {
      */
     public IcalBuilder begin(Component component) {
         components.add(component);
-        builder.append(Name.BEGIN).append(":").append(component.toString()).append("\r\n");
+        builder.append(Name.BEGIN)
+                .append(":")
+                .append(component.toString())
+                .append(CRLF);
         return this;
     }
 
@@ -74,7 +89,10 @@ public final class IcalBuilder {
      */
     public IcalBuilder end() {
         Preconditions.checkArgument(!components.isEmpty());
-        builder.append(Name.END).append(":").append(components.getLast().toString()).append("\r\n");
+        builder.append(Name.END)
+                .append(":")
+                .append(components.getLast().toString())
+                .append(CRLF);
         components.removeLast();
         return this;
     }

@@ -2,7 +2,7 @@ package ch.epfl.rechor.timetable;
 
 /**
  * represent the trips indexed
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public interface Trips extends Indexed{
 

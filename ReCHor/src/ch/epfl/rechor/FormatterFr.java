@@ -15,20 +15,23 @@ import static java.lang.Character.isLetter;
 
 /**
  * used to format values into a String text
- * @author Matthias Gibon
+ * @author Matthias Gibon (397827)
  */
 public final class FormatterFr {
+    private final static int SECOND_IN_HOUR = 3600;
+    private final static int SECOND_IN_MINUTE = 60;
+    private final static int BUILDER_BASE_CAPACITY = 100;
     /**
      * format a duration into a string
      * @param duration Duration to be formated (in seconds)
      * @return duration formated as a String ( ...h...min or ...min)
      */
     public static String formatDuration(Duration duration) {
-        if (((int) duration.getSeconds()) / 3600 > 0 ) {
+        if (((int) duration.getSeconds()) /  SECOND_IN_HOUR > 0 ) {
             long h=duration.toHours();
             return (h + " h " + duration.minusHours(h).toMinutes() + " min");
         }
-        return (((int) duration.getSeconds() / 60) + " min");
+        return (((int) duration.getSeconds() / SECOND_IN_MINUTE) + " min");
     }
 
     /**
@@ -56,7 +59,8 @@ public final class FormatterFr {
      */
     public static String formatPlatformName(Stop stop) {
         Objects.requireNonNull(stop);
-        StringBuilder builder = new StringBuilder(100);
+        StringBuilder builder = new StringBuilder(BUILDER_BASE_CAPACITY);
+
         if(stop.platformName()!=null&&!stop.platformName().isEmpty()) {
             if (isDigit(stop.platformName().charAt(0))) {
                 builder.append("voie ");
@@ -65,6 +69,7 @@ public final class FormatterFr {
             }
             builder.append(stop.platformName());
         }
+
         return(builder.toString());
     }
 
@@ -76,15 +81,17 @@ public final class FormatterFr {
      */
     public static String formatLeg(Journey.Leg.Foot footLeg){
         Objects.requireNonNull(footLeg);
-        StringBuilder builder=new StringBuilder(100);
+        StringBuilder builder=new StringBuilder(BUILDER_BASE_CAPACITY);
+
         if(footLeg.isTransfer()) {
             builder.append("changement (");
         }
         else {
             builder.append("trajet à pied (");
         }
-        builder.append(formatDuration(footLeg.duration()));
-        builder.append(")");
+        builder.append(formatDuration(footLeg.duration()))
+                .append(")");
+
         return(builder.toString());
     }
 
@@ -96,17 +103,21 @@ public final class FormatterFr {
      */
     public static String formatLeg(Journey.Leg.Transport leg){
         Objects.requireNonNull(leg);
-        StringBuilder builder = new StringBuilder(100);
-        builder.append(formatTime(leg.depTime())).append(' ');
-        builder.append(leg.depStop().name());
+        StringBuilder builder = new StringBuilder(BUILDER_BASE_CAPACITY)
+                .append(formatTime(leg.depTime())).append(' ')
+                .append(leg.depStop().name());
+
         if(leg.depStop().platformName()!=null && !leg.depStop().platformName().isEmpty()){
             builder.append(" (").append(formatPlatformName(leg.depStop())).append(')');
         }
-        builder.append(" → ");
-        builder.append(leg.arrStop().name()).append(" (arr. ");
-        builder.append(formatTime(leg.arrTime()));
+        builder.append(" → ")
+                .append(leg.arrStop().name())
+                .append(" (arr. ")
+                .append(formatTime(leg.arrTime()));
+
         if(leg.arrStop().platformName()!=null && !leg.arrStop().platformName().isEmpty()) {
-            builder.append(' ').append(formatPlatformName(leg.arrStop()));
+            builder.append(' ')
+                    .append(formatPlatformName(leg.arrStop()));
         }
         builder.append(')');
 
@@ -122,7 +133,8 @@ public final class FormatterFr {
     public static String formatRouteDestination(Journey.Leg.Transport transportLeg){
         Objects.requireNonNull(transportLeg);
         StringBuilder builder = new StringBuilder();
-        builder.append(transportLeg.route()).append(" Direction ").append(transportLeg.destination());
+        builder.append(transportLeg.route()).append(" Direction ")
+                .append(transportLeg.destination());
         return(builder.toString());
     }
 }
