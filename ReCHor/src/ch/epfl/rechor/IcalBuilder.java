@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 /**
- * used to create step by step the ICalendar format of a journey
+ * used to create step by step the ICalendar format of a journey.
  *
  * @author Matthias Gibon (397827)
  */
@@ -19,7 +19,7 @@ public final class IcalBuilder {
 
     /**
      * add a Name with a description at the end of the current ICalendar
-     * format of the journey (name:value)
+     * format of the journey (name:value).
      *
      * @param name  type of name to be added
      * @param value description of the name
@@ -51,7 +51,8 @@ public final class IcalBuilder {
     }
 
     /**
-     * add a name with a date at the end of the current ICalendar format of the journey (name:yyyyMMddTHHmmss)
+     * add a name with a date at the end of the current ICalendar
+     * format of the journey (name:yyyyMMddTHHmmss).
      *
      * @param name     type of name to be added
      * @param dateTime date used as description
@@ -67,7 +68,7 @@ public final class IcalBuilder {
     }
 
     /**
-     * begin a component at the end of the current ICalendar format of the journey (begin:component)
+     * begin a component at the end of the current ICalendar format of the journey (begin:component).
      *
      * @param component type of component to be added
      * @return the builder itself
@@ -82,7 +83,7 @@ public final class IcalBuilder {
     }
 
     /**
-     * end the last added component at the end of the current ICalendar format of the journey (end:...)
+     * end the last added component at the end of the current ICalendar format of the journey (end:...).
      *
      * @return the builder itself
      * @throws IllegalArgumentException if no available components can be ended
@@ -98,7 +99,7 @@ public final class IcalBuilder {
     }
 
     /**
-     * convert the current ICalendar representation of the Journey into a string
+     * convert the current ICalendar representation of the Journey into a string.
      *
      * @return a String following the ICalendar format representing the journey created
      * @throws IllegalArgumentException if every started components have not ended
