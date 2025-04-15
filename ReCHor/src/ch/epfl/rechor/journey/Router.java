@@ -3,10 +3,9 @@ package ch.epfl.rechor.journey;
 import ch.epfl.rechor.timetable.TimeTable;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Arrays;
 
+import static ch.epfl.rechor.PackedRange.*;
 import static ch.epfl.rechor.journey.PackedCriteria.*;
 
 /**
@@ -27,50 +26,72 @@ public record Router(TimeTable timeTable) {
 
         Profile.Builder profileBuilder = new Profile.Builder(timeTable,date,arrStationId);
 
-        List<ParetoFront.Builder> connectionFronts = new ArrayList<>();
+        int[] transferTable = new int[timeTable.stations().size()];
+        Arrays.fill(transferTable,-1);
+        for(int i=startInclusive(timeTable.transfers().arrivingAt(arrStationId));
+            i<endExclusive(timeTable.transfers().arrivingAt(arrStationId));i++) {
+            transferTable[timeTable.transfers().depStationId(i)] = timeTable.transfers().
+                    minutesBetween(timeTable.transfers().depStationId(i), arrStationId);
+        }
 
         for(int connectionId=0; connectionId < timeTable.connectionsFor(date).size();connectionId++){
 
-            ParetoFront.Builder stationFrontBuilder = new ParetoFront.Builder();
-//            profileBuilder.setForStation(timeTable.connectionsFor(date)
-//                    .depStopId(connectionId),stationFrontBuilder);
-
             ParetoFront.Builder tripFrontBuilder = new ParetoFront.Builder();
-//            profileBuilder.setForTrip(timeTable.connectionsFor(date).
-//                    nextConnectionId(connectionId),tripFrontBuilder);
 
             //OPTION 1 go by foot
-            int transferDuration;
-            if(true){ // Add connection by foot if it exists, (comment savoir si le transfer existe?)
-                transferDuration=timeTable.transfers().minutesBetween(timeTable
-                        .connectionsFor(date).arrStopId(connectionId),arrStationId);
-                stationFrontBuilder.add(timeTable.connectionsFor(date).arrMins(connectionId)+transferDuration
-                        ,0,0); //will need to create a payload later
-                // number of changes?
-            }
-            //OPTION 2 stay until next intermediate stop
-            if(true){
+            // if a connection by foot exists from where we arrive to the destination
+            if(transferTable[timeTable.stationId(timeTable.connectionsFor(date)
+                    .depStopId(timeTable.connectionsFor(date).arrStopId(connectionId)))] != -1){
+                tripFrontBuilder.add(timeTable.connectionsFor(date).arrMins(connectionId)
+                                +transferTable[timeTable.stationId(timeTable.connectionsFor(date)
+                                .arrStopId(connectionId))],
+                        0,
+                        0); //will need to create a payload later
+            } //add the tuple for going by foot from where we arrived to the destination
 
-            }
+            //OPTION 2 stay until next intermediate stop
+            //if the pareto frontier for the trips containing our connection exist
+            if(profileBuilder.forTrip(timeTable.connectionsFor(date).tripId(connectionId))!=null){
+                tripFrontBuilder.addAll(profileBuilder.forTrip(timeTable.connectionsFor(date).tripId(connectionId)));
+            } // keep going on that trip and add all the tuples of that frontier
 
             //OPTION 3 change vehicle
-            if(true){
-
-            }
+            //if the pareto frontier for the station at which we arrive exist
+            if(profileBuilder.forStation(timeTable.stationId(timeTable.connectionsFor(date).arrStopId(connectionId)))!=null){
+                int arrMins =timeTable.connectionsFor(date).arrMins(connectionId);
+                profileBuilder.forStation(timeTable.stationId(timeTable.connectionsFor(date).arrStopId(connectionId)))
+                        .forEach(x->{if(depMins(x)>=arrMins){ tripFrontBuilder.add(arrMins(x),changes(x)+1,0);}}); //will need payload
+            } //convert and add all the tuple of that frontier
 
             //UPDATE existing Pareto Front Trips
             if(profileBuilder.forTrip(timeTable.connectionsFor(date).tripId(connectionId))==null){
                 profileBuilder.setForTrip(timeTable.connectionsFor(date).tripId(connectionId),new ParetoFront.Builder());
-            } //create the profile's builder for a given trip id if necessary
+            } //create the profile builder for a given trip id if necessary
             profileBuilder.forTrip(timeTable.connectionsFor(date).tripId(connectionId)).addAll(tripFrontBuilder);
 
-            //UPDATE existing Pareto Front Station
+            //UPDATE Pareto Front Station
+            int connectionDepStationId=timeTable.stationId(timeTable.connectionsFor(date).depStopId(connectionId));
+            int connectionDepMins=timeTable.connectionsFor(date).depMins(connectionId);
+            //for each transfer arriving at the station
+            for(int i = timeTable.transfers().depStationId(startInclusive(timeTable.transfers().arrivingAt(connectionDepStationId)));
+                i < timeTable.transfers().depStationId(endExclusive(timeTable.transfers().arrivingAt(connectionDepStationId)));i++){
 
-            stationFrontBuilder.forEach(x -> withDepMins(x,PackedCriteria.depMins(x)-transferDuration));
+                if(profileBuilder.forStation(i)==null) {
+                    profileBuilder.setForStation(i, new ParetoFront.Builder());
+                } // create a profile builder for the start station if necessary
+
+                int depStationid = i;
+                tripFrontBuilder.forEach(x -> {
+                    System.out.println(Long.toBinaryString(connectionDepMins - timeTable.transfers().minutesBetween(depStationid, connectionDepStationId)));
+                    withDepMins(x, connectionDepMins - timeTable.transfers().minutesBetween(depStationid, connectionDepStationId));
+                }); //create a tuple starting from the station i and take the created trip and add it
+                profileBuilder.forStation(depStationid).addAll(tripFrontBuilder);
+            }
+
 
         }
 
-        return new Profile(timeTable,date,arrStationId, null);
+        return profileBuilder.build();
     }
 
     private long packPayload(int firstConnectionId, LocalDate date){

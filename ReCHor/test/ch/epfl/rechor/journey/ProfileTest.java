@@ -396,4 +396,10 @@ class ProfileTest {
             };
         }
     }
+
+    @Test
+    public void a(){
+        System.out.println("blablabla");
+        System.out.println("\t blablabla");
+    }
 }
