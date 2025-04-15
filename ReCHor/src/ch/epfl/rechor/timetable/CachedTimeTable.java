@@ -1,6 +1,5 @@
 package ch.epfl.rechor.timetable;
 
-import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 
 public class CachedTimeTable implements TimeTable{
