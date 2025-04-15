@@ -61,11 +61,11 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId,
      * @author Matthias Gibon
      */
     public final static class Builder {
-        TimeTable timeTable;
-        LocalDate date;
-        int arrStationId;
-        ParetoFront.Builder[] stationBuilderFront;
-        ParetoFront.Builder[] tripBuilderFront;
+        private TimeTable timeTable;
+        private LocalDate date;
+        private int arrStationId;
+        private ParetoFront.Builder[] stationBuilderFront;
+        private ParetoFront.Builder[] tripBuilderFront;
 
         /**
          * create an instance of Profile Builder with the given information in order to create a
