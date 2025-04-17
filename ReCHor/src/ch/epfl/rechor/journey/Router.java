@@ -73,19 +73,19 @@ public record Router(TimeTable timeTable) {
             int connectionDepStationId=timeTable.stationId(timeTable.connectionsFor(date).depStopId(connectionId));
             int connectionDepMins=timeTable.connectionsFor(date).depMins(connectionId);
             //for each transfer arriving at the station
-            for(int i = timeTable.transfers().depStationId(startInclusive(timeTable.transfers().arrivingAt(connectionDepStationId)));
-                i < timeTable.transfers().depStationId(endExclusive(timeTable.transfers().arrivingAt(connectionDepStationId)));i++){
+            for(int i = startInclusive(timeTable.transfers().arrivingAt(connectionDepStationId));
+                i <endExclusive(timeTable.transfers().arrivingAt(connectionDepStationId));i++){
 
-                if(profileBuilder.forStation(i)==null) {
-                    profileBuilder.setForStation(i, new ParetoFront.Builder());
+                int depStationid = timeTable.transfers().depStationId(i);
+
+                if(profileBuilder.forStation(depStationid)==null) {
+                    profileBuilder.setForStation(depStationid, new ParetoFront.Builder());
                 } // create a profile builder for the start station if necessary
 
-                int depStationid = i;
-                tripFrontBuilder.forEach(x -> {
-                    System.out.println(Long.toBinaryString(connectionDepMins - timeTable.transfers().minutesBetween(depStationid, connectionDepStationId)));
-                    withDepMins(x, connectionDepMins - timeTable.transfers().minutesBetween(depStationid, connectionDepStationId));
-                }); //create a tuple starting from the station i and take the created trip and add it
-                profileBuilder.forStation(depStationid).addAll(tripFrontBuilder);
+                tripFrontBuilder.forEach(x -> profileBuilder.forStation(depStationid)
+                        .add(withDepMins(x, connectionDepMins
+                                - timeTable.transfers().minutesBetween(depStationid, connectionDepStationId))
+                )); //create a tuple starting from the station i and take the created trip and add it
             }
 
 
