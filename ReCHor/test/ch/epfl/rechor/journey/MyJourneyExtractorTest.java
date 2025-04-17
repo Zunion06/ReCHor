@@ -49,27 +49,27 @@ public class MyJourneyExtractorTest {
             TimeTable t = FileTimeTable.in(Path.of("timetable"));
             LocalDate date = LocalDate.of(2025, Month.MARCH, 18);
             Profile p = readProfile(t, date, 11486);
-            for (ParetoFront pp : p.stationFront()) {
-                try {
-                    List<Long> list = new ArrayList<>(1);
-                    pp.forEach(x -> {
-                        if (list.isEmpty()) {
-                            list.add(x);
-                        }
-                    });
-                    long l = list.getFirst();
-                    int connectionId = Bits32_24_8.unpack24((int) l);
-                    int depStopId = p.connections().depStopId(connectionId);
-                    System.out.println(p.timeTable().isStationId(depStopId) ?
-                            depStopId :
-                            p.timeTable().platforms().stationId(p.timeTable().stationId(depStopId)) + " : " + p.timeTable().stations().name(p.timeTable().isStationId(depStopId) ?
-                            depStopId :
-                            p.timeTable().platforms().stationId(p.timeTable().stationId(depStopId))));
-                }
-                catch (ArrayIndexOutOfBoundsException e){
-                    continue;
-                }
-            }
+//            for (ParetoFront pp : p.stationFront()) {
+//                try {
+//                    List<Long> list = new ArrayList<>(1);
+//                    pp.forEach(x -> {
+//                        if (list.isEmpty()) {
+//                            list.add(x);
+//                        }
+//                    });
+//                    long l = list.getFirst();
+//                    int connectionId = Bits32_24_8.unpack24((int) l);
+//                    int depStopId = p.connections().depStopId(connectionId);
+//                    System.out.println(p.timeTable().isStationId(depStopId) ?
+//                            depStopId :
+//                            p.timeTable().platforms().stationId(p.timeTable().stationId(depStopId)) + " : " + p.timeTable().stations().name(p.timeTable().isStationId(depStopId) ?
+//                            depStopId :
+//                            p.timeTable().platforms().stationId(p.timeTable().stationId(depStopId))));
+//                }
+//                catch (ArrayIndexOutOfBoundsException e){
+//                    continue;
+//                }
+//            }
             List<Journey> js = JourneyExtractor.journeys(p, 7872);
             String j = JourneyIcalConverter.toIcalendar(js.get(32));
 //            System.out.println(j);
@@ -155,10 +155,6 @@ public class MyJourneyExtractorTest {
         assertEquals(Set.of(), requiredNames);
     }
 
-    @Test
-    void TestIfJourneyCanStartWithFoot() {
-
-    }
 
     Journey ExampleIfJourney1Foot1Transport(){
         var s1 = new Stop("Ecublens VD, EPFL", null, 6.566141, 46.522196);

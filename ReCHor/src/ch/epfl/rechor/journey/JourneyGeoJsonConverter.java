@@ -2,16 +2,15 @@ package ch.epfl.rechor.journey;
 
 import ch.epfl.rechor.Json;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public final class JourneyGeoJsonConverter {
-    private JourneyGeoJsonConverter() {};
+    private JourneyGeoJsonConverter() {}
 
     public static Json toGeoJson(Journey journey) {
-        Map<Json.JString,Json> objectMap = new HashMap<>();
+        Map<Json.JString,Json> objectMap = new TreeMap<>((x,y) -> {
+            return y.toString().charAt(1) - x.toString().charAt(1); // faudra expliquer
+        });
         objectMap.put(
                 new Json.JString("type"),
                 new Json.JString("LineString")
