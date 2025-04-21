@@ -131,7 +131,9 @@ public record Profile(TimeTable timeTable, LocalDate date, int arrStationId,
                 if(builder==null){
                     stationFront.add(ParetoFront.EMPTY); //to avoid null ParetoFronts
                 }
-                else{stationFront.add(builder.build());}
+                else{
+                    stationFront.add(builder.build());
+                }
             }
             return new Profile(timeTable,date,arrStationId,stationFront);
         }

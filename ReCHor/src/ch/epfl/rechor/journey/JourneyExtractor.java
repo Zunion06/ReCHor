@@ -43,6 +43,7 @@ public final class JourneyExtractor {
             //first add a Leg.Foot to legsList if necessary
             if (depStationId != getStationId(connections.depStopId(connectionID), timeTable)) {
                 LocalDateTime footDepTime = createLocalDateTime(depMins(profileCriteria), profile);
+
                 LocalDateTime footArrTime = footDepTime.plusMinutes(
                         timeTable.transfers().minutesBetween(
                                 depStationId,
