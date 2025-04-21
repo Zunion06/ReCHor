@@ -239,9 +239,9 @@ public final class ParetoFront {
         public boolean fullyDominates(Builder that, int depMins){
             if (that.size==0) return true;
             boolean domination;
-            for (int j=0; j<size; j++) {
+            for (int j=0; j<that.size; j++) {
                 domination = false;
-                for (int i=0; i<that.size;i++ ) {
+                for (int i=0; i<size;i++ ) {
                     if (dominatesOrIsEqual(tupleTable[i], withDepMins(that.tupleTable[j],
                             depMins))) {
                         domination = true;
