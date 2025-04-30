@@ -14,6 +14,7 @@ public final class IcalBuilder {
     private final ArrayList<Component> components = new ArrayList<>();
     private final String CRLF = "\r\n";
     private final String CRLF_SPACE = "\r\n ";
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
 
     private final static int SUBSTRING_MAX_SIZE = 74;
 
@@ -59,10 +60,9 @@ public final class IcalBuilder {
      * @return the builder itself
      */
     public IcalBuilder add(Name name, LocalDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
         builder.append(name.toString())
                 .append(":")
-                .append(formatter.format(dateTime))
+                .append(FORMATTER.format(dateTime))
                 .append(CRLF);
         return this;
     }

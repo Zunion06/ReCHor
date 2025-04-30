@@ -128,7 +128,6 @@ public final class ParetoFront {
          * @return the builder itself
          */
         public Builder clear(){
-            tupleTable=new long[tupleTable.length];
             this.size=0;
             return this;
         }

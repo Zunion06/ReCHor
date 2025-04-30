@@ -39,6 +39,7 @@ public record Router(TimeTable timeTable) {
         for (int connectionId = 0; connectionId < timeTable.connectionsFor(date).size(); connectionId++) {
 
             ParetoFront.Builder tripFrontBuilder = new ParetoFront.Builder();
+
             int connectionArrStopId = transferTable[getStationId(timeTable.connectionsFor(date)
                     .arrStopId(connectionId))];
 

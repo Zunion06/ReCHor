@@ -21,6 +21,13 @@ public final class FormatterFr {
     private final static int SECOND_IN_HOUR = 3600;
     private final static int SECOND_IN_MINUTE = 60;
     private final static int BUILDER_BASE_CAPACITY = 100;
+    private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("H'h'mm");
+
+    /**
+     * private constructor to make the class not instantiable
+     */
+    private FormatterFr(){}
+
     /**
      * format a duration into a string
      * @param duration Duration to be formated (in seconds)
@@ -37,18 +44,12 @@ public final class FormatterFr {
     /**
      * format a time into a string
      * @param dateTime date to be formated
-     * @return datetime formated as a String (...h...min)
+     * @return datetime formated as a String (...h...)
      * @throws NullPointerException if dateTime is null
      */
     public static String formatTime(LocalDateTime dateTime) {
         Objects.requireNonNull(dateTime);
-        DateTimeFormatter fmt = new DateTimeFormatterBuilder()
-                .appendValue(ChronoField.HOUR_OF_DAY)
-                .appendLiteral('h')
-                .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
-                .toFormatter();
-        fmt.format(dateTime);
-        return (fmt.format(dateTime));
+        return FORMATTER.format(dateTime);
     }
 
     /**
