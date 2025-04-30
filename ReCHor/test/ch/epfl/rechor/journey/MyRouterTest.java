@@ -4,6 +4,7 @@ import ch.epfl.rechor.timetable.CachedTimeTable;
 import ch.epfl.rechor.timetable.Stations;
 import ch.epfl.rechor.timetable.TimeTable;
 import ch.epfl.rechor.timetable.mapped.FileTimeTable;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -22,27 +23,41 @@ public class MyRouterTest {
         return -1;
     }
 
-
-    public static void main(String[] args) throws IOException {
+    @Test
+    public void testWithJourneyExtractor() throws IOException {
         long tStart = System.nanoTime();
 
         TimeTable timeTable =
                 new CachedTimeTable(FileTimeTable.in(Path.of("timetable")));
         Stations stations = timeTable.stations();
-        LocalDate date = LocalDate.of(2025, Month.APRIL, 1);
+        LocalDate date = LocalDate.of(2025, Month.APRIL, 2);
         int depStationId = stationId(stations, "Ecublens VD, EPFL");
         int arrStationId = stationId(stations, "Gruyères");
         Router router = new Router(timeTable);
         Profile profile = router.profile(date, arrStationId);
-//        Journey journey = JourneyExtractor
-//                .journeys(profile, depStationId)
-//                .get(32);
-        List<Journey> journeyl = JourneyExtractor.journeys(profile, depStationId);
-        Journey journey = journeyl.get(32);
+        Journey journey = JourneyExtractor
+                .journeys(profile, depStationId)
+                .get(32);
         System.out.println(JourneyIcalConverter.toIcalendar(journey));
 
         double elapsed = (System.nanoTime() - tStart) * 1e-9;
         System.out.printf("Temps écoulé : %.3f s%n", elapsed);
     }
+
+    @Test
+    public void testWOJourneyExtractor() throws IOException {
+        TimeTable timeTable =
+                new CachedTimeTable(FileTimeTable.in(Path.of("timetable")));
+        Stations stations = timeTable.stations();
+        LocalDate date = LocalDate.of(2025, Month.APRIL, 2);
+        int depStationId = stationId(stations, "Ecublens VD, EPFL");
+        int arrStationId = stationId(stations, "Gruyères");
+        Router router = new Router(timeTable);
+        Profile profile = router.profile(date, arrStationId);
+        System.out.println("paretofront:");
+        System.out.println(profile.forStation(depStationId).toString());
+    }
+
+
 
 }
