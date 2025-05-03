@@ -12,8 +12,7 @@ public sealed interface Json permits Json.JArray, Json.JObject, Json.JString, Js
         @Override
         public String toString() {
             StringJoiner joiner = new StringJoiner(",","[","]");
-            for (Json element : list)
-                joiner.add(element.toString());
+            list.forEach(json -> joiner.add(json.toString()));
             return joiner.toString();
         }
     }
