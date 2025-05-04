@@ -110,8 +110,9 @@ public final class BufferedTransfers implements Transfers {
      */
     @Override
     public int minutesBetween(int depStationId, int arrStationId) {
-        int searchStartingPoint = PackedRange.startInclusive(transfersIntervals[arrStationId]);
-        int searchEndPoint = PackedRange.endExclusive(transfersIntervals[arrStationId]);
+        int packedIndexes = arrivingAt(arrStationId);
+        int searchStartingPoint = PackedRange.startInclusive(packedIndexes);
+        int searchEndPoint = PackedRange.endExclusive(packedIndexes);
         for (int i = searchStartingPoint; i < searchEndPoint; i++) {
             if (structuredBuffer.getU16(DEP_STATION_ID,i) == depStationId)
                 return minutes(i);

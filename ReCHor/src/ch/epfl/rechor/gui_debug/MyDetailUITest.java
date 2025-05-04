@@ -37,7 +37,6 @@ public final class MyDetailUITest extends Application {
         return -1;
     }
 
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         TimeTable timeTable = new CachedTimeTable(
@@ -54,6 +53,7 @@ public final class MyDetailUITest extends Application {
 
         ObservableValue<Journey> journeyO =
                 new SimpleObjectProperty<>(journey);
+        ObservableValue<Journey> emptyJourney = new SimpleObjectProperty<>(null);
         DetailUI detailUI = DetailUI.create(journeyO);
         Pane root = new BorderPane(detailUI.rootNode());
 

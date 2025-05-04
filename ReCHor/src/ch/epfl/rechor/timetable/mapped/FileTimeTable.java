@@ -73,6 +73,12 @@ public record FileTimeTable(Path directory, List<String> stringTable, Stations s
                     new BufferedTransfers(channel.map(READ_ONLY,0,channel.size()));
         }
 
+//        mapBuffer("stations.bin",string,bufferedStations,directory);
+//        mapBuffer("platforms.bin",string,bufferedStations,directory);
+//        mapBuffer("routes.bin",string,bufferedStations,directory);
+//        mapBuffer("station-aliases.bin",string,bufferedStations,directory);
+
+
         return new FileTimeTable(directory,string,bufferedStations,bufferedStationAliases,
                 bufferedPlatforms,bufferedRoutes,bufferedTransfers);
     }
@@ -94,6 +100,7 @@ public record FileTimeTable(Path directory, List<String> stringTable, Stations s
         } catch (IOException e) { //catch IOExceptions because the method cannot can not throw it
             throw new UncheckedIOException(e);
         }
+
 
         return bufferedTrips;
     }
@@ -124,5 +131,24 @@ public record FileTimeTable(Path directory, List<String> stringTable, Stations s
         }
 
         return new BufferedConnections(connectionBuffer,connectionSuccBuffer);
+    }
+
+    private static void mapBuffer(String directoryName, List<String> string, Indexed buffer,Path directory) throws IOException{
+        //reads the information of each needed files in the directory :
+        try(FileChannel channel = FileChannel.open(directory.resolve("stations.bin"))) {
+            buffer =
+                    new BufferedStations(string,channel.map(READ_ONLY,0,channel.size()));
+        } //closes the channel implicitly with the try-with-resources
+    }
+
+    private static void mapBufferDoesNotThrow(String directoryName, List<String> string, Indexed buffer,Path directory) throws IOException{
+        //reads the information of each needed files in the directory :
+        try(FileChannel channel = FileChannel.open(directory.resolve("stations.bin"))) {
+            buffer =
+                    new BufferedStations(string,channel.map(READ_ONLY,0,channel.size()));
+        } //closes the channel implicitly with the try-with-resources
+        catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 }
