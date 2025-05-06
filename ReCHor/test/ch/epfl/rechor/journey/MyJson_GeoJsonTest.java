@@ -4,6 +4,8 @@ import ch.epfl.rechor.timetable.TimeTable;
 import ch.epfl.rechor.timetable.mapped.FileTimeTable;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
+import java.net.URI;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +25,18 @@ public class MyJson_GeoJsonTest {
             Profile p = MyJourneyExtractorTest.readProfile(t, date, 11486);
             List<Journey> js = JourneyExtractor.journeys(p, 7872);
             System.out.println(JourneyGeoJsonConverter.toGeoJson(js.get(32)));
+            String url = "https://umap.osm.ch/fr/map/?data="+ JourneyGeoJsonConverter.toGeoJson(js.get(32));
+            String encodedUrl = url.replace("\"", "%22").replace("[", "%5B").replace("]", "%5D").replace("{", "%7B").replace("}", "%7D");
+            try {
+                if (Desktop.isDesktopSupported()) {
+                    Desktop desktop = Desktop.getDesktop();
+                    desktop.browse(new URI(encodedUrl));
+                } else {
+                    System.out.println("Desktop API non supportée sur cette plateforme.");
+                }
+            }catch (Exception e ) {
+                throw new Exception("wallah");
+            }
         });
     }
 
