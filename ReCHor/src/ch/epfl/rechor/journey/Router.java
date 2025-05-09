@@ -139,7 +139,4 @@ public record Router(TimeTable timeTable) {
                 stopId:
                 timeTable.platforms().stationId(timeTable.stationId(stopId));
     }
-
-    //first 24 bits are the id of the first connection while the first 8 bits are the number of change
-
 }

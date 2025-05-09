@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * gives access to the icons of the different vehicles type
+ * @author Matthias Gibon (397827)
  */
 public class VehicleIcons {
     private static final Map<Vehicle, Image> myMap = new EnumMap<>(Vehicle.class);

@@ -35,6 +35,7 @@ public record DetailUI(Node rootNode) {
      * create the visual representation of the journey in the interface
      * @param observableJourney view on the information about a journeys
      * @return the Javafx representation that will be seen on the interface
+     * @author Matthias Gibon (397827)
      */
     public static DetailUI create(ObservableValue<Journey> observableJourney) {
 
