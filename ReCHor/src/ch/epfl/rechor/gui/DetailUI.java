@@ -198,7 +198,7 @@ public record DetailUI(Node rootNode) {
                     format(observableJourney.getValue().depTime()) + ".ics";
             fileChooser.setInitialFileName(fileName);
             File file = fileChooser.showSaveDialog(null);
-
+            System.out.println(JourneyIcalConverter.toIcalendar(observableJourney.getValue()));
             if(file!=null){
                 try {
                     Files.writeString(file.toPath(),
@@ -215,16 +215,13 @@ public record DetailUI(Node rootNode) {
         mapButton.setOnAction((x)->{
             if (Desktop.isDesktopSupported()){
                 String url = "https://umap.osm.ch/fr/map/?data="+ JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
-                String url2 = "https://umap.osm.ch/fr/map/?data={\"type\":\"LineString\",\"coordinates\":[[6.62909,46.51679],[6.83787,46.54276],[6.91181,46.69351],[7.15105,46.80315]]}";
-                String url3 = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+                System.out.println(JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue()));
+                String rickRoll = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
                 String encodedUrl = url.replace("\"", "%22").replace("[", "%5B").replace("]", "%5D").replace("{", "%7B").replace("}", "%7D");
                 try { //open a browser page from a given URI
-//                    System.out.println(new URI(url));
                     Desktop.getDesktop().browse(new URI(encodedUrl));
                 } catch (Exception e) {
-                    System.out.println(url);
-//                    System.out.println("https://umap.osm.ch/fr/map/?data={\"type\":\"LineString\",\"coordinates\":[[6.62909,46.51679],[6.83787,46.54276],[6.91181,46.69351],[7.15105,46.80315]]}");
-
+                    System.out.println("Il y a eu un problème");
                 }
             }
         });

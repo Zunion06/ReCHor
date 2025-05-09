@@ -1,7 +1,5 @@
 package ch.epfl.rechor;
 
-import ch.epfl.rechor.timetable.TimeTable;
-import ch.epfl.rechor.timetable.mapped.FileTimeTable;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -12,7 +10,7 @@ import java.util.Map;
 import static java.nio.file.Files.readAllLines;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class MyStopIndeexTest {
+public class MyStopIndexTest {
     @Test
     void StopMatchingWorks(){
         assertDoesNotThrow(() -> {

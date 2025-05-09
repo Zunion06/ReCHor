@@ -75,17 +75,17 @@ public final class StopIndex {
         int startIndex, endIndex;
         int tempScore;
         Matcher matcher = null;
-        int redondance = 1;
         Iterator<String> it = Arrays.stream(subQueries).iterator();
         for (Pattern queryPat : queries) {
             matcher = queryPat.matcher(stopName);
             if (matcher.find()) {
-//                redondance++;
                 String queryStr = it.next();
 //                System.out.println("queryStr : "+queryStr);
 //                System.out.println("queryPat : " + queryPat);
 //                System.out.println("stopname : " + stopName);
-                tempScore = queryStr.length() * 100 / stopName.length();
+                tempScore = stopName.isEmpty() ?
+                        0 :
+                        queryStr.length() * 100 / stopName.length();
                 startIndex = matcher.start();
                 endIndex = matcher.end();
                 if (startIndex == 0 || !Character.isLetter(stopName.charAt(startIndex - 1)))
@@ -96,7 +96,7 @@ public final class StopIndex {
             }
         }
 //        System.out.println("name : "+stopName+"\tscore : "+score);
-        return score*redondance;
+        return score;
     }
 
 }
