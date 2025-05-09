@@ -186,7 +186,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                 routeText.setText(FormatterFr.formatRouteDestination(getFirstTransportLeg(journey)));
 
 
-                //Create the circles representing the changes of the journey
+                //Create the circles representing the changes of the journey.
                 long journeyDuration = journey.duration().toMinutes();
                 for(int i=1;i<journey.legs().size();i++){ //starts at 1 to avoid the first leg
                     Journey.Leg leg=journey.legs().get(1);
