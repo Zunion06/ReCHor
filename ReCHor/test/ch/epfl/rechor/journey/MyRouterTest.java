@@ -1,5 +1,6 @@
 package ch.epfl.rechor.journey;
 
+import ch.epfl.rechor.FormatterFr;
 import ch.epfl.rechor.timetable.CachedTimeTable;
 import ch.epfl.rechor.timetable.Stations;
 import ch.epfl.rechor.timetable.TimeTable;
@@ -39,6 +40,8 @@ public class MyRouterTest {
                 .journeys(profile, depStationId)
                 .get(32);
         System.out.println(JourneyIcalConverter.toIcalendar(journey));
+        System.out.println();
+        System.out.println(FormatterFr.formatLeg((Journey.Leg.Transport)journey.legs().get(0)));
 
         double elapsed = (System.nanoTime() - tStart) * 1e-9;
         System.out.printf("Temps écoulé : %.3f s%n", elapsed);

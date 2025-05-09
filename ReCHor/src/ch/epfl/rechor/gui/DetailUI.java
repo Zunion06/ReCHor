@@ -23,7 +23,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
-import java.net.URL;
 import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public record DetailUI(Node rootNode) {
         //will be used later for the line
         List<Pair<Circle,Circle>> circleList = new ArrayList<>();
 
-        //grid that will contain all the informations on the legs
+        //grid that will contain all the information on the legs
         GridPane legGrid = new GridPane(){
             //redefine the method layoutChildren so that the red lines will get updated in real time
             @Override

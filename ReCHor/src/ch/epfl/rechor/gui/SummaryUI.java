@@ -17,8 +17,6 @@ import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +33,40 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                                    ObservableValue<LocalTime> journeyTimes){
 
         ListView<Journey> journeyView = new ListView<>();
+        journeyView.getStylesheets().add("summary.css");
+
         journeyView.getItems().addAll(journeyList.getValue());
         journeyView.setCellFactory(x->new JourneyListCell());
 
-        journeyList.addListener((obs, oldList, newList) -> {
-            journeyView.getItems().clear();
-            journeyView.getItems().addAll(newList != null ? newList : List.of());
+        journeyView.getSelectionModel().select(findFirstJourneySelect(journeyList,journeyTimes.getValue()));
+        journeyView.scrollTo(findFirstJourneySelect(journeyList,journeyTimes.getValue()));
+        journeyView.scrollTo(findFirstJourneySelect(journeyList,journeyTimes.getValue()));
+
+
+        journeyTimes.addListener((obs, oldValue, newValue) -> {
+            journeyView.getSelectionModel().select(findFirstJourneySelect(journeyList,newValue));
+            journeyView.scrollTo(findFirstJourneySelect(journeyList,newValue));
         });
 
-        return new SummaryUI(journeyView,new SimpleObjectProperty<>(journeyList.getValue().getFirst()));
+        return new SummaryUI(journeyView,
+                new SimpleObjectProperty<>(journeyView.getSelectionModel().getSelectedItem()));
+    }
+
+    /**
+     * gives an updated version of the Journey List with only journeys after a given time
+     * @param journeyList list of all journey of the day
+     * @param journeyTimes minimum departing time of the journeys searched
+     * @return a copy of journeyList without journey happening before JourneyTimes
+     */
+    private static Journey findFirstJourneySelect(ObservableValue<List<Journey>> journeyList,
+                                            LocalTime journeyTimes){
+
+        for(Journey journey : journeyList.getValue()){
+            if(journeyTimes.isBefore(journey.depTime().toLocalTime())){
+                return journey;
+            }
+        }
+        return journeyList.getValue().getLast();
     }
 
     /**
@@ -162,6 +185,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                 transportImageView.setFitHeight(31);
                 routeText.setText(FormatterFr.formatRouteDestination(getFirstTransportLeg(journey)));
 
+
                 //Create the circles representing the changes of the journey
                 long journeyDuration = journey.duration().toMinutes();
                 for(Journey.Leg leg : journey.legs()){
@@ -186,12 +210,19 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
             }
         }
 
+        /**
+         * finds the first transport leg of the journey (no journey has none)
+         * @param journey Journey we're studying
+         * @return the first transport leg of the journey
+         */
         private Journey.Leg.Transport getFirstTransportLeg(Journey journey){
             Journey.Leg firstLeg;
             if((firstLeg = journey.legs().getFirst()) instanceof Journey.Leg.Transport){
+                //System.out.println("first leg: "+FormatterFr.formatLeg((Journey.Leg.Transport) firstLeg));
                 return (Journey.Leg.Transport)firstLeg;
             }
             else{
+                //System.out.println("first leg: "+FormatterFr.formatLeg((Journey.Leg.Foot) journey.legs().get(1)));
                 return (Journey.Leg.Transport)journey.legs().get(1);
             }
         }
