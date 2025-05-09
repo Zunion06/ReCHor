@@ -147,10 +147,9 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                         if (circle.getUserData() != null) {
                             double position = (double) circle.getUserData(); //set in updateItem()
                             circle.setCenterY(lineHeight);
-                            circle.setCenterX(+(lineLength * position));
+                            circle.setCenterX(lineStart+(lineLength * position));
                         }
                     }
-
                 }
             };
 
@@ -220,9 +219,11 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         private Journey.Leg.Transport getFirstTransportLeg(Journey journey){
             Journey.Leg firstLeg;
             if((firstLeg = journey.legs().getFirst()) instanceof Journey.Leg.Transport){
+                //System.out.println("first leg: "+FormatterFr.formatLeg((Journey.Leg.Transport) firstLeg));
                 return (Journey.Leg.Transport)firstLeg;
             }
             else{
+                //System.out.println("first leg: "+FormatterFr.formatLeg((Journey.Leg.Foot) journey.legs().get(1)));
                 return (Journey.Leg.Transport)journey.legs().get(1);
             }
         }
