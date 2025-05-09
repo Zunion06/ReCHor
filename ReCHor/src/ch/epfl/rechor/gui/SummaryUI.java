@@ -188,23 +188,23 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
 
                 //Create the circles representing the changes of the journey.
                 long journeyDuration = journey.duration().toMinutes();
-//                for(int i=1;i<journey.legs().size();i++){ //starts at 1 to avoid the first leg
-//                    Journey.Leg leg=journey.legs().get(1);
-//                    boolean isNotLastLeg = i!=journey.legs().size()-1;
-//                    if(leg instanceof Journey.Leg.Foot && isNotLastLeg){
-//
-//                        Circle intermediateCircle = new Circle(3);
-//                        intermediateCircle.getStyleClass().add("transfer");
-//
-//                        double position = ((double) Duration.between(journey.depTime(),leg.depTime())
-//                                .toMinutes()) / journeyDuration; //ratio on the line where the circle will be
-//
-//                        intermediateCircle.setUserData(position);
-//
-//                        intermediateCircleList.add(intermediateCircle);
-//                        centerGroup.getChildren().add(intermediateCircle);
-//                    }
-//                }
+                for(int i=1;i<journey.legs().size();i++){ //starts at 1 to avoid the first leg
+                    Journey.Leg leg=journey.legs().get(1);
+                    boolean isNotLastLeg = i!=journey.legs().size()-1;
+                    if(leg instanceof Journey.Leg.Foot && isNotLastLeg){
+
+                        Circle intermediateCircle = new Circle(3);
+                        intermediateCircle.getStyleClass().add("transfer");
+
+                        double position = ((double) Duration.between(journey.depTime(),leg.depTime())
+                                .toMinutes()) / journeyDuration; //ratio on the line where the circle will be
+
+                        intermediateCircle.setUserData(position);
+
+                        intermediateCircleList.add(intermediateCircle);
+                        centerGroup.getChildren().add(intermediateCircle);
+                    }
+                }
 
 
                 setGraphic(borderPane);
