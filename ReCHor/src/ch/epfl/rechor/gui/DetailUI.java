@@ -2,6 +2,7 @@ package ch.epfl.rechor.gui;
 
 import ch.epfl.rechor.FormatterFr;
 import ch.epfl.rechor.journey.Journey;
+import ch.epfl.rechor.journey.JourneyGeoJsonConverter;
 import ch.epfl.rechor.journey.JourneyIcalConverter;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -197,7 +199,7 @@ public record DetailUI(Node rootNode) {
                     format(observableJourney.getValue().depTime()) + ".ics";
             fileChooser.setInitialFileName(fileName);
             File file = fileChooser.showSaveDialog(null);
-
+            System.out.println(JourneyIcalConverter.toIcalendar(observableJourney.getValue()));
             if(file!=null){
                 try {
                     Files.writeString(file.toPath(),
@@ -213,10 +215,14 @@ public record DetailUI(Node rootNode) {
         //map:
         mapButton.setOnAction((x)->{
             if (Desktop.isDesktopSupported()){
+                String url = "https://umap.osm.ch/fr/map/?data="+ JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
+                System.out.println(JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue()));
+                String rickRoll = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+                String encodedUrl = url.replace("\"", "%22").replace("[", "%5B").replace("]", "%5D").replace("{", "%7B").replace("}", "%7D");
                 try { //open a browser page from a given URI
-                    Desktop.getDesktop().browse(new URI("https://cs108.epfl.ch/p/09.html"));
+                    Desktop.getDesktop().browse(new URI(encodedUrl));
                 } catch (Exception e) {
-                    System.out.println("nope");
+                    System.out.println("Il y a eu un problème");
                 }
             }
         });
