@@ -4,15 +4,15 @@ import ch.epfl.rechor.StopIndex;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.converter.LocalTimeStringConverter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public record QueryUI(Node rootNode,
                       ObservableValue<String> depStopO,
@@ -30,7 +30,7 @@ public record QueryUI(Node rootNode,
         StopField depStopField = StopField.create(stopIndex);
         TextField depStopTextField = depStopField.textField();
         depStopTextField.setId("depStop");
-        Button changeButton = new Button("\u2194"); // <-- à changer ce n'est pas correcte
+        Button changeButton = new Button("↔"); // <-- à changer ce n'est pas correcte
         Label arrStopLabel = new Label("Arrivée\u202F:");
         StopField arrStopField = StopField.create(stopIndex);
         TextField arrStopTextField = arrStopField.textField();
@@ -54,7 +54,14 @@ public record QueryUI(Node rootNode,
         datePicker.setId("date");
         Label timeLabel = new Label("Heure\u202F:");
         TextField timeTextField = new TextField();
-        timeTextField.setId("date");
+        timeTextField.setId("time");
+        DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("H:mm", Locale.FRANCE);
+        LocalTimeStringConverter converter = new LocalTimeStringConverter(displayFormatter, parseFormatter);
+        TextFormatter<LocalTime> textFormatter = new TextFormatter<>(converter);
+        timeTextField.setTextFormatter(textFormatter);
+        LocalTime now = LocalTime.now();
+        textFormatter.setValue(LocalTime.of(now.getHour(),now.getMinute()));
         dateTimeHBox.getChildren().addAll(
                 dateLabel,datePicker,
                 timeLabel,timeTextField
@@ -68,6 +75,14 @@ public record QueryUI(Node rootNode,
                 return datePicker.getValue();
             }
         };
-        return new QueryUI(mainBox,depStopField.stopO(), arrStopField.stopO(), dateO,null) ;
+        ObservableValue<LocalTime> timeO = new ObservableValueBase<>() {
+            @Override
+            public LocalTime getValue() {
+                return LocalTime.parse(timeTextField.getText(),displayFormatter);
+            }
+        };
+
+        mainBox.isFocused();
+        return new QueryUI(mainBox,depStopField.stopO(),arrStopField.stopO(),dateO,timeO);
     }
 }
