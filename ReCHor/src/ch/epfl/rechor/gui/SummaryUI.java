@@ -147,7 +147,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                         if (circle.getUserData() != null) {
                             double position = (double) circle.getUserData(); //set in updateItem()
                             circle.setCenterY(lineHeight);
-                            circle.setCenterX(lineLength * position);
+                            circle.setCenterX(+(lineLength * position));
                         }
                     }
 
@@ -188,8 +188,10 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
 
                 //Create the circles representing the changes of the journey
                 long journeyDuration = journey.duration().toMinutes();
-                for(Journey.Leg leg : journey.legs()){
-                    if(leg instanceof Journey.Leg.Foot){
+                for(int i=1;i<journey.legs().size();i++){ //starts at 1 to avoid the first leg
+                    Journey.Leg leg=journey.legs().get(1);
+                    boolean isNotLastLeg = i!=journey.legs().size()-1;
+                    if(leg instanceof Journey.Leg.Foot && isNotLastLeg){
 
                         Circle intermediateCircle = new Circle(3);
                         intermediateCircle.getStyleClass().add("transfer");
@@ -218,11 +220,9 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         private Journey.Leg.Transport getFirstTransportLeg(Journey journey){
             Journey.Leg firstLeg;
             if((firstLeg = journey.legs().getFirst()) instanceof Journey.Leg.Transport){
-                //System.out.println("first leg: "+FormatterFr.formatLeg((Journey.Leg.Transport) firstLeg));
                 return (Journey.Leg.Transport)firstLeg;
             }
             else{
-                //System.out.println("first leg: "+FormatterFr.formatLeg((Journey.Leg.Foot) journey.legs().get(1)));
                 return (Journey.Leg.Transport)journey.legs().get(1);
             }
         }
