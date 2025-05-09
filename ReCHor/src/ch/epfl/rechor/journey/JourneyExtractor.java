@@ -87,9 +87,9 @@ public final class JourneyExtractor {
                         transportArrStop,
                         transportArrTime,
                         intermediateStops,
-                        timeTable.routes().vehicle(trips.routeId(depStopID)),
-                        timeTable.routes().name(trips.routeId(depStopID)),
-                        trips.destination(depStopID)
+                        timeTable.routes().vehicle(trips.routeId(connections.tripId(connectionID))),
+                        timeTable.routes().name(trips.routeId(connections.tripId(connectionID))),
+                        trips.destination(connections.tripId(connectionID))
                 ));
 
                 //add the Leg.Foot in between two Leg.Transport

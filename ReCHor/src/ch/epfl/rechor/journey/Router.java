@@ -81,12 +81,13 @@ public record Router(TimeTable timeTable) {
             } // convert and add all the tuple of that frontier
 
             if(!tripFrontBuilder.isEmpty()){
+
                 // UPDATE existing Pareto Front Trips
-                int connectionTripId=connections.tripId(connectionId);
-                if (profileBuilder.forTrip(connectionTripId) == null) {
-                    profileBuilder.setForTrip(connectionTripId, new ParetoFront.Builder());
+                if (profileBuilder.forTrip(tripId) == null) {
+                    profileBuilder.setForTrip(tripId, new ParetoFront.Builder());
                 } // create the profile builder for a given trip id if necessary
-                profileBuilder.forTrip(connectionTripId).addAll(tripFrontBuilder);
+                profileBuilder.forTrip(tripId).addAll(tripFrontBuilder);
+
 
                 // UPDATE Pareto Front Station
                 int connectionDepStationId = getStationId(connections.depStopId(connectionId));
@@ -109,14 +110,11 @@ public record Router(TimeTable timeTable) {
                         } // create a profile builder for the start station if necessary
 
                         tripFrontBuilder.forEach(x -> {
-                            transfers.minutesBetween(depStationId,connectionDepStationId);
+                            byte intermediateStops = (byte) (connections.tripPos(payload(x)) - connectionPos);
 
-                            profileBuilder.forStation(depStationId)
-                                    .add(withPayload(withDepMins(x, newDepTime),
-                                            Bits32_24_8.pack(
-                                                    firstConnectionId,
-                                                    connections.tripPos(payload(x)) - connectionPos
-                                            ))
+                            profileBuilder.forStation(depStationId).add(
+                                    withPayload(withDepMins(x, newDepTime),
+                                            Bits32_24_8.pack(firstConnectionId, intermediateStops))
                                     ); // add a depMin and a payload to each t
                         }); // create a tuple starting from the station i and take the created trip and add it
                     }
