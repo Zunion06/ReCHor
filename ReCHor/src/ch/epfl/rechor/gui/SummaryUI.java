@@ -20,6 +20,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Flow;
 
 /**
  * Represent the interface of the list of journeys in the final product
@@ -29,6 +30,14 @@ import java.util.List;
  */
 public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO) {
 
+    /**
+     * Crates an instance of SummaryUI, listing the journeys of journeyList and selecting the
+     * first journey after journeyTimes or, if there are no such journey, the last journey of the
+     * list.
+     * @param journeyList view on the list of journey to be listed
+     * @param journeyTimes view on the minimum time of the journey
+     * @return an instance of SummaryUI with the given properties
+     */
     public static SummaryUI create(ObservableValue<List<Journey>> journeyList,
                                    ObservableValue<LocalTime> journeyTimes){
 
@@ -38,14 +47,11 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         journeyView.getItems().addAll(journeyList.getValue());
         journeyView.setCellFactory(x->new JourneyListCell());
 
-        journeyView.getSelectionModel().select(findFirstJourneySelect(journeyList,journeyTimes.getValue()));
-        journeyView.scrollTo(findFirstJourneySelect(journeyList,journeyTimes.getValue()));
-        journeyView.scrollTo(findFirstJourneySelect(journeyList,journeyTimes.getValue()));
+        updateListView(journeyView,journeyList,journeyTimes.getValue());
 
 
-        journeyTimes.addListener((obs, oldValue, newValue) -> {
-            journeyView.getSelectionModel().select(findFirstJourneySelect(journeyList,newValue));
-            journeyView.scrollTo(findFirstJourneySelect(journeyList,newValue));
+        journeyTimes.subscribe((newValue) -> {
+            updateListView(journeyView,journeyList,newValue);
         });
 
         return new SummaryUI(journeyView,
@@ -53,20 +59,27 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
     }
 
     /**
-     * gives an updated version of the Journey List with only journeys after a given time
+     * updates the selection of journey to the first journey after a given LocalTime, if no journey found, select the last journey in the list
+     * @param listView javaFx view of the journey that updates the interface
      * @param journeyList list of all journey of the day
      * @param journeyTimes minimum departing time of the journeys searched
-     * @return a copy of journeyList without journey happening before JourneyTimes
      */
-    private static Journey findFirstJourneySelect(ObservableValue<List<Journey>> journeyList,
+    private static void updateListView(ListView<Journey> listView,ObservableValue<List<Journey>> journeyList,
                                             LocalTime journeyTimes){
 
+        boolean journeyFound = false;
         for(Journey journey : journeyList.getValue()){
             if(journeyTimes.isBefore(journey.depTime().toLocalTime())){
-                return journey;
+                listView.getSelectionModel().select(journey);
+                listView.scrollTo(journey);
+                journeyFound = true;
+                break;
             }
         }
-        return journeyList.getValue().getLast();
+        if(!journeyFound){
+            listView.getSelectionModel().select(journeyList.getValue().getLast());
+            listView.scrollTo(journeyList.getValue().getLast());
+        }
     }
 
     /**
@@ -86,7 +99,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         final private Circle stopCircle;
         final private List<Circle> intermediateCircleList;
 
-        public JourneyListCell(){
+        private JourneyListCell(){
 
             borderPane = new BorderPane();
             borderPane.getStyleClass().add("journey");
@@ -119,7 +132,10 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
             intermediateCircleList=new ArrayList<>();
 
             Pane centerPane = new Pane() {
-                //Override layoutChildren to place the line and circles where we want them without being resized
+                /**
+                 * calls layoutChildren and place the line and circles where we want them without
+                 * being resized by the original definition of the method
+                 */
                 @Override
                 protected void layoutChildren() {
                     super.layoutChildren();
@@ -150,6 +166,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                             circle.setCenterX(lineStart+(lineLength * position));
                         }
                     }
+
                 }
             };
 
@@ -167,6 +184,13 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
             centerGroup.getChildren().addAll(startCircle,stopCircle);
         }
 
+        /**
+         * calls updateItem of the ListCell and updates the intermediate stops circles and line
+         * @param journey The new item for the cell.
+         * @param empty whether or not this cell represents data from the list. If it
+         *        is empty, then it does not represent any domain data, but is a cell
+         *        being used to render an "empty" row.
+         */
         @Override
         protected void updateItem(Journey journey, boolean empty){
             super.updateItem(journey,empty);
@@ -189,7 +213,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                 long journeyDuration = journey.duration().toMinutes();
                 for(int i=1;i<journey.legs().size();i++){ //starts at 1 to avoid the first leg
                     Journey.Leg leg=journey.legs().get(1);
-                    boolean isNotLastLeg = i!=journey.legs().size()-1;
+                    boolean isNotLastLeg = i!=journey.legs().size()-1; //ends 1 early to avoid the last leg
                     if(leg instanceof Journey.Leg.Foot && isNotLastLeg){
 
                         Circle intermediateCircle = new Circle(3);
@@ -199,15 +223,13 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                                 .toMinutes()) / journeyDuration; //ratio on the line where the circle will be
 
                         intermediateCircle.setUserData(position);
+                        //stores the information in the circle for when it will be updated and placed
 
                         intermediateCircleList.add(intermediateCircle);
                         centerGroup.getChildren().add(intermediateCircle);
                     }
                 }
-
-
                 setGraphic(borderPane);
-
             }
         }
 
@@ -219,11 +241,9 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         private Journey.Leg.Transport getFirstTransportLeg(Journey journey){
             Journey.Leg firstLeg;
             if((firstLeg = journey.legs().getFirst()) instanceof Journey.Leg.Transport){
-                //System.out.println("first leg: "+FormatterFr.formatLeg((Journey.Leg.Transport) firstLeg));
                 return (Journey.Leg.Transport)firstLeg;
             }
-            else{
-                //System.out.println("first leg: "+FormatterFr.formatLeg((Journey.Leg.Foot) journey.legs().get(1)));
+            else{ //a foot leg is always followed by a transport leg
                 return (Journey.Leg.Transport)journey.legs().get(1);
             }
         }
