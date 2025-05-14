@@ -10,10 +10,14 @@ import ch.epfl.rechor.timetable.Stations;
 import ch.epfl.rechor.timetable.TimeTable;
 import ch.epfl.rechor.timetable.mapped.FileTimeTable;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
+import javafx.scene.Scene;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.nio.charset.StandardCharsets;
@@ -22,6 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
+import java.util.Objects;
 
 import static java.nio.file.Files.readAllLines;
 
@@ -58,17 +63,26 @@ public class Main extends Application {
                 return stationId(stations, queryUI.arrStopO().getValue());
             }
         };
+
+//        ObservableValue<Object> l = Bindings.createObjectBinding(
+//                () -> queryUI.depStopO().getValue(),queryUI.arrStopO().getValue(), queryUI.dateO().getValue(),queryUI.timeO().getValue()
+//        );
+
+
         Router router = new Router(timeTable);
-        Profile profile = router.profile(queryUI.dateO().getValue(), arrStationIdO.getValue());
-        List<Journey> journeys = JourneyExtractor
-                .journeys(profile, depStationIdO.getValue());
-        ObservableValue<List<Journey>> journeysO =
-                new SimpleObjectProperty<>(journeys);
-        ChangeListener<String> changeListener =
-                x-> {
-                    journeysO.getValue().clear();
-                    journeysO.getValue().addAll(JourneyExtractor.journeys(profile, depStationIdO.getValue()));
-                };
+        Profile profile =
+                null;
+                //router.profile(queryUI.dateO().getValue(), arrStationIdO.getValue());
+        List<Journey> journeys =
+                null;
+//                JourneyExtractor
+//                .journeys(profile, depStationIdO.getValue());
+        ObservableValue<List<Journey>> journeysO = new SimpleObjectProperty<>(List.of());
+//        ChangeListener<String> changeListener =
+//                x-> {
+//                    journeysO.getValue().clear();
+//                    journeysO.getValue().addAll(JourneyExtractor.journeys(profile, depStationIdO.getValue()));
+//                };
         ObservableValue<LocalTime> depTimeO =
                 new SimpleObjectProperty<>(queryUI.timeO().getValue());
         SummaryUI summaryUI = SummaryUI.create(journeysO, depTimeO);
@@ -76,9 +90,14 @@ public class Main extends Application {
         //DetailUI
         DetailUI detailUI = DetailUI.create(summaryUI.selectedJourneyO());
 
-
-
-
+        SplitPane splitPane = new SplitPane(summaryUI.rootNode(),detailUI.rootNode());
+        BorderPane borderPane = new BorderPane();
+        borderPane.setTop(queryUI.rootNode());
+        borderPane.setCenter(splitPane);
+        primaryStage.setScene(new Scene(borderPane));
+        primaryStage.setMinWidth(400);
+        primaryStage.setMinHeight(600);
+        primaryStage.show();
 
     }
 

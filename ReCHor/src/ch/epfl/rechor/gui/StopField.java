@@ -98,6 +98,8 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                 }
         );
 
+
+
         listView.setItems(recommendedStops);
         return new StopField(textField,query);
     }
