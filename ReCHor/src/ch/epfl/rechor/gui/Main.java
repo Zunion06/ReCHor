@@ -10,6 +10,7 @@ import ch.epfl.rechor.timetable.Stations;
 import ch.epfl.rechor.timetable.TimeTable;
 import ch.epfl.rechor.timetable.mapped.FileTimeTable;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -83,6 +84,7 @@ public class Main extends Application {
 //                    journeysO.getValue().clear();
 //                    journeysO.getValue().addAll(JourneyExtractor.journeys(profile, depStationIdO.getValue()));
 //                };
+
         ObservableValue<LocalTime> depTimeO =
                 new SimpleObjectProperty<>(queryUI.timeO().getValue());
         SummaryUI summaryUI = SummaryUI.create(journeysO, depTimeO);
@@ -94,10 +96,16 @@ public class Main extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(queryUI.rootNode());
         borderPane.setCenter(splitPane);
-        primaryStage.setScene(new Scene(borderPane));
-        primaryStage.setMinWidth(400);
+
+        Scene scene = new Scene(borderPane);
+        primaryStage.setScene(scene);
+        primaryStage.setMinWidth(800);
         primaryStage.setMinHeight(600);
+        primaryStage.setTitle("ReCHor");
         primaryStage.show();
+
+        Platform.runLater(() ->
+                scene.lookup("#depStop").requestFocus());
 
     }
 

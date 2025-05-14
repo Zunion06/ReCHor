@@ -8,15 +8,9 @@ public final class JourneyGeoJsonConverter {
     private JourneyGeoJsonConverter() {}
 
     public static Json toGeoJson(Journey journey) {
-        Map<Json.JString,Json> objectMap = new TreeMap<>((x,y) -> {
-            return y.toString().charAt(1) - x.toString().charAt(1); // faudra expliquer
-        });
-        objectMap.put(
-                new Json.JString("type"),
-                new Json.JString("LineString")
-        );
         List<Json> coordinatesList = new ArrayList<>();
         Stop firstStop = journey.legs().getFirst().depStop();
+
         coordinatesList.add(new Json.JArray(
                 List.of(
                         new Json.JNumber(firstStop.longitude()),
@@ -36,11 +30,12 @@ public final class JourneyGeoJsonConverter {
                             new Json.JNumber(leg.arrStop().latitude())
                     )));
         }
-        objectMap.put(
+        return new Json.JObject(Map.of(
                 new Json.JString("coordinates"),
-                new Json.JArray(coordinatesList)
-        );
-        return new Json.JObject(objectMap);
+                new Json.JArray(coordinatesList),
+                new Json.JString("type"),
+                new Json.JString("LineString")
+        ));
     }
 
 }

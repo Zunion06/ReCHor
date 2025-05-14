@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-public class MyJson_GeoJsonTest {
+public class MyJsonGeoJsonTest {
 
     @Test
     void JourneyGeoJsonConverterToGeoJsonWorks(){
