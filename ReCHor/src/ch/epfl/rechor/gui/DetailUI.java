@@ -31,6 +31,7 @@ import java.util.List;
 import static javafx.scene.paint.Color.RED;
 
 public record DetailUI(Node rootNode) {
+    private final static int RED_LINE_WIDTH = 2;
 
     /**
      * create the visual representation of the journey in the interface
@@ -39,8 +40,6 @@ public record DetailUI(Node rootNode) {
      * @author Matthias Gibon (397827)
      */
     public static DetailUI create(ObservableValue<Journey> observableJourney) {
-
-
 
         //create all nodes of the interface
         ScrollPane scroll = new ScrollPane();
@@ -64,7 +63,9 @@ public record DetailUI(Node rootNode) {
 
         //grid that will contain all the information on the legs
         GridPane legGrid = new GridPane(){
-            //redefine the method layoutChildren so that the red lines will get updated in real time
+            /**
+             * calls the method layoutChildren and updates the red lines in real time
+             */
             @Override
             protected void layoutChildren(){
                 super.layoutChildren();
@@ -77,7 +78,7 @@ public record DetailUI(Node rootNode) {
                                 pair.getValue().getBoundsInParent().getCenterX(),
                                 pair.getValue().getBoundsInParent().getCenterY());
 
-                        redCircleLine.setStrokeWidth(2); // width of the line
+                        redCircleLine.setStrokeWidth(RED_LINE_WIDTH); // width of the line
                         redCircleLine.setStroke(RED); // color of the line
                         annotationPane.getChildren().add(redCircleLine);
                     }
@@ -154,12 +155,14 @@ public record DetailUI(Node rootNode) {
                 if (!leg.intermediateStops().isEmpty()) {
                     Accordion accordion = new Accordion();
                     GridPane intermediateStopGrid = new GridPane();
-                    intermediateStopGrid.getStyleClass().add("intermediate-stops");
                     TitledPane accordionText = new TitledPane();
+
+                    intermediateStopGrid.getStyleClass().add("intermediate-stops");
                     accordionText.setText(leg.intermediateStops().size() + " arrêts, "
                             + FormatterFr.formatDuration(leg.duration()));
                     accordionText.setContent(intermediateStopGrid);
                     accordion.getPanes().add(accordionText);
+
                     int intermediateStopIndex=0;
                     for(Journey.Leg.IntermediateStop intermediateStop : leg.intermediateStops()){
                         intermediateStopGrid.add(new Text(FormatterFr.formatTime(intermediateStop.arrTime())),
@@ -216,7 +219,6 @@ public record DetailUI(Node rootNode) {
             if (Desktop.isDesktopSupported()){
                 String url = "https://umap.osm.ch/fr/map/?data="+ JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
                 System.out.println(JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue()));
-                String rickRoll = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
                 String encodedUrl = url.replace("\"", "%22").replace("[", "%5B").replace("]", "%5D").replace("{", "%7B").replace("}", "%7D");
                 try { //open a browser page from a given URI
                     Desktop.getDesktop().browse(new URI(encodedUrl));

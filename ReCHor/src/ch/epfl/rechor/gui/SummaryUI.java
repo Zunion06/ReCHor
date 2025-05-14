@@ -20,7 +20,6 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Flow;
 
 /**
  * Represent the interface of the list of journeys in the final product
@@ -67,18 +66,21 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
     private static void updateListView(ListView<Journey> listView,ObservableValue<List<Journey>> journeyList,
                                             LocalTime journeyTimes){
 
-        boolean journeyFound = false;
-        for(Journey journey : journeyList.getValue()){
-            if(journeyTimes.isBefore(journey.depTime().toLocalTime())){
-                listView.getSelectionModel().select(journey);
-                listView.scrollTo(journey);
-                journeyFound = true;
-                break;
+        if(!journeyList.getValue().isEmpty()) {
+
+            boolean journeyFound = false;
+            for (Journey journey : journeyList.getValue()) {
+                if (journeyTimes.isBefore(journey.depTime().toLocalTime())) {
+                    listView.getSelectionModel().select(journey);
+                    listView.scrollTo(journey);
+                    journeyFound = true;
+                    break;
+                }
             }
-        }
-        if(!journeyFound){
-            listView.getSelectionModel().select(journeyList.getValue().getLast());
-            listView.scrollTo(journeyList.getValue().getLast());
+            if (!journeyFound) {
+                listView.getSelectionModel().select(journeyList.getValue().getLast());
+                listView.scrollTo(journeyList.getValue().getLast());
+            }
         }
     }
 
