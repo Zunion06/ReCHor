@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 
 public final class MyDetailUITest extends Application {
 
@@ -42,7 +41,7 @@ public final class MyDetailUITest extends Application {
         TimeTable timeTable = new CachedTimeTable(
                 FileTimeTable.in(Path.of("timetable")));
         Stations stations = timeTable.stations();
-        LocalDate date = LocalDate.of(2025, Month.APRIL, 6);
+        LocalDate date = LocalDate.of(2025, Month.MAY, 15);
         int depStationId = stationId(stations, "Ecublens VD, EPFL");
         int arrStationId = stationId(stations, "Gruyères");
         Router router = new Router(timeTable);
@@ -54,7 +53,7 @@ public final class MyDetailUITest extends Application {
         ObservableValue<Journey> journeyO =
                 new SimpleObjectProperty<>(journey);
         ObservableValue<Journey> emptyJourney = new SimpleObjectProperty<>(null);
-        DetailUI detailUI = DetailUI.create(journeyO);
+        DetailUI detailUI = DetailUI.create(emptyJourney);
         Pane root = new BorderPane(detailUI.rootNode());
 
         primaryStage.setScene(new Scene(root));

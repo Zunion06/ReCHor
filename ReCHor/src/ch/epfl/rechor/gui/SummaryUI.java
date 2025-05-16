@@ -3,6 +3,7 @@ package ch.epfl.rechor.gui;
 import ch.epfl.rechor.FormatterFr;
 import ch.epfl.rechor.journey.Journey;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
@@ -61,10 +62,9 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
             updateListView(journeyView,journeyList,newValue);
         });
 
-        ObjectProperty<Journey> selectedJourneyO = new SimpleObjectProperty<>();
-        journeyView.getSelectionModel().selectionModeProperty().subscribe(
-                newSelection -> selectedJourneyO.set(journeyView.getSelectionModel().getSelectedItem())
-        );
+        //Let the selectedJourney always be the journey currently selected in the listView
+        ReadOnlyObjectProperty<Journey> selectedJourneyO =
+                journeyView.getSelectionModel().selectedItemProperty();
 
         return new SummaryUI(journeyView,
                 selectedJourneyO);

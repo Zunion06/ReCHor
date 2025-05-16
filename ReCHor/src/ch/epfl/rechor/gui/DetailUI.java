@@ -4,6 +4,9 @@ import ch.epfl.rechor.FormatterFr;
 import ch.epfl.rechor.journey.Journey;
 import ch.epfl.rechor.journey.JourneyGeoJsonConverter;
 import ch.epfl.rechor.journey.JourneyIcalConverter;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
@@ -96,137 +99,151 @@ public record DetailUI(Node rootNode) {
         emptyVBox.getChildren().add(noJourneyText);
 
         //show "Aucun Voyage" if the journey is null
-        if (observableJourney.getValue()!=null) {
-            emptyVBox.setVisible(false);
-        }
-        else{
-            vBox.setVisible(false);
-            return new DetailUI(scroll);
-        }
+        BooleanBinding booleanBindValue = Bindings.createBooleanBinding(
+                ()->!(observableJourney.getValue()==null),
+                observableJourney);
+        vBox.visibleProperty().bind(booleanBindValue);
+        emptyVBox.visibleProperty().bind(booleanBindValue.not());
 
-        //number of legs in the journey
-        int legsSize = observableJourney.getValue().legs().size();
+        //create the information of the journey everytime the given journey changes
+        observableJourney.subscribe(newJourney->{
 
-        //create the representation of each leg of the journey in the interface
-        for (int i = 0; i < legsSize; i++) {
-            Journey.Leg leg = observableJourney.getValue().legs().get(i);
+            //destroy the previous information:
+            circleList.clear();
+            calendarButton.cancelButtonProperty();
+            mapButton.cancelButtonProperty();
+            legGrid.getChildren().clear();
+            annotationPane.getChildren().clear();
 
-            if (leg instanceof Journey.Leg.Foot) { //if the leg is done by foot
-                legGrid.add(new Text(FormatterFr.formatLeg((Journey.Leg.Foot) leg)), 2,
-                        legGrid.getRowCount(),
-                        2,
-                        1);
-            } else { //iff the leg is done via transports
 
-                //information on the start of the leg
-                int index = legGrid.getRowCount();
-                Text depTime = new Text(FormatterFr.formatTime(leg.depTime()));
-                depTime.getStyleClass().add("departure");
-                legGrid.add(depTime,
-                        0,
-                        index);
-                Circle depCircle = new Circle(3);
-                legGrid.add(depCircle,
-                        1,
-                        index);
-                legGrid.add(new Text(leg.depStop().name()),
-                        2,
-                        index);
-                Text depPlatform = new Text(FormatterFr.formatPlatformName(leg.depStop()));
-                depPlatform.getStyleClass().add("departure");
-                legGrid.add(depPlatform,
-                        3,
-                        index);
-                index++;
-                ImageView icon = new ImageView(VehicleIcons.iconFor(((Journey.Leg.Transport) leg).vehicle()));
-                icon.setFitHeight(31);
-                icon.setFitWidth(31);
-                legGrid.add(icon,
-                        0,
-                        index, 1, (leg.intermediateStops().isEmpty() ? 1 : 2));
-                legGrid.add(new Text(FormatterFr.formatRouteDestination((Journey.Leg.Transport) leg)),
-                        2,
-                        index,
-                        2,
-                        1);
-                index++;
+            if(newJourney!=null) {
+                //number of legs in the journey
+                int legsSize = newJourney.legs().size();
 
-                //add the accordion with intermediates stop if necessary
-                if (!leg.intermediateStops().isEmpty()) {
-                    Accordion accordion = new Accordion();
-                    GridPane intermediateStopGrid = new GridPane();
-                    TitledPane accordionText = new TitledPane();
+                //create the representation of each leg of the journey in the interface
+                for (int i = 0; i < legsSize; i++) {
+                    Journey.Leg leg = newJourney.legs().get(i);
 
-                    intermediateStopGrid.getStyleClass().add("intermediate-stops");
-                    accordionText.setText(leg.intermediateStops().size() + " arrêts, "
-                            + FormatterFr.formatDuration(leg.duration()));
-                    accordionText.setContent(intermediateStopGrid);
-                    accordion.getPanes().add(accordionText);
-
-                    int intermediateStopIndex=0;
-                    for(Journey.Leg.IntermediateStop intermediateStop : leg.intermediateStops()){
-                        intermediateStopGrid.add(new Text(FormatterFr.formatTime(intermediateStop.arrTime())),
-                                0,
-                                intermediateStopIndex);
-                        intermediateStopGrid.add(new Text(FormatterFr.formatTime(intermediateStop.depTime())),
-                                1,
-                                intermediateStopIndex);
-                        intermediateStopGrid.add(new Text(intermediateStop.stop().name()),
+                    if (leg instanceof Journey.Leg.Foot) { //if the leg is done by foot
+                        legGrid.add(new Text(FormatterFr.formatLeg((Journey.Leg.Foot) leg)), 2,
+                                legGrid.getRowCount(),
                                 2,
-                                intermediateStopIndex);
-                        intermediateStopIndex++;
+                                1);
+                    } else { //iff the leg is done via transports
+
+                        //information on the start of the leg
+                        int index = legGrid.getRowCount();
+                        Text depTime = new Text(FormatterFr.formatTime(leg.depTime()));
+                        depTime.getStyleClass().add("departure");
+                        legGrid.add(depTime,
+                                0,
+                                index);
+                        Circle depCircle = new Circle(3);
+                        legGrid.add(depCircle,
+                                1,
+                                index);
+                        legGrid.add(new Text(leg.depStop().name()),
+                                2,
+                                index);
+                        Text depPlatform = new Text(FormatterFr.formatPlatformName(leg.depStop()));
+                        depPlatform.getStyleClass().add("departure");
+                        legGrid.add(depPlatform,
+                                3,
+                                index);
+                        index++;
+                        ImageView icon = new ImageView(VehicleIcons.iconFor(((Journey.Leg.Transport) leg).vehicle()));
+                        icon.setFitHeight(31);
+                        icon.setFitWidth(31);
+                        legGrid.add(icon,
+                                0,
+                                index, 1, (leg.intermediateStops().isEmpty() ? 1 : 2));
+                        legGrid.add(new Text(FormatterFr.formatRouteDestination((Journey.Leg.Transport) leg)),
+                                2,
+                                index,
+                                2,
+                                1);
+                        index++;
+
+                        //add the accordion with intermediates stop if necessary
+                        if (!leg.intermediateStops().isEmpty()) {
+                            Accordion accordion = new Accordion();
+                            GridPane intermediateStopGrid = new GridPane();
+                            TitledPane accordionText = new TitledPane();
+
+                            intermediateStopGrid.getStyleClass().add("intermediate-stops");
+                            accordionText.setText(leg.intermediateStops().size() + " arrêts, "
+                                    + FormatterFr.formatDuration(leg.duration()));
+                            accordionText.setContent(intermediateStopGrid);
+                            accordion.getPanes().add(accordionText);
+
+
+                            int intermediateStopIndex = 0;
+                            for (Journey.Leg.IntermediateStop intermediateStop : leg.intermediateStops()) {
+                                intermediateStopGrid.add(new Text(FormatterFr.formatTime(intermediateStop.arrTime())),
+                                        0,
+                                        intermediateStopIndex);
+                                intermediateStopGrid.add(new Text(FormatterFr.formatTime(intermediateStop.depTime())),
+                                        1,
+                                        intermediateStopIndex);
+                                intermediateStopGrid.add(new Text(intermediateStop.stop().name()),
+                                        2,
+                                        intermediateStopIndex);
+                                intermediateStopIndex++;
+                            }
+                            legGrid.add(accordion, 2, index, 2, 1);
+                            index++;
+                        }
+
+                        //information on arrival of the leg
+                        legGrid.add(new Text(FormatterFr.formatTime(leg.arrTime())), 0, index);
+                        Circle arrCircle = new Circle(3);
+                        legGrid.add(arrCircle, 1, index);
+                        legGrid.add(new Text(leg.arrStop().name()), 2, index);
+                        legGrid.add(new Text(FormatterFr.formatPlatformName(leg.arrStop())), 3, index);
+
+                        //add the dep and arr circle to our list of pair for the futur line between them
+                        circleList.add(new Pair<>(depCircle, arrCircle));
                     }
-                    legGrid.add(accordion, 2, index, 2, 1);
-                    index++;
                 }
 
-                //information on arrival of the leg
-                legGrid.add(new Text(FormatterFr.formatTime(leg.arrTime())), 0, index);
-                Circle arrCircle = new Circle(3);
-                legGrid.add(arrCircle, 1, index);
-                legGrid.add(new Text(leg.arrStop().name()), 2, index);
-                legGrid.add(new Text(FormatterFr.formatPlatformName(leg.arrStop())), 3, index);
+                //button interactions:
 
-                //add the dep and arr circle to our list of pair for the futur line between them
-                circleList.add(new Pair<>(depCircle,arrCircle));
-            }
-        }
-
-        //button interactions:
-
-        //Calendar
-        calendarButton.setOnAction(x->{
-            FileChooser fileChooser = new FileChooser();
-            String fileName = "voyage_" + DateTimeFormatter.ISO_DATE.
-                    format(observableJourney.getValue().depTime()) + ".ics";
-            fileChooser.setInitialFileName(fileName);
-            File file = fileChooser.showSaveDialog(null);
-            System.out.println(JourneyIcalConverter.toIcalendar(observableJourney.getValue()));
-            if(file!=null){
-                try {
-                    Files.writeString(file.toPath(),
-                            JourneyIcalConverter.toIcalendar(observableJourney.getValue()));
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
-            }
+                //Calendar
+                calendarButton.setOnAction(x -> {
+                    FileChooser fileChooser = new FileChooser();
+                    String fileName = "voyage_" + DateTimeFormatter.ISO_DATE.
+                            format(newJourney.depTime()) + ".ics";
+                    fileChooser.setInitialFileName(fileName);
+                    File file = fileChooser.showSaveDialog(null);
+                    System.out.println(JourneyIcalConverter.toIcalendar(newJourney));
+                    if (file != null) {
+                        try {
+                            Files.writeString(file.toPath(),
+                                    JourneyIcalConverter.toIcalendar(newJourney));
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    }
 
 
-        });
+                });
 
-        //map:
-        mapButton.setOnAction((x)->{
-            if (Desktop.isDesktopSupported()){
-                String url = "https://umap.osm.ch/fr/map/?data="+ JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
-                System.out.println(JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue()));
-                String encodedUrl = url.replace("\"", "%22").replace("[", "%5B").replace("]", "%5D").replace("{", "%7B").replace("}", "%7D");
-                try { //open a browser page from a given URI
-                    Desktop.getDesktop().browse(new URI(encodedUrl));
-                } catch (Exception e) {
-                    System.out.println("Il y a eu un problème");
-                }
+                //map:
+                mapButton.setOnAction((x) -> {
+                    if (Desktop.isDesktopSupported()) {
+                        String url = "https://umap.osm.ch/fr/map/?data=" + JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
+                        System.out.println(JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue()));
+                        String encodedUrl = url.replace("\"", "%22").replace("[", "%5B").replace("]", "%5D").replace("{", "%7B").replace("}", "%7D");
+                        try { //open a browser page from a given URI
+                            Desktop.getDesktop().browse(new URI(encodedUrl));
+                        } catch (Exception e) {
+                            System.out.println("Il y a eu un problème");
+                        }
+                    }
+                });
             }
         });
+
 
         return new DetailUI(scroll);
     }
