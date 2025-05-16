@@ -55,18 +55,12 @@ public class Main extends Application {
 
         Router router = new Router(timeTable);
 
-        queryUI.arrStopO().addListener(
-                ((observable, oldValue, newValue) -> System.out.println("arr : "+oldValue+" -> "+newValue))
-        );
         profileO = Bindings.createObjectBinding(
                 () -> {
-                    System.out.println("profileO");
                     if (queryUI.arrStopO().getValue().isEmpty()) {
-                        System.out.println("profile is nuull confirmed");
                         return null;
                     }
                     else {
-                        System.out.println("profile0 changed");
                         return router.profile(queryUI.dateO().getValue(), stationId(stations, queryUI.arrStopO().getValue()));
                     }
                 },
@@ -74,10 +68,9 @@ public class Main extends Application {
         );
         journeysO = Bindings.createObjectBinding(
                 () -> {
-                    System.out.println("journeyO");
-                    if (!queryUI.depStopO().getValue().isEmpty() || profileO.getValue()!=null){
-                        System.out.println("profile is null : "+profileO.getValue()==null);
-                        return JourneyExtractor.journeys(profileO.getValue(), stationId(stations, queryUI.depStopO().getValue()));
+                    Profile profile = profileO.getValue();
+                    if (!queryUI.depStopO().getValue().isEmpty() && profile!=null){
+                        return JourneyExtractor.journeys(profile, stationId(stations, queryUI.depStopO().getValue()));
                     }
                     else
                         return List.of();

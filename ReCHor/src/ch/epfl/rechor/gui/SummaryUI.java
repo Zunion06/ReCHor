@@ -50,7 +50,6 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         updateListView(journeyView,journeyList,journeyTimes.getValue());
 
         journeyList.subscribe(newVal -> {
-            System.out.println("newVal : "+newVal);
             if (newVal != null) {
                 journeyView.getItems().setAll(newVal);
                 updateListView(journeyView,journeyList,journeyTimes.getValue());
@@ -58,9 +57,8 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         });
 
         journeyTimes.subscribe((newValue) -> {
-            System.out.println("time changed");
-                journeyView.setCellFactory(x->new JourneyListCell());
-                updateListView(journeyView,journeyList,newValue);
+            journeyView.setCellFactory(x->new JourneyListCell());
+            updateListView(journeyView,journeyList,newValue);
         });
 
         ObjectProperty<Journey> selectedJourneyO = new SimpleObjectProperty<>();

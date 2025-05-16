@@ -49,7 +49,6 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                             textField.setText("");
                         else
                             stopO.set(textField.getText());
-                        System.out.println("stopO : "+stopO.getValue());
                     }
                 }
         );
