@@ -2,6 +2,7 @@ package ch.epfl.rechor.gui;
 
 import ch.epfl.rechor.FormatterFr;
 import ch.epfl.rechor.journey.Journey;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
@@ -48,13 +49,27 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
 
         updateListView(journeyView,journeyList,journeyTimes.getValue());
 
-
-        journeyTimes.subscribe((newValue) -> {
-            updateListView(journeyView,journeyList,newValue);
+        journeyList.subscribe(newVal -> {
+            System.out.println("newVal : "+newVal);
+            if (newVal != null) {
+                journeyView.getItems().setAll(newVal);
+                updateListView(journeyView,journeyList,journeyTimes.getValue());
+            }
         });
 
+        journeyTimes.subscribe((newValue) -> {
+            System.out.println("time changed");
+                journeyView.setCellFactory(x->new JourneyListCell());
+                updateListView(journeyView,journeyList,newValue);
+        });
+
+        ObjectProperty<Journey> selectedJourneyO = new SimpleObjectProperty<>();
+        journeyView.getSelectionModel().selectionModeProperty().subscribe(
+                newSelection -> selectedJourneyO.set(journeyView.getSelectionModel().getSelectedItem())
+        );
+
         return new SummaryUI(journeyView,
-                new SimpleObjectProperty<>(journeyView.getSelectionModel().getSelectedItem()));
+                selectedJourneyO);
     }
 
     /**
@@ -67,7 +82,6 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                                             LocalTime journeyTimes){
 
         if(!journeyList.getValue().isEmpty()) {
-
             boolean journeyFound = false;
             for (Journey journey : journeyList.getValue()) {
                 if (journeyTimes.isBefore(journey.depTime().toLocalTime())) {

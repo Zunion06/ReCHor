@@ -1,10 +1,14 @@
 package ch.epfl.rechor.gui;
 
 import ch.epfl.rechor.StopIndex;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.LocalTimeStringConverter;
@@ -69,20 +73,21 @@ public record QueryUI(Node rootNode,
 
         mainBox.getChildren().addAll(searchHBox,dateTimeHBox);
 
-        ObservableValue<LocalDate> dateO = new ObservableValueBase<>() {
-            @Override
-            public LocalDate getValue() {
-                return datePicker.getValue();
-            }
-        };
-        ObservableValue<LocalTime> timeO = new ObservableValueBase<>() {
-            @Override
-            public LocalTime getValue() {
-                return LocalTime.parse(timeTextField.getText(),displayFormatter);
-            }
-        };
+        ObjectProperty<LocalDate> dateO = new SimpleObjectProperty<>(datePicker.getValue());
+        datePicker.valueProperty().subscribe(dateO::set);
+        ObjectProperty<LocalTime> timeO = new SimpleObjectProperty<>(LocalTime.parse(timeTextField.getText(),displayFormatter));
+//        timeTextField.textProperty().subscribe(newVal -> timeO.set(LocalTime.parse(newVal, displayFormatter)));
+        timeTextField.addEventHandler(
+                KeyEvent.KEY_PRESSED,
+                x -> {
+                    if (x.getCode().equals(KeyCode.ENTER)) {
+                        mainBox.requestFocus();
+                        timeO.set(LocalTime.parse(timeTextField.getText(), displayFormatter));
+                        x.consume();
+                    }
+                }
+        );
 
-        mainBox.isFocused();
         return new QueryUI(mainBox,depStopField.stopO(),arrStopField.stopO(),dateO,timeO);
     }
 }

@@ -1,6 +1,8 @@
 package ch.epfl.rechor.gui;
 
 import ch.epfl.rechor.StopIndex;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
@@ -33,12 +35,7 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
         popup.getContent().add(listView);
 
         TextField textField = new TextField();
-        ObservableValue<String> query = new ObservableValueBase<>() {
-            @Override
-            public String getValue() {
-                return textField.getCharacters().toString();
-            }
-        };
+        ObjectProperty<String> stopO = new SimpleObjectProperty<>("");
         textField.focusedProperty().addListener(
                 (obs,oldVal,newVal) ->
                 {
@@ -48,19 +45,22 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                     }
                     else {
                         popup.hide();
-                        if (listView.getItems().stream().noneMatch(s -> query.getValue().equals(s)))
+                        if (isStopValid(stopIndex,listView.getItems(),textField.getText()))
                             textField.setText("");
+                        else
+                            stopO.set(textField.getText());
+                        System.out.println("stopO : "+stopO.getValue());
                     }
                 }
         );
 
-        List<String> result = new ArrayList<>(stopIndex.stopsMatching(query.getValue(),50));
+        List<String> result = new ArrayList<>(stopIndex.stopsMatching(stopO.getValue(),50));
 
         ObservableList<String> recommendedStops = FXCollections.observableList(result);
 
         textField.textProperty().addListener(
                 (obs,oldVal,newVal) -> {
-                    recommendedStops.setAll(stopIndex.stopsMatching(query.getValue(),50));
+                    recommendedStops.setAll(stopIndex.stopsMatching(textField.getText(), 50));
                 }
         );
 
@@ -101,10 +101,16 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
 
 
         listView.setItems(recommendedStops);
-        return new StopField(textField,query);
+        return new StopField(textField,stopO);
     }
 
     public void setTo(String stopName) {
         textField.setText(stopName);
+        if (stopO instanceof ObjectProperty<String>)
+            ((ObjectProperty<String>) stopO).set(stopName);
+    }
+
+    private static boolean isStopValid(StopIndex stopIndex,List<String> list, String name){
+        return list.stream().noneMatch(name::equals);
     }
 }

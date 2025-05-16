@@ -23,11 +23,8 @@ import javafx.stage.Stage;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.Month;
 import java.util.List;
-import java.util.Objects;
 
 import static java.nio.file.Files.readAllLines;
 
@@ -35,6 +32,9 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+    private static ObservableValue<Profile> profileO;
+    private static ObservableValue<List<Journey>> journeysO ;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -52,42 +52,41 @@ public class Main extends Application {
         TimeTable timeTable = new CachedTimeTable(
                 FileTimeTable.in(timetablePath));
         Stations stations = timeTable.stations();
-        ObservableValue<Integer> depStationIdO = new ObservableValueBase<Integer>() {
-            @Override
-            public Integer getValue() {
-                return stationId(stations, queryUI.depStopO().getValue());
-            }
-        };
-        ObservableValue<Integer> arrStationIdO = new ObservableValueBase<Integer>() {
-            @Override
-            public Integer getValue() {
-                return stationId(stations, queryUI.arrStopO().getValue());
-            }
-        };
-
-//        ObservableValue<Object> l = Bindings.createObjectBinding(
-//                () -> queryUI.depStopO().getValue(),queryUI.arrStopO().getValue(), queryUI.dateO().getValue(),queryUI.timeO().getValue()
-//        );
-
 
         Router router = new Router(timeTable);
-        Profile profile =
-                null;
-                //router.profile(queryUI.dateO().getValue(), arrStationIdO.getValue());
-        List<Journey> journeys =
-                null;
-//                JourneyExtractor
-//                .journeys(profile, depStationIdO.getValue());
-        ObservableValue<List<Journey>> journeysO = new SimpleObjectProperty<>(List.of());
-//        ChangeListener<String> changeListener =
-//                x-> {
-//                    journeysO.getValue().clear();
-//                    journeysO.getValue().addAll(JourneyExtractor.journeys(profile, depStationIdO.getValue()));
-//                };
 
-        ObservableValue<LocalTime> depTimeO =
-                new SimpleObjectProperty<>(queryUI.timeO().getValue());
-        SummaryUI summaryUI = SummaryUI.create(journeysO, depTimeO);
+        queryUI.arrStopO().addListener(
+                ((observable, oldValue, newValue) -> System.out.println("arr : "+oldValue+" -> "+newValue))
+        );
+        profileO = Bindings.createObjectBinding(
+                () -> {
+                    System.out.println("profileO");
+                    if (queryUI.arrStopO().getValue().isEmpty()) {
+                        System.out.println("profile is nuull confirmed");
+                        return null;
+                    }
+                    else {
+                        System.out.println("profile0 changed");
+                        return router.profile(queryUI.dateO().getValue(), stationId(stations, queryUI.arrStopO().getValue()));
+                    }
+                },
+                queryUI.dateO(),queryUI.arrStopO()
+        );
+        journeysO = Bindings.createObjectBinding(
+                () -> {
+                    System.out.println("journeyO");
+                    if (!queryUI.depStopO().getValue().isEmpty() || profileO.getValue()!=null){
+                        System.out.println("profile is null : "+profileO.getValue()==null);
+                        return JourneyExtractor.journeys(profileO.getValue(), stationId(stations, queryUI.depStopO().getValue()));
+                    }
+                    else
+                        return List.of();
+                },
+                queryUI.depStopO(),profileO
+        );
+
+        SummaryUI summaryUI = SummaryUI.create(journeysO, queryUI.timeO());
+
 
         //DetailUI
         DetailUI detailUI = DetailUI.create(summaryUI.selectedJourneyO());
