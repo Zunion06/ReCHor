@@ -6,6 +6,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @author Guillaume Pommier (401065)
+ */
 public final class StopIndex {
     private static final Map<String, String> equivalentLetters = Map.of(
             "a", "[aâà]",
@@ -23,6 +26,12 @@ public final class StopIndex {
         this.alternativeNameMap=alternativeNameMap;
     }
 
+    /**
+     * Finds the most relevant stop names for a given query
+     * @param query the user input to match stop names against
+     * @param maxNumberName the maximum number of matching names to return
+     * @return a list of matched stop names, sorted by relevance
+     */
     public List<String> stopsMatching(String query, int maxNumberName) {
         if (query == null || query.isEmpty()) {
             return stopNames;
@@ -80,6 +89,8 @@ public final class StopIndex {
                     tempScore *= 2;
                 score += tempScore;
             }
+            else
+                return 0;
         }
         return score;
     }

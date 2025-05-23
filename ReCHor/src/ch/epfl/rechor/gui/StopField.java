@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record StopField(TextField textField, ObservableValue<String> stopO) {
+    private static final int MAX_NUMBER_NAME = 50;
 
     public static StopField create(StopIndex stopIndex) {
         Popup popup = new Popup();
@@ -37,8 +38,7 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
         TextField textField = new TextField();
         ObjectProperty<String> stopO = new SimpleObjectProperty<>("");
         textField.focusedProperty().addListener(
-                (obs,oldVal,newVal) ->
-                {
+                (obs,oldVal,newVal) -> {
                     if (newVal) {
                         Bounds bounds = textField.localToScreen(textField.boundsInLocalProperty().getValue());
                         popup.show(textField, bounds.getMinX(), bounds.getMaxY());
@@ -53,13 +53,13 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                 }
         );
 
-        List<String> result = new ArrayList<>(stopIndex.stopsMatching(stopO.getValue(),50));
+        List<String> result = new ArrayList<>(stopIndex.stopsMatching(stopO.getValue(), MAX_NUMBER_NAME));
 
         ObservableList<String> recommendedStops = FXCollections.observableList(result);
 
         textField.textProperty().addListener(
                 (obs,oldVal,newVal) -> {
-                    recommendedStops.setAll(stopIndex.stopsMatching(textField.getText(), 50));
+                    recommendedStops.setAll(stopIndex.stopsMatching(textField.getText(), MAX_NUMBER_NAME));
                 }
         );
 
@@ -88,9 +88,10 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                         }
                         case ENTER -> {
                             String selectedText = listView.getSelectionModel().getSelectedItem();
-                            if (selectedText!=null)
+                            if (selectedText!=null) {
                                 textField.setText(selectedText);
-                            popup.hide();
+                                recommendedStops.setAll(stopIndex.stopsMatching(selectedText, MAX_NUMBER_NAME));
+                            }
                             x.consume();
                         }
                     }
