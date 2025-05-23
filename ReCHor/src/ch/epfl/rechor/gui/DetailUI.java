@@ -101,7 +101,7 @@ public record DetailUI(Node rootNode) {
 
         //show "Aucun Voyage" if the journey is null
         BooleanBinding booleanBindValue = Bindings.createBooleanBinding(
-                ()->!(observableJourney.getValue()==null),
+                ()->(observableJourney.getValue()!=null),
                 observableJourney);
         vBox.visibleProperty().bind(booleanBindValue);
         emptyVBox.visibleProperty().bind(booleanBindValue.not());

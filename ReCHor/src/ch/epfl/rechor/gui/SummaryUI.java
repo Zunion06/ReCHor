@@ -183,7 +183,6 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                             circle.setCenterX(lineStart+(lineLength * position));
                         }
                     }
-
                 }
             };
 
@@ -225,20 +224,23 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                 transportImageView.setFitHeight(IMAGE_SIZE);
                 routeText.setText(FormatterFr.formatRouteDestination(getFirstTransportLeg(journey)));
 
+                //clear all previous circles
+                intermediateCircleList.clear();
+                centerGroup.getChildren().removeIf(node -> node instanceof Circle
+                        && node != startCircle && node != stopCircle);
 
                 //Create the circles representing the changes of the journey.
                 long journeyDuration = journey.duration().toMinutes();
-                for(int i=1;i<journey.legs().size();i++){ //starts at 1 to avoid the first leg
-                    Journey.Leg leg=journey.legs().get(1);
-                    boolean isNotLastLeg = i!=journey.legs().size()-1; //ends 1 early to avoid the last leg
-                    if(leg instanceof Journey.Leg.Foot && isNotLastLeg){
+                for(int i=1;i<journey.legs().size()-1;i++){ //starts at 1 to avoid the first leg
+                    Journey.Leg leg=journey.legs().get(i);
+                    Journey.Leg nextLeg = journey.legs().get(i+1);
+                    if(leg instanceof Journey.Leg.Foot && nextLeg instanceof Journey.Leg.Transport){
 
                         Circle intermediateCircle = new Circle(CIRCLE_RADIUS);
                         intermediateCircle.getStyleClass().add("transfer");
 
                         double position = ((double) Duration.between(journey.depTime(),leg.depTime())
                                 .toMinutes()) / journeyDuration; //ratio on the line where the circle will be
-
                         intermediateCircle.setUserData(position);
                         //stores the information in the circle for when it will be updated and placed
 
