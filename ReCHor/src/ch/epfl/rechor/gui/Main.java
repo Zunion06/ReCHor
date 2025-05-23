@@ -36,6 +36,10 @@ public class Main extends Application {
     private static final int MIN_WIDTH = 800;
     private static final int MIN_HEIGHT = 600;
 
+    /**
+     * Launches the JavaFX application.
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
@@ -43,6 +47,16 @@ public class Main extends Application {
     private static ObservableValue<Profile> profileO;
     private static ObservableValue<List<Journey>> journeysO ;
 
+    /**
+     * Sets up and shows the main JavaFX UI for the route planner application.
+     *
+     * Loads timetable data, initializes station and alias information, sets up
+     * the queryUI, summaryUI, and detailUI. Binds UI components
+     * so that journey results update automatically based on user input.
+     *
+     * @param primaryStage the main application window
+     * @throws Exception if an error occurs during UI setup or data loading
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         //QueryUI
@@ -66,23 +80,18 @@ public class Main extends Application {
 
         profileO = Bindings.createObjectBinding(
                 () -> {
-                    if (queryUI.arrStopO().getValue().isEmpty()) {
+                    if (queryUI.arrStopO().getValue().isEmpty())
                         return null;
-                    }
-                    else {
-                        return router.profile(queryUI.dateO().getValue(), nameList.indexOf(queryUI.arrStopO().getValue()));
-                    }
+                    return router.profile(queryUI.dateO().getValue(), nameList.indexOf(queryUI.arrStopO().getValue()));
                 },
                 queryUI.dateO(),queryUI.arrStopO()
         );
         journeysO = Bindings.createObjectBinding(
                 () -> {
                     Profile profile = profileO.getValue();
-                    if (!queryUI.depStopO().getValue().isEmpty() && profile!=null){
+                    if (!queryUI.depStopO().getValue().isEmpty() && profile!=null)
                         return JourneyExtractor.journeys(profile, nameList.indexOf(queryUI.depStopO().getValue()));
-                    }
-                    else
-                        return List.of();
+                    return List.of();
                 },
                 queryUI.depStopO(),profileO
         );
@@ -93,6 +102,7 @@ public class Main extends Application {
         //DetailUI
         DetailUI detailUI = DetailUI.create(summaryUI.selectedJourneyO());
 
+        //The Interface
         SplitPane splitPane = new SplitPane(summaryUI.rootNode(),detailUI.rootNode());
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(queryUI.rootNode());
@@ -107,6 +117,5 @@ public class Main extends Application {
 
         Platform.runLater(() ->
                 scene.lookup("#depStop").requestFocus());
-
     }
 }

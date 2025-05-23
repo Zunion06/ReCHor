@@ -33,6 +33,13 @@ public record QueryUI(Node rootNode,
                       ObservableValue<LocalDate> dateO,
                       ObservableValue<LocalTime> timeO
 ){
+
+    /**
+     * Creates an instance of QueryUI, used to select the starting point and end point of a journey
+     * as well as the date and time
+     * @param stopIndex class to find
+     * @return an instance of QueryUI with the given properties
+     */
     public static QueryUI create(StopIndex stopIndex) {
         VBox mainBox = new VBox();
         mainBox.getStylesheets().add("query.css");
@@ -85,7 +92,6 @@ public record QueryUI(Node rootNode,
         ObjectProperty<LocalDate> dateO = new SimpleObjectProperty<>(datePicker.getValue());
         datePicker.valueProperty().subscribe(dateO::set);
         ObjectProperty<LocalTime> timeO = new SimpleObjectProperty<>(LocalTime.parse(timeTextField.getText(),displayFormatter));
-//        timeTextField.textProperty().subscribe(newVal -> timeO.set(LocalTime.parse(newVal, displayFormatter)));
         timeTextField.addEventHandler(
                 KeyEvent.KEY_PRESSED,
                 x -> {
@@ -96,7 +102,6 @@ public record QueryUI(Node rootNode,
                     }
                 }
         );
-
         return new QueryUI(mainBox,depStopField.stopO(),arrStopField.stopO(),dateO,timeO);
     }
 }
