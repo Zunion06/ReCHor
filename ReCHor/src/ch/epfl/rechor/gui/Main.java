@@ -19,16 +19,12 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.nio.file.Files.readAllLines;
 
 /**
  * the class to launch the interface of ReCHor
@@ -56,14 +52,14 @@ public class Main extends Application {
         Stations stations = timeTable.stations();
         StationAliases stationAliases = timeTable.stationAliases();
 
-        List<String> list = IntStream.range(0,stations.size())
+        List<String> nameList = IntStream.range(0,stations.size())
                 .mapToObj(stations::name)
                 .toList();
         Map<String,String> alternativeName = new HashMap<>();
         for (int i = 0; i < stationAliases.size(); i++) {
             alternativeName.put(stationAliases.alias(i),stationAliases.stationName(i));
         }
-        QueryUI queryUI = QueryUI.create(new StopIndex(list,alternativeName));
+        QueryUI queryUI = QueryUI.create(new StopIndex(nameList,alternativeName));
 
         //SummaryUI
         Router router = new Router(timeTable);
@@ -74,7 +70,7 @@ public class Main extends Application {
                         return null;
                     }
                     else {
-                        return router.profile(queryUI.dateO().getValue(), stationId(stations, queryUI.arrStopO().getValue()));
+                        return router.profile(queryUI.dateO().getValue(), nameList.indexOf(queryUI.arrStopO().getValue()));
                     }
                 },
                 queryUI.dateO(),queryUI.arrStopO()
@@ -83,7 +79,7 @@ public class Main extends Application {
                 () -> {
                     Profile profile = profileO.getValue();
                     if (!queryUI.depStopO().getValue().isEmpty() && profile!=null){
-                        return JourneyExtractor.journeys(profile, stationId(stations, queryUI.depStopO().getValue()));
+                        return JourneyExtractor.journeys(profile, nameList.indexOf(queryUI.depStopO().getValue()));
                     }
                     else
                         return List.of();
@@ -112,14 +108,5 @@ public class Main extends Application {
         Platform.runLater(() ->
                 scene.lookup("#depStop").requestFocus());
 
-    }
-
-    static int stationId(Stations stations, String stationName) {
-        for (int i = 0; i < stations.size(); i++) {
-            if (stations.name(i).equals(stationName)) {
-                return i;
-            }
-        }
-        return -1;
     }
 }

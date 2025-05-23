@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class StopIndex {
     private static final Map<String, String> equivalentLetters = Map.of(
@@ -42,17 +43,17 @@ public final class StopIndex {
                                         0 : caseInsensitiveFlags
                     )).toList();
 
-        return stopNames.stream()
-                .filter(s -> {
-                    for (Pattern q : queries)
-                            if (!q.matcher(s).find())
-                                return false;
-                    return true;
-                }).sorted((a,b)-> {
-                    int aScore = scoreCalculator(a,queries,subQueries);
-                    int bScore = scoreCalculator(b,queries,subQueries);
-                    return bScore-aScore;
-                })
+        return Stream.concat(
+                stopNames.stream()
+                        .map(stopName -> new Match(stopName,queries,subQueries,false))
+                        .filter(match -> match.score!=0),
+                alternativeNameMap.keySet().stream()
+                        .map(stopName -> new Match(stopName,queries,subQueries,true))
+                        .filter(match -> match.score!=0)
+                )
+                .sorted((a,b) -> b.score-a.score)
+                .map(match -> match.stopName)
+                .distinct()
                 .limit(maxNumberName)
                 .toList();
     }
@@ -80,8 +81,16 @@ public final class StopIndex {
                 score += tempScore;
             }
         }
-//        System.out.println("name : "+stopName+"\tscore : "+score);
         return score;
     }
 
+    private final class Match {
+        private final String stopName;
+        private final int score;
+
+        public Match(String stopName, List<Pattern> queries, String[] subQueries, boolean isAlternativeName) {
+            this.stopName = isAlternativeName ? alternativeNameMap.get(stopName) : stopName;
+            score = scoreCalculator(stopName,queries,subQueries);
+        }
+    }
 }

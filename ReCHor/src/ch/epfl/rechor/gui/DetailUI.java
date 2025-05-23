@@ -239,7 +239,7 @@ public record DetailUI(Node rootNode) {
                                 .replace("{", "%7B").replace("}", "%7D");
                         try { //open a browser page from a given URI
                             Desktop.getDesktop().browse(new URI(encodedUrl));
-                        } catch (Exception _) {
+                        } catch (Exception e) {
                         }
                     }
                 });
