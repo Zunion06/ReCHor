@@ -17,7 +17,7 @@ public class VehicleIcons {
 
     /**
      * provides the Image of the icon corresponding the given vehicle
-     * @param vehicle type of the vehicle who's icon we're looking for
+     * @param vehicle type of the vehicle whose icon we're looking for
      * @return the icon of the vehicle in the format of an Image
      */
     public static Image iconFor(Vehicle vehicle){

@@ -2,9 +2,7 @@ package ch.epfl.rechor.gui;
 
 import ch.epfl.rechor.FormatterFr;
 import ch.epfl.rechor.journey.Journey;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -31,8 +29,10 @@ import java.util.List;
  */
 public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO) {
 
+    private static final String SUMMARY_STYLE_SHEET = "summary.css";
+
     /**
-     * Crates an instance of SummaryUI, listing the journeys of journeyList and selecting the
+     * Creates an instance of SummaryUI, listing the journeys of journeyList and selecting the
      * first journey after journeyTimes or, if there are no such journey, the last journey of the
      * list.
      * @param journeyList view on the list of journey to be listed
@@ -43,7 +43,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                                    ObservableValue<LocalTime> journeyTimes){
 
         ListView<Journey> journeyView = new ListView<>();
-        journeyView.getStylesheets().add("summary.css");
+        journeyView.getStylesheets().add(SUMMARY_STYLE_SHEET);
 
         journeyView.getItems().addAll(journeyList.getValue());
         journeyView.setCellFactory(x->new JourneyListCell());
@@ -101,6 +101,16 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
      * @author Matthias Gibon (397827)
      */
     static final private class JourneyListCell extends ListCell<Journey> {
+
+        static final private int CIRCLE_RADIUS = 3;
+        static final private int MARGIN = 5;
+        static final private int IMAGE_SIZE = 31;
+        static final private String DEPARTURE_STYLE = "departure";
+        static final private String ROUTE_STYLE = "route";
+        static final private String DEP_ARR_STYLE = "dep-arr";
+        static final private String TRANSFER_STYLE = "transfer";
+        static final private String DURATION_STYLE = "duration";
+        static final private String JOURNEY_STYLE = "journey";
         final private BorderPane borderPane;
         final private Text depTimeText;
         final private ImageView transportImageView;
@@ -116,15 +126,16 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         private JourneyListCell(){
 
             borderPane = new BorderPane();
-            borderPane.getStyleClass().add("journey");
+            borderPane.getStyleClass().add(JOURNEY_STYLE);
 
             //left
             depTimeText = new Text();
-            depTimeText.getStyleClass().add("departure");
+            depTimeText.getStyleClass().add(DEPARTURE_STYLE);
 
             //top
             HBox routeBox = new HBox();
-            routeBox.getStyleClass().add("route");
+
+            routeBox.getStyleClass().add(ROUTE_STYLE);
             transportImageView = new ImageView();
             routeText = new Text();
 
@@ -133,16 +144,16 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
 
             //bottom
             HBox durationBox = new HBox();
-            durationBox.getStyleClass().add("duration");
+            durationBox.getStyleClass().add(DURATION_STYLE);
             durationText = new Text();
 
             //center
             centerLine = new Line();
             centerGroup = new Group();
-            startCircle = new Circle(3);
-            stopCircle = new Circle(3);
-            startCircle.getStyleClass().add("dep-arr");
-            stopCircle.getStyleClass().add("dep-arr"); // only for first and last circle
+            startCircle = new Circle(CIRCLE_RADIUS);
+            stopCircle = new Circle(CIRCLE_RADIUS);
+            startCircle.getStyleClass().add(DEP_ARR_STYLE);
+            stopCircle.getStyleClass().add(DEP_ARR_STYLE); // only for first and last circle
             intermediateCircleList=new ArrayList<>();
 
             Pane centerPane = new Pane() {
@@ -156,8 +167,8 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                     setPrefSize(0, 0);
 
                     double lineHeight = getHeight() / 2;
-                    double lineStart = 5;
-                    double lineEnd = getWidth() - 5;
+                    double lineStart = MARGIN;
+                    double lineEnd = getWidth() - MARGIN;
                     double lineLength = lineEnd - lineStart;
 
                     //line position
@@ -201,7 +212,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         /**
          * calls updateItem of the ListCell and updates the intermediate stops circles and line
          * @param journey The new item for the cell.
-         * @param empty whether or not this cell represents data from the list. If it
+         * @param empty whether this cell represents data from the list. If it
          *        is empty, then it does not represent any domain data, but is a cell
          *        being used to render an "empty" row.
          */
@@ -218,8 +229,8 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                 durationText.setText(FormatterFr.formatDuration(journey.duration()));
                 transportImageView.setImage(VehicleIcons.iconFor
                         (getFirstTransportLeg(journey).vehicle()));
-                transportImageView.setFitWidth(31);
-                transportImageView.setFitHeight(31);
+                transportImageView.setFitWidth(IMAGE_SIZE);
+                transportImageView.setFitHeight(IMAGE_SIZE);
                 routeText.setText(FormatterFr.formatRouteDestination(getFirstTransportLeg(journey)));
 
 
@@ -230,8 +241,8 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                     boolean isNotLastLeg = i!=journey.legs().size()-1; //ends 1 early to avoid the last leg
                     if(leg instanceof Journey.Leg.Foot && isNotLastLeg){
 
-                        Circle intermediateCircle = new Circle(3);
-                        intermediateCircle.getStyleClass().add("transfer");
+                        Circle intermediateCircle = new Circle(CIRCLE_RADIUS);
+                        intermediateCircle.getStyleClass().add(TRANSFER_STYLE);
 
                         double position = ((double) Duration.between(journey.depTime(),leg.depTime())
                                 .toMinutes()) / journeyDuration; //ratio on the line where the circle will be
