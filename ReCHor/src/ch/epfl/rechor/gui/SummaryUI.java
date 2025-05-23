@@ -29,8 +29,6 @@ import java.util.List;
  */
 public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO) {
 
-    private static final String SUMMARY_STYLE_SHEET = "summary.css";
-
     /**
      * Creates an instance of SummaryUI, listing the journeys of journeyList and selecting the
      * first journey after journeyTimes or, if there are no such journey, the last journey of the
@@ -43,7 +41,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                                    ObservableValue<LocalTime> journeyTimes){
 
         ListView<Journey> journeyView = new ListView<>();
-        journeyView.getStylesheets().add(SUMMARY_STYLE_SHEET);
+        journeyView.getStylesheets().add("summary.css");
 
         journeyView.getItems().addAll(journeyList.getValue());
         journeyView.setCellFactory(x->new JourneyListCell());
@@ -105,12 +103,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         static final private int CIRCLE_RADIUS = 3;
         static final private int MARGIN = 5;
         static final private int IMAGE_SIZE = 31;
-        static final private String DEPARTURE_STYLE = "departure";
-        static final private String ROUTE_STYLE = "route";
-        static final private String DEP_ARR_STYLE = "dep-arr";
-        static final private String TRANSFER_STYLE = "transfer";
-        static final private String DURATION_STYLE = "duration";
-        static final private String JOURNEY_STYLE = "journey";
+
         final private BorderPane borderPane;
         final private Text depTimeText;
         final private ImageView transportImageView;
@@ -126,16 +119,16 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         private JourneyListCell(){
 
             borderPane = new BorderPane();
-            borderPane.getStyleClass().add(JOURNEY_STYLE);
+            borderPane.getStyleClass().add("journey");
 
             //left
             depTimeText = new Text();
-            depTimeText.getStyleClass().add(DEPARTURE_STYLE);
+            depTimeText.getStyleClass().add("departure");
 
             //top
             HBox routeBox = new HBox();
 
-            routeBox.getStyleClass().add(ROUTE_STYLE);
+            routeBox.getStyleClass().add("route");
             transportImageView = new ImageView();
             routeText = new Text();
 
@@ -144,7 +137,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
 
             //bottom
             HBox durationBox = new HBox();
-            durationBox.getStyleClass().add(DURATION_STYLE);
+            durationBox.getStyleClass().add("duration");
             durationText = new Text();
 
             //center
@@ -152,8 +145,8 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
             centerGroup = new Group();
             startCircle = new Circle(CIRCLE_RADIUS);
             stopCircle = new Circle(CIRCLE_RADIUS);
-            startCircle.getStyleClass().add(DEP_ARR_STYLE);
-            stopCircle.getStyleClass().add(DEP_ARR_STYLE); // only for first and last circle
+            startCircle.getStyleClass().add("dep-arr");
+            stopCircle.getStyleClass().add("dep-arr"); // only for first and last circle
             intermediateCircleList=new ArrayList<>();
 
             Pane centerPane = new Pane() {
@@ -242,7 +235,7 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
                     if(leg instanceof Journey.Leg.Foot && isNotLastLeg){
 
                         Circle intermediateCircle = new Circle(CIRCLE_RADIUS);
-                        intermediateCircle.getStyleClass().add(TRANSFER_STYLE);
+                        intermediateCircle.getStyleClass().add("transfer");
 
                         double position = ((double) Duration.between(journey.depTime(),leg.depTime())
                                 .toMinutes()) / journeyDuration; //ratio on the line where the circle will be
