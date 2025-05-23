@@ -56,7 +56,6 @@ public record SummaryUI(Node rootNode, ObservableValue<Journey> selectedJourneyO
         });
 
         journeyTimes.subscribe((newValue) -> {
-            journeyView.setCellFactory(x->new JourneyListCell());
             updateListView(journeyView,journeyList,newValue);
         });
 
