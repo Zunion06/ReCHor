@@ -6,16 +6,14 @@ import ch.epfl.rechor.journey.JourneyExtractor;
 import ch.epfl.rechor.journey.Profile;
 import ch.epfl.rechor.journey.Router;
 import ch.epfl.rechor.timetable.CachedTimeTable;
+import ch.epfl.rechor.timetable.StationAliases;
 import ch.epfl.rechor.timetable.Stations;
 import ch.epfl.rechor.timetable.TimeTable;
 import ch.epfl.rechor.timetable.mapped.FileTimeTable;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
@@ -23,12 +21,25 @@ import javafx.stage.Stage;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.time.LocalTime;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.nio.file.Files.readAllLines;
 
+/**
+ * the class to launch the interface of ReCHor
+ * @author Guillaume Pommier (401065)
+ */
 public class Main extends Application {
+
+    private static final String TITLE = "ReCHor";
+    private static final int MIN_WIDTH = 800;
+    private static final int MIN_HEIGHT = 600;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -40,19 +51,21 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         //QueryUI
         Path timetablePath = Path.of("timetable");
-        List<String> list = List.copyOf(readAllLines(timetablePath.resolve("strings.txt"),
-                        StandardCharsets.ISO_8859_1))
-                .stream()
-                .filter(s -> s.chars().noneMatch(Character::isDigit))
-                .filter(s -> s.chars().anyMatch(Character::isLowerCase))
-                .toList();
-        QueryUI queryUI = QueryUI.create(new StopIndex(list,null));
-
-        //SummaryUI
         TimeTable timeTable = new CachedTimeTable(
                 FileTimeTable.in(timetablePath));
         Stations stations = timeTable.stations();
+        StationAliases stationAliases = timeTable.stationAliases();
 
+        List<String> list = IntStream.range(0,stations.size())
+                .mapToObj(stations::name)
+                .toList();
+        Map<String,String> alternativeName = new HashMap<>();
+        for (int i = 0; i < stationAliases.size(); i++) {
+            alternativeName.put(stationAliases.alias(i),stationAliases.stationName(i));
+        }
+        QueryUI queryUI = QueryUI.create(new StopIndex(list,alternativeName));
+
+        //SummaryUI
         Router router = new Router(timeTable);
 
         profileO = Bindings.createObjectBinding(
@@ -91,9 +104,9 @@ public class Main extends Application {
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(800);
-        primaryStage.setMinHeight(600);
-        primaryStage.setTitle("ReCHor");
+        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(MIN_HEIGHT);
+        primaryStage.setTitle(TITLE);
         primaryStage.show();
 
         Platform.runLater(() ->

@@ -48,7 +48,7 @@ public class MyJsonGeoJsonTest {
             Stop arrStop = new Stop(
                     "",
                     "",
-                    46.005,
+                    180,
                     -54
                     );
             legList.add(

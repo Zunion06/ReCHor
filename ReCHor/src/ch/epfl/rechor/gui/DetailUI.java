@@ -64,7 +64,7 @@ public record DetailUI(Node rootNode) {
         //will be used later for the line
         List<Pair<Circle,Circle>> circleList = new ArrayList<>();
 
-        //grid that will contain all the information on the legs
+        // grid that will contain all the information on the legs
         GridPane legGrid = new GridPane(){
             /**
              * calls the method layoutChildren and updates the red lines in real time
@@ -232,7 +232,6 @@ public record DetailUI(Node rootNode) {
                 mapButton.setOnAction((x) -> {
                     if (Desktop.isDesktopSupported()) {
                         String url = "https://umap.osm.ch/fr/map/?data=" + JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
-                        System.out.println(JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue()));
                         String encodedUrl = url.replace("\"", "%22").replace("[", "%5B").replace("]", "%5D").replace("{", "%7B").replace("}", "%7D");
                         try { //open a browser page from a given URI
                             Desktop.getDesktop().browse(new URI(encodedUrl));

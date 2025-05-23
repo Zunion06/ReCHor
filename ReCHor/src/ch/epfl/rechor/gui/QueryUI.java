@@ -18,6 +18,15 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+/**
+ * The part of the interface that allows to create a journey
+ * @param rootNode Node at the root of the heritage
+ * @param depStopO current selected departure stop name for the journey
+ * @param arrStopO current selected arriving stop name for the journey
+ * @param dateO current selected departure date for the journey
+ * @param timeO current selected departure time for the journey
+ * @author Guillaume Pommier (401065)
+ */
 public record QueryUI(Node rootNode,
                       ObservableValue<String> depStopO,
                       ObservableValue<String> arrStopO,

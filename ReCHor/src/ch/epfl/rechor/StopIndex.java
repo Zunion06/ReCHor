@@ -4,9 +4,16 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class StopIndex {
+    private static final Map<String, String> equivalentLetters = Map.of(
+            "a", "[aâà]",
+            "e", "[eéèêë]",
+            "i", "[iíìîï]",
+            "o", "[oóòôö]",
+            "u", "[uúùûü]",
+            "c", "[cç]");
+    private final Pattern delimiters = Pattern.compile("[aeiouc]");
     private final List<String> stopNames;
     private final Map<String,String> alternativeNameMap;
 
@@ -16,43 +23,24 @@ public final class StopIndex {
     }
 
     public List<String> stopsMatching(String query, int maxNumberName) {
-
-        Pattern vowels = Pattern.compile("[aeuoi]");
+        if (query == null || query.isEmpty()) {
+            return stopNames;
+        }
         String[] subQueries = Pattern.compile(" ").split(query);
 
-        int flags = Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
+        int caseInsensitiveFlags = Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
 
         List<Pattern> queries = Arrays.stream(subQueries).map(
-                    s -> {
-                        StringBuilder builder = new StringBuilder();
-                        Arrays.stream(vowels.splitWithDelimiters(s, 0))
-                                .forEach(c -> {
-                                    switch (c) {
-                                        case "a" -> builder.append("[aáàâä]");
-                                        case "e" -> builder.append("[eéèêë]");
-                                        case "i" -> builder.append("[iíìîï]");
-                                        case "o" -> builder.append("[oóòôö]");
-                                        case "u" -> builder.append("[uúùûü]");
-                                        case "c" -> builder.append("[cç]");
-                                        default -> builder.append(Pattern.quote(c));
-                                    }});
-
-//                        s.chars().forEach(c-> {
-//                                    switch (c) {
-//                                        case 'a' -> builder.append("[aáàâä]");
-//                                        case 'e' -> builder.append("[eéèêë]");
-//                                        case 'i' -> builder.append("[iíìîï]");
-//                                        case 'o' -> builder.append("[oóòôö]");
-//                                        case 'u' -> builder.append("[uúùûü]");
-//                                        case 'c' -> builder.append("[cç]");
-//                                        default -> builder.append(Pattern.quote(String.valueOf((char)c)));
-//                                    }
-//                                });
-                        return Pattern.compile(builder.toString(),flags);
-                    }).toList();
-
-//        queries.forEach(System.out::println);
-
+                    subQuery -> Pattern.compile(
+                            Arrays.stream(delimiters.splitWithDelimiters(subQuery, 0))
+                                    .map(characters -> equivalentLetters.getOrDefault(
+                                                characters,
+                                                Pattern.quote(characters)
+                                        )
+                                    ).collect(Collectors.joining()),
+                            subQuery.codePoints().anyMatch(Character::isUpperCase) ?
+                                        0 : caseInsensitiveFlags
+                    )).toList();
 
         return stopNames.stream()
                 .filter(s -> {
@@ -74,15 +62,12 @@ public final class StopIndex {
         int score = 0;
         int startIndex, endIndex;
         int tempScore;
-        Matcher matcher = null;
+        Matcher matcher;
         Iterator<String> it = Arrays.stream(subQueries).iterator();
         for (Pattern queryPat : queries) {
             matcher = queryPat.matcher(stopName);
             if (matcher.find()) {
                 String queryStr = it.next();
-//                System.out.println("queryStr : "+queryStr);
-//                System.out.println("queryPat : " + queryPat);
-//                System.out.println("stopname : " + stopName);
                 tempScore = stopName.isEmpty() ?
                         0 :
                         queryStr.length() * 100 / stopName.length();
