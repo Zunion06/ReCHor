@@ -6,7 +6,6 @@ import ch.epfl.rechor.journey.JourneyGeoJsonConverter;
 import ch.epfl.rechor.journey.JourneyIcalConverter;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.value.ObservableBooleanValue;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.Accordion;
@@ -35,6 +34,8 @@ import static javafx.scene.paint.Color.RED;
 
 public record DetailUI(Node rootNode) {
     private final static int RED_LINE_WIDTH = 2;
+    public static final int CIRCLE_RADIUS = 3;
+    public static final int IMAGE_SIZE = 31;
 
     /**
      * create the visual representation of the journey in the interface
@@ -64,7 +65,7 @@ public record DetailUI(Node rootNode) {
         //will be used later for the line
         List<Pair<Circle,Circle>> circleList = new ArrayList<>();
 
-        // grid that will contain all the information on the legs
+        //grid that will contain all the information on the legs
         GridPane legGrid = new GridPane(){
             /**
              * calls the method layoutChildren and updates the red lines in real time
@@ -138,7 +139,7 @@ public record DetailUI(Node rootNode) {
                         legGrid.add(depTime,
                                 0,
                                 index);
-                        Circle depCircle = new Circle(3);
+                        Circle depCircle = new Circle(CIRCLE_RADIUS);
                         legGrid.add(depCircle,
                                 1,
                                 index);
@@ -148,12 +149,12 @@ public record DetailUI(Node rootNode) {
                         Text depPlatform = new Text(FormatterFr.formatPlatformName(leg.depStop()));
                         depPlatform.getStyleClass().add("departure");
                         legGrid.add(depPlatform,
-                                3,
+                                CIRCLE_RADIUS,
                                 index);
                         index++;
                         ImageView icon = new ImageView(VehicleIcons.iconFor(((Journey.Leg.Transport) leg).vehicle()));
-                        icon.setFitHeight(31);
-                        icon.setFitWidth(31);
+                        icon.setFitHeight(IMAGE_SIZE);
+                        icon.setFitWidth(IMAGE_SIZE);
                         legGrid.add(icon,
                                 0,
                                 index, 1, (leg.intermediateStops().isEmpty() ? 1 : 2));
@@ -196,10 +197,10 @@ public record DetailUI(Node rootNode) {
 
                         //information on arrival of the leg
                         legGrid.add(new Text(FormatterFr.formatTime(leg.arrTime())), 0, index);
-                        Circle arrCircle = new Circle(3);
+                        Circle arrCircle = new Circle(CIRCLE_RADIUS);
                         legGrid.add(arrCircle, 1, index);
                         legGrid.add(new Text(leg.arrStop().name()), 2, index);
-                        legGrid.add(new Text(FormatterFr.formatPlatformName(leg.arrStop())), 3, index);
+                        legGrid.add(new Text(FormatterFr.formatPlatformName(leg.arrStop())), CIRCLE_RADIUS, index);
 
                         //add the dep and arr circle to our list of pair for the futur line between them
                         circleList.add(new Pair<>(depCircle, arrCircle));
@@ -215,7 +216,6 @@ public record DetailUI(Node rootNode) {
                             format(newJourney.depTime()) + ".ics";
                     fileChooser.setInitialFileName(fileName);
                     File file = fileChooser.showSaveDialog(null);
-                    System.out.println(JourneyIcalConverter.toIcalendar(newJourney));
                     if (file != null) {
                         try {
                             Files.writeString(file.toPath(),
@@ -231,12 +231,15 @@ public record DetailUI(Node rootNode) {
                 //map:
                 mapButton.setOnAction((x) -> {
                     if (Desktop.isDesktopSupported()) {
-                        String url = "https://umap.osm.ch/fr/map/?data=" + JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
-                        String encodedUrl = url.replace("\"", "%22").replace("[", "%5B").replace("]", "%5D").replace("{", "%7B").replace("}", "%7D");
+                        String url = "https://umap.osm.ch/fr/map/?data=" +
+                                JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
+
+                        String encodedUrl = url.replace("\"", "%22")
+                                .replace("[", "%5B").replace("]", "%5D")
+                                .replace("{", "%7B").replace("}", "%7D");
                         try { //open a browser page from a given URI
                             Desktop.getDesktop().browse(new URI(encodedUrl));
-                        } catch (Exception e) {
-                            System.out.println("Il y a eu un problème");
+                        } catch (Exception _) {
                         }
                     }
                 });

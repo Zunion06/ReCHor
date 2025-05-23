@@ -44,7 +44,6 @@ public record Router(TimeTable timeTable) {
         for (int connectionId = 0; connectionId < connections.size(); connectionId++) {
 
             ParetoFront.Builder tripFrontBuilder = new ParetoFront.Builder();
-
             int connectionArrStopId = transferTable[getStationId(connections
                     .arrStopId(connectionId))];
 
@@ -109,11 +108,11 @@ public record Router(TimeTable timeTable) {
                             profileBuilder.setForStation(depStationId, new ParetoFront.Builder());
                         } // create a profile builder for the start station if necessary
 
-                        tripFrontBuilder.forEach(x -> {
-                            byte intermediateStops = (byte) (connections.tripPos(payload(x)) - connectionPos);
+                        tripFrontBuilder.forEach(tuple -> {
+                            byte intermediateStops = (byte) (connections.tripPos(payload(tuple)) - connectionPos);
 
                             profileBuilder.forStation(depStationId).add(
-                                    withPayload(withDepMins(x, newDepTime),
+                                    withPayload(withDepMins(tuple, newDepTime),
                                             Bits32_24_8.pack(firstConnectionId, intermediateStops))
                                     ); // add a depMin and a payload to each t
                         }); // create a tuple starting from the station i and take the created trip and add it
