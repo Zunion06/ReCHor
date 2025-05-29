@@ -16,7 +16,7 @@ public class CachedTimeTable implements TimeTable{
 
     /**
      * returns an instance of CachedTimeTable
-     * @param underlyingTimeTable the instance of TimeTable that will be use for all methods
+     * @param underlyingTimeTable the instance of TimeTable that will be used for all methods
      */
     public CachedTimeTable(TimeTable underlyingTimeTable){
         this.underlyingTimeTable = underlyingTimeTable;
