@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ *
  * @author Guillaume Pommier (401065)
  */
 public final class StopIndex {
@@ -21,9 +22,16 @@ public final class StopIndex {
     private final List<String> stopNames;
     private final Map<String,String> alternativeNameMap;
 
+    /**
+     * Constructs a StopIndex with a list of main stop names and a mapping
+     * of alternative names to their corresponding main names.
+     *
+     * @param stopNames the list of main stop names to index
+     * @param alternativeNameMap a map from alternative names to main names
+     */
     public StopIndex(List<String> stopNames, Map<String,String> alternativeNameMap) {
-        this.stopNames=stopNames;
-        this.alternativeNameMap=alternativeNameMap;
+        this.stopNames= new ArrayList<>(stopNames);
+        this.alternativeNameMap= new HashMap<>(alternativeNameMap);
     }
 
     /**
@@ -34,13 +42,13 @@ public final class StopIndex {
      */
     public List<String> stopsMatching(String query, int maxNumberName) {
         if (query == null || query.isEmpty()) {
-            return stopNames;
+            return stopNames.subList(0,maxNumberName);
         }
         String[] subQueries = Pattern.compile(" ").split(query);
 
         int caseInsensitiveFlags = Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
 
-        List<Pattern> queries = Arrays.stream(subQueries).map(
+        List<Pattern> formattedSubQueries = Arrays.stream(subQueries).map(
                     subQuery -> Pattern.compile(
                             Arrays.stream(delimiters.splitWithDelimiters(subQuery, 0))
                                     .map(characters -> equivalentLetters.getOrDefault(
@@ -54,10 +62,14 @@ public final class StopIndex {
 
         return Stream.concat(
                 stopNames.stream()
-                        .map(stopName -> new Match(stopName,queries,subQueries,false))
+                        .map(stopName ->
+                                new ScoredStopName(stopName,formattedSubQueries,
+                                        subQueries,false))
                         .filter(match -> match.score!=0),
                 alternativeNameMap.keySet().stream()
-                        .map(stopName -> new Match(stopName,queries,subQueries,true))
+                        .map(stopName ->
+                                new ScoredStopName(stopName,formattedSubQueries,
+                                        subQueries,true))
                         .filter(match -> match.score!=0)
                 )
                 .sorted((a,b) -> b.score-a.score)
@@ -67,20 +79,22 @@ public final class StopIndex {
                 .toList();
     }
 
-
-    private static int scoreCalculator(String stopName, List<Pattern> queries, String[] subQueries){
+    /**
+     * Calculates a relevance score for a given stop name against the query
+     * @param stopName the stopName which we will calculate the score
+     * @param formattedSubQueries the list of formatted subqueries as pattern
+     * @param subQueries the array of the unformatted subqueries
+     * @return the score of a stop name given a query
+     */
+    private static int scoreCalculator(String stopName, List<Pattern> formattedSubQueries, String[] subQueries){
         int score = 0;
         int startIndex, endIndex;
         int tempScore;
         Matcher matcher;
-        Iterator<String> it = Arrays.stream(subQueries).iterator();
-        for (Pattern queryPat : queries) {
-            matcher = queryPat.matcher(stopName);
+        for (int i = 0 ; i < subQueries.length ; i++) {
+            matcher = formattedSubQueries.get(i).matcher(stopName);
             if (matcher.find()) {
-                String queryStr = it.next();
-                tempScore = stopName.isEmpty() ?
-                        0 :
-                        queryStr.length() * 100 / stopName.length();
+                tempScore = subQueries[i].length() * 100 / stopName.length();
                 startIndex = matcher.start();
                 endIndex = matcher.end();
                 if (startIndex == 0 || !Character.isLetter(stopName.charAt(startIndex - 1)))
@@ -95,13 +109,24 @@ public final class StopIndex {
         return score;
     }
 
-    private final class Match {
+    /**
+     * Utilitarian class used to stock the score of a stop name and better sort the
+     * @author Guillaume Pommier (401065)
+     */
+    private final class ScoredStopName {
         private final String stopName;
         private final int score;
 
-        public Match(String stopName, List<Pattern> queries, String[] subQueries, boolean isAlternativeName) {
+        /**
+         * Instantiate a ScoredStopName
+         * @param stopName the stopName which we will calculate the score
+         * @param formattedSubQueries the list of formatted subqueries as pattern
+         * @param subQueries the array of the unformatted subqueries
+         * @param isAlternativeName tells if the stop name should be considered an alternative name
+         */
+        private ScoredStopName(String stopName, List<Pattern> formattedSubQueries, String[] subQueries, boolean isAlternativeName) {
             this.stopName = isAlternativeName ? alternativeNameMap.get(stopName) : stopName;
-            score = scoreCalculator(stopName,queries,subQueries);
+            score = scoreCalculator(stopName,formattedSubQueries,subQueries);
         }
     }
 }

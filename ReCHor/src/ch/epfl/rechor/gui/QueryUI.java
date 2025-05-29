@@ -4,7 +4,6 @@ import ch.epfl.rechor.StopIndex;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.beans.value.ObservableValueBase;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -37,7 +36,7 @@ public record QueryUI(Node rootNode,
     /**
      * Creates an instance of QueryUI, used to select the starting point and end point of a journey
      * as well as the date and time
-     * @param stopIndex class to find
+     * @param stopIndex the class used to suggest and validate stop names
      * @return an instance of QueryUI with the given properties
      */
     public static QueryUI create(StopIndex stopIndex) {
@@ -75,9 +74,18 @@ public record QueryUI(Node rootNode,
         Label timeLabel = new Label("Heure\u202F:");
         TextField timeTextField = new TextField();
         timeTextField.setId("time");
+
+        // Formatter for displaying time in 24-hour format with leading zeros
         DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        // Formatter for parsing user input in 24-hour format, accepting single-digit hours,
+        // using French locale
         DateTimeFormatter parseFormatter = DateTimeFormatter.ofPattern("H:mm", Locale.FRANCE);
+
+        // Converter to transform between LocalTime objects and strings using the defined display
+        // and parse formats
         LocalTimeStringConverter converter = new LocalTimeStringConverter(displayFormatter, parseFormatter);
+
         TextFormatter<LocalTime> textFormatter = new TextFormatter<>(converter);
         timeTextField.setTextFormatter(textFormatter);
         LocalTime now = LocalTime.now();
@@ -91,7 +99,9 @@ public record QueryUI(Node rootNode,
 
         ObjectProperty<LocalDate> dateO = new SimpleObjectProperty<>(datePicker.getValue());
         datePicker.valueProperty().subscribe(dateO::set);
-        ObjectProperty<LocalTime> timeO = new SimpleObjectProperty<>(LocalTime.parse(timeTextField.getText(),displayFormatter));
+        ObjectProperty<LocalTime> timeO = new SimpleObjectProperty<>(
+                LocalTime.parse(timeTextField.getText(),displayFormatter)
+        );
         timeTextField.addEventHandler(
                 KeyEvent.KEY_PRESSED,
                 x -> {

@@ -4,51 +4,64 @@ import ch.epfl.rechor.StopIndex;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.beans.value.ObservableValueBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
-import javafx.event.EventType;
 import javafx.geometry.Bounds;
-import javafx.scene.Cursor;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Popup;
-import javafx.stage.Window;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A UI component that wraps a text field with dynamic stop name suggestions.
+  * It displays a popup list of recommended stop names as the user types and updates
+ * the selected stop value when a valid name is confirmed.
+ *
+ * @param textField the input field for typing a stop name
+ * @param stopO an observable value representing the currently selected stop name
+ * @author Guillaume Pommier (401065)
+ */
 public record StopField(TextField textField, ObservableValue<String> stopO) {
+    private static final int LIST_VIEW_MAX_HEIGHT = 240;
     private static final int MAX_NUMBER_NAME = 50;
 
+    /**
+     * Creates a new StopField with autocomplete functionality based on a given StopIndex.
+     * Displays a popup with a list of matching stop names as the user types. The list
+     * updates dynamically and supports selection via keyboard or mouse.
+     *
+     * @param stopIndex the class used to suggest and validate stop names
+     * @return a StopField instance with autocomplete behavior
+     */
     public static StopField create(StopIndex stopIndex) {
         Popup popup = new Popup();
         popup.setHideOnEscape(false);
 
         ListView<String> listView = new ListView<>();
         listView.setFocusTraversable(false);
-        listView.setMaxHeight(240);
+        listView.setMaxHeight(LIST_VIEW_MAX_HEIGHT);
         popup.getContent().add(listView);
 
         TextField textField = new TextField();
         ObjectProperty<String> stopO = new SimpleObjectProperty<>("");
-        textField.focusedProperty().addListener(
-                (obs,oldVal,newVal) -> {
+        textField.focusedProperty().subscribe(
+                newVal -> {
                     if (newVal) {
                         Bounds bounds = textField.localToScreen(textField.boundsInLocalProperty().getValue());
                         popup.show(textField, bounds.getMinX(), bounds.getMaxY());
                     }
                     else {
                         popup.hide();
-                        if (isStopValid(stopIndex,listView.getItems(),textField.getText()))
+                        String text = textField.getText();
+                        if (listView.getItems().stream().noneMatch(text::equals))
                             textField.setText("");
                         else
-                            stopO.set(textField.getText());
+                            stopO.set(text);
                     }
                 }
         );
@@ -57,10 +70,12 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
 
         ObservableList<String> recommendedStops = FXCollections.observableList(result);
 
-        textField.textProperty().addListener(
-                (obs,oldVal,newVal) -> {
-                    recommendedStops.setAll(stopIndex.stopsMatching(textField.getText(), MAX_NUMBER_NAME));
-                }
+        textField.textProperty().subscribe(
+                nV ->
+                    recommendedStops.setAll(
+                            stopIndex.stopsMatching(textField.getText(), MAX_NUMBER_NAME)
+                    )
+
         );
 
         listView.setOnMouseClicked(
@@ -97,20 +112,17 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                     }
                 }
         );
-
-
-
         listView.setItems(recommendedStops);
         return new StopField(textField,stopO);
     }
 
+    /**
+     * Set the text in the TextField and the value of stopO to the argument
+     * @param stopName the stop name to set
+     */
     public void setTo(String stopName) {
         textField.setText(stopName);
         if (stopO instanceof ObjectProperty<String>)
             ((ObjectProperty<String>) stopO).set(stopName);
-    }
-
-    private static boolean isStopValid(StopIndex stopIndex,List<String> list, String name){
-        return list.stream().noneMatch(name::equals);
     }
 }

@@ -49,7 +49,6 @@ public class Main extends Application {
 
     /**
      * Sets up and shows the main JavaFX UI for the route planner application.
-     *
      * Loads timetable data, initializes station and alias information, sets up
      * the queryUI, summaryUI, and detailUI. Binds UI components
      * so that journey results update automatically based on user input.

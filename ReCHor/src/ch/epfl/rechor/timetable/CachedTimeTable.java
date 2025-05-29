@@ -2,6 +2,11 @@ package ch.epfl.rechor.timetable;
 
 import java.time.LocalDate;
 
+/**
+ * Represent the timetable of public transports for the given values
+ * With the particularity of using a Cache to better retrieve useful data
+ * @author Guillaume Pommier (401065)
+ */
 public class CachedTimeTable implements TimeTable{
     private final TimeTable underlyingTimeTable;
     private Trips trips;
@@ -9,6 +14,10 @@ public class CachedTimeTable implements TimeTable{
     private LocalDate tripsDate;
     private LocalDate connectionsDate;
 
+    /**
+     * returns an instance of CachedTimeTable
+     * @param underlyingTimeTable the instance of TimeTable that will be use for all methods
+     */
     public CachedTimeTable(TimeTable underlyingTimeTable){
         this.underlyingTimeTable = underlyingTimeTable;
     }

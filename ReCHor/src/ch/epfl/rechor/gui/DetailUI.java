@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -231,15 +233,17 @@ public record DetailUI(Node rootNode) {
                 //map:
                 mapButton.setOnAction((x) -> {
                     if (Desktop.isDesktopSupported()) {
-                        String url = "https://umap.osm.ch/fr/map/?data=" +
-                                JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
+                        String baseUrl = "https://umap.osm.ch/fr/map/?data=";
+                        String geoJson = JourneyGeoJsonConverter.toGeoJson(observableJourney.getValue());
 
-                        String encodedUrl = url.replace("\"", "%22")
-                                .replace("[", "%5B").replace("]", "%5D")
-                                .replace("{", "%7B").replace("}", "%7D");
+                        // Encode the GeoJSON string so that it can be safely included in a URL
+                        // (i.e. '{', '}', '"', '[' and ']' are encoded)
+                        String encodedGeoJson = URLEncoder.encode(geoJson, StandardCharsets.UTF_8);
+
+                        String fullUrl = baseUrl + encodedGeoJson;
                         try { //open a browser page from a given URI
-                            Desktop.getDesktop().browse(new URI(encodedUrl));
-                        } catch (Exception e) {
+                            Desktop.getDesktop().browse(new URI(fullUrl));
+                        } catch (Exception ignored) {
                         }
                     }
                 });

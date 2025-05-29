@@ -13,9 +13,9 @@ public final class JourneyGeoJsonConverter {
     /**
      * create a GeoJSON file representing a journey
      * @param journey the journey to be converted
-     * @return a Json object containing the GeoJson journey
+     * @return a String representing the GeoJson journey
      */
-    public static Json toGeoJson(Journey journey) {
+    public static String toGeoJson(Journey journey) {
         List<Json> coordinatesList = new ArrayList<>();
         Stop firstStop = journey.legs().getFirst().depStop();
 
@@ -55,6 +55,6 @@ public final class JourneyGeoJsonConverter {
                 new Json.JArray(coordinatesList),
                 new Json.JString("type"),
                 new Json.JString("LineString")
-        ));
+        )).toString();
     }
 }
