@@ -28,7 +28,7 @@ import java.util.List;
  */
 public record StopField(TextField textField, ObservableValue<String> stopO) {
     private static final int LIST_VIEW_MAX_HEIGHT = 240;
-    private static final int MAX_NUMBER_NAME = 50;
+    private static final int MAX_NUMBER_OF_NAMES = 50;
 
     /**
      * Creates a new StopField with autocomplete functionality based on a given StopIndex.
@@ -66,14 +66,14 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                 }
         );
 
-        List<String> result = new ArrayList<>(stopIndex.stopsMatching(stopO.getValue(), MAX_NUMBER_NAME));
+        List<String> result = new ArrayList<>(stopIndex.stopsMatching(stopO.getValue(), MAX_NUMBER_OF_NAMES));
 
         ObservableList<String> recommendedStops = FXCollections.observableList(result);
 
         textField.textProperty().subscribe(
                 nV ->
                     recommendedStops.setAll(
-                            stopIndex.stopsMatching(textField.getText(), MAX_NUMBER_NAME)
+                            stopIndex.stopsMatching(textField.getText(), MAX_NUMBER_OF_NAMES)
                     )
 
         );
@@ -93,21 +93,32 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                     switch (x.getCode()) {
                         case KeyCode.UP -> {
                             SelectionModel<String> selection = listView.getSelectionModel();
-                            selection.select(selection.getSelectedIndex()-1);
+                            int newSelectionIndex = selection.getSelectedIndex() - 1;
+                            selection.select(newSelectionIndex);
+                            listView.scrollTo(newSelectionIndex);
                             x.consume();
                         }
                         case KeyCode.DOWN -> {
                             SelectionModel<String> selection = listView.getSelectionModel();
-                            selection.select(selection.getSelectedIndex()+1);
+                            int newSelectionIndex = selection.getSelectedIndex() + 1;
+                            selection.select(newSelectionIndex);
+                            listView.scrollTo(newSelectionIndex);
                             x.consume();
                         }
                         case ENTER -> {
                             String selectedText = listView.getSelectionModel().getSelectedItem();
                             if (selectedText!=null) {
                                 textField.setText(selectedText);
-                                recommendedStops.setAll(stopIndex.stopsMatching(selectedText, MAX_NUMBER_NAME));
+                                recommendedStops.setAll(stopIndex.stopsMatching(selectedText, MAX_NUMBER_OF_NAMES));
                             }
                             x.consume();
+                        }
+                        case TAB -> {
+                            String selectedText = listView.getSelectionModel().getSelectedItem();
+                            if (selectedText!=null) {
+                                textField.setText(selectedText);
+                                recommendedStops.setAll(stopIndex.stopsMatching(selectedText, MAX_NUMBER_OF_NAMES));
+                            }
                         }
                     }
                 }
