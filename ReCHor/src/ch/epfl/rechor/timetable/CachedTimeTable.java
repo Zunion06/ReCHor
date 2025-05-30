@@ -7,7 +7,7 @@ import java.time.LocalDate;
  * With the particularity of using a Cache to better retrieve useful data
  * @author Guillaume Pommier (401065)
  */
-public class CachedTimeTable implements TimeTable{
+public final class CachedTimeTable implements TimeTable{
     private final TimeTable underlyingTimeTable;
     private Trips trips;
     private Connections connections;

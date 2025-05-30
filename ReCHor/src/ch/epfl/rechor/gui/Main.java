@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
  * the class to launch the interface of ReCHor
  * @author Guillaume Pommier (401065)
  */
-public class Main extends Application {
+public final class Main extends Application {
 
     private static final String TITLE = "ReCHor";
     private static final int MIN_WIDTH = 800;
@@ -44,8 +44,8 @@ public class Main extends Application {
         launch(args);
     }
 
-    private static ObservableValue<Profile> profileO;
-    private static ObservableValue<List<Journey>> journeysO ;
+    private ObservableValue<Profile> profileO;
+    private ObservableValue<List<Journey>> journeysO ;
 
     /**
      * Sets up and shows the main JavaFX UI for the route planner application.
