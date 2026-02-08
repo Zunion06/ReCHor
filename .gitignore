@@ -1,1 +1,5 @@
-/ReCHor/timetable/
+/timetable/*
+/archive/
+/.idea/
+/out/
+/submissions/
