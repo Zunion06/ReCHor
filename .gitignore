@@ -4,3 +4,6 @@
 /.idea/
 /out/
 /submissions/
+/target/
+/lib/
+/.vscode/
