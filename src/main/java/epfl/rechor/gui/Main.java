@@ -59,7 +59,7 @@ public final class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         //QueryUI
-        Path timetablePath = Path.of("timetable");
+        Path timetablePath = Path.of("src/main/resources/timetable");
         TimeTable timeTable = new CachedTimeTable(
                 FileTimeTable.in(timetablePath));
         Stations stations = timeTable.stations();

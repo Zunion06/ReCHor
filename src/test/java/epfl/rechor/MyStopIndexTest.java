@@ -21,7 +21,7 @@ public class MyStopIndexTest {
         assertDoesNotThrow(() -> {
 //            List<String> list = List.copyOf(readAllLines(Path.of("timetable").resolve("strings.txt"),
 //                    StandardCharsets.ISO_8859_1));
-            Path timetablePath = Path.of("timetable");
+            Path timetablePath = Path.of("src/main/resources/timetable");
             TimeTable timeTable = new CachedTimeTable(
                     FileTimeTable.in(timetablePath));
             Stations stations = timeTable.stations();

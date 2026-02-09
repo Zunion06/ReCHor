@@ -15,7 +15,7 @@ A Java application similar to the SBB itinerary planning app.
 
 ## Timetable
 
-Due to their large size, the timetable files are not included in this repository.
+Due to their large size, the main timetable files are not included in this repository.
 
 However you can download them at https://cs108.epfl.ch/archive/25/p/
 

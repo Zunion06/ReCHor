@@ -1,5 +1,5 @@
-/timetable/*
-!/timetable/README.md
+**/timetable/*
+!**/README.md
 /archive/
 /.idea/
 /out/
