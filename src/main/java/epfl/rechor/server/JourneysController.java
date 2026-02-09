@@ -40,7 +40,7 @@ public class JourneysController {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
                     "No data available for the requested date: " + date);
         }
-        
+
         int depStationId = getStationIndex(from);
         int arrStationId = getStationIndex(to);
 
@@ -50,6 +50,7 @@ public class JourneysController {
 
     private int getStationIndex(String stationName) throws ResponseStatusException {
         int index = Collections.binarySearch(nameList, stationName);
+        // int index = nameList.indexOf(stationName);
         if (index < 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     "Station not found: " + stationName);
