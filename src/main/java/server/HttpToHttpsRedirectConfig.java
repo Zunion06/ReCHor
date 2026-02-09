@@ -1,4 +1,4 @@
-package epfl.rechor.server;
+package server;
 
 import org.apache.catalina.connector.Connector;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;

@@ -1,4 +1,4 @@
-package epfl.rechor.server;
+package server;
 
 import java.util.List;
 
