@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-import static epfl.rechor.journey.JourneyExtractorTest.testPath;
+import static epfl.HelperProfile.*;
 import epfl.rechor.timetable.TimeTable;
 import epfl.rechor.timetable.mapped.FileTimeTable;
 

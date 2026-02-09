@@ -1,13 +1,6 @@
 package epfl.rechor.journey;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.NoSuchElementException;
+import static epfl.HelperProfile.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,61 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
-import epfl.rechor.timetable.TimeTable;
-import epfl.rechor.timetable.mapped.FileTimeTable;
 
 class JourneyExtractorTest {
-    static Path testPath(String path) {
-        var maybeTestDataDir = System.getenv("RECHOR_TEST_DATA_DIR");
-        return maybeTestDataDir != null
-                ? Path.of(maybeTestDataDir).resolve(path)
-                : Path.of(path);
-    }
-
-    private static Profile readProfile() throws IOException {
-        var timeTable = FileTimeTable.in(testPath("timetable"));
-        var date = LocalDate.of(2025, Month.MARCH, 18);
-        var arrStationId = stationId(timeTable, "Gruyères");
-
-        var path = testPath("profile_" + date + "_" + arrStationId + ".txt");
-        try (BufferedReader r = Files.newBufferedReader(path)) {
-            var profileB = new Profile.Builder(timeTable, date, arrStationId);
-            var stationId = -1;
-            String line;
-            while ((line = r.readLine()) != null) {
-                stationId += 1;
-                if (line.isEmpty()) continue;
-                var frontB = new ParetoFront.Builder();
-                for (var t : line.split(","))
-                    frontB.add(Long.parseLong(t, 16));
-                profileB.setForStation(stationId, frontB);
-            }
-            return profileB.build();
-        }
-    }
-
-    private static Profile readProfileUnchecked() {
-        try {
-            return readProfile();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    private static int stationId(TimeTable timeTable, String name) {
-        var stations = timeTable.stations();
-        for (var i = 0; i < stations.size(); i += 1)
-            if (stations.name(i).equals(name)) return i;
-        throw new NoSuchElementException();
-    }
-
-    private static final Profile PROFILE = readProfileUnchecked();
-
     @Test
     void journeyExtractorJourneysWorksWithSingleTransportLeg() {
-        var timeTable = PROFILE.timeTable();
+        var timeTable = profile().timeTable();
         var depStationId = stationId(timeTable, "Le Pâquier-Montbarry");
-        var journeys = JourneyExtractor.journeys(PROFILE, depStationId);
+        var journeys = JourneyExtractor.journeys(profile(), depStationId);
         assertEquals(39, journeys.size());
         for (var journey : journeys) {
             assertEquals(1, journey.legs().size());
@@ -80,9 +25,9 @@ class JourneyExtractorTest {
 
     @Test
     void journeyExtractorJourneyWorksWithInitialFootLeg() {
-        var timeTable = PROFILE.timeTable();
+        var timeTable = profile().timeTable();
         var depStationId = stationId(timeTable, "Le Pâquier-Montbarry, gare");
-        var journeys = JourneyExtractor.journeys(PROFILE, depStationId);
+        var journeys = JourneyExtractor.journeys(profile(), depStationId);
         assertEquals(39, journeys.size());
         for (var journey : journeys) {
             assertEquals(2, journey.legs().size());
@@ -93,9 +38,9 @@ class JourneyExtractorTest {
 
     @Test
     void journeyExtractorJourneyWorksWithFinalFootLeg() {
-        var timeTable = PROFILE.timeTable();
+        var timeTable = profile().timeTable();
         var depStationId = stationId(timeTable, "Pringy, village");
-        var journeys = JourneyExtractor.journeys(PROFILE, depStationId);
+        var journeys = JourneyExtractor.journeys(profile(), depStationId);
         assertEquals(20, journeys.size());
         for (var journey : journeys) {
             assertEquals(2, journey.legs().size());
@@ -106,10 +51,10 @@ class JourneyExtractorTest {
 
     @Test
     void journeyExtractorJourneyWorksWithComplexJourney() {
-        var timeTable = PROFILE.timeTable();
-        var d = PROFILE.date();
+        var timeTable = profile().timeTable();
+        var d = profile().date();
         var depStationId = stationId(timeTable, "Martina, cunfin");
-        var journeys = JourneyExtractor.journeys(PROFILE, depStationId);
+        var journeys = JourneyExtractor.journeys(profile(), depStationId);
         assertEquals(22, journeys.size());
 
         var j = journeys.get(6);

@@ -12,7 +12,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
-import static epfl.rechor.journey.JourneyExtractorTest.testPath;
+import static epfl.HelperProfile.*;
 import epfl.rechor.timetable.TimeTable;
 import epfl.rechor.timetable.mapped.FileTimeTable;
 
