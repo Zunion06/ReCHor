@@ -120,6 +120,7 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
                                 recommendedStops.setAll(stopIndex.stopsMatching(selectedText, MAX_NUMBER_OF_NAMES));
                             }
                         }
+                        default -> {}
                     }
                 }
         );
@@ -133,7 +134,7 @@ public record StopField(TextField textField, ObservableValue<String> stopO) {
      */
     public void setTo(String stopName) {
         textField.setText(stopName);
-        if (stopO instanceof ObjectProperty<String>)
-            ((ObjectProperty<String>) stopO).set(stopName);
+        if (stopO instanceof ObjectProperty<String> objectProperty)
+            objectProperty.set(stopName);
     }
 }

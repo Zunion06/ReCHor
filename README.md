@@ -5,6 +5,7 @@ Semester project for the **CS-108 – Object-Oriented Programming (Pratique de l
 ## Description
 
 A Java application similar to the SBB itinerary planning app.
+
 (SBB is the Swiss public transportation company for trains, buses, and other transit services.)
 
 ## Authors
@@ -15,4 +16,22 @@ A Java application similar to the SBB itinerary planning app.
 ## Timetable
 
 Due to their large size, the timetable files are not included in this repository.
+
 However you can download them at https://cs108.epfl.ch/archive/25/p/
+
+## Utilisation
+
+Run the javaFX application: 
+```bash
+mvn javafx:run
+```
+
+Run the HTTP server:
+```bash
+mvn spring-boot:run
+```
+
+Run tests:
+```bash
+mvn test
+```
