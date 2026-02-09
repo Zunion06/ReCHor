@@ -1,4 +1,4 @@
-package server;
+package server.config;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,11 +22,11 @@ import epfl.rechor.timetable.mapped.FileTimeTable;
 @Configuration
 public class TimeTableConfig {
 
+    @Value("${rechor.data.dir}") // Useful to separate the main and test timetables 
+    private String dataPath;
     @Bean
     public TimeTable timeTable() throws IOException {
-        Path timetablePath = Path.of("timetable");
-        return new CachedTimeTable(
-                FileTimeTable.in(timetablePath));
+        return new CachedTimeTable(FileTimeTable.in(Path.of(dataPath)));
     }
 
     @Bean
