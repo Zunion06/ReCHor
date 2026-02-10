@@ -22,13 +22,16 @@ RUN mvn clean package -pl rechor-server -am -DskipTests
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
+COPY --from=build /app/rechor-server/target/*.jar app.jar
+
+RUN mkdir -p /app/data/timetable
+COPY rechor-server/src/main/resources/timetable-mini /app/data/timetable/
+
 # For security
 # If attacker gains access to the container, it won't be as a root user
 # Therefore the attacker can't download or remove anything
 RUN useradd -m rechoruser
 USER rechoruser
 
-COPY --from=build /app/rechor-server/target/*.jar app.jar
-
 # Using "sh -c" allows the shell to expand the $JAVA_OPTS variable
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "java -DRECHOR_MINI=true $JAVA_OPTS -jar app.jar"]
