@@ -1,5 +1,11 @@
 # Server
 
+## Fix
+
+Find a way to access the timetable ressources.
+
+No tests when `mvn test` inside rechor-server
+
 ## Feature
 
 Implement security measures:
