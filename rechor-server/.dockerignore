@@ -1,0 +1,12 @@
+**/archive/
+**/.idea/
+**/out/
+**/submissions/
+**/target/
+**/lib/
+**/.vscode/
+**/.env
+**/.envrc
+**/README.md
+**/TODO.md
+**/test/*

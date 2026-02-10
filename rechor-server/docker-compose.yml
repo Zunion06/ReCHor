@@ -1,0 +1,14 @@
+services:
+  rechor-server:
+    build:
+      context: ..
+      dockerfile: rechor-server/Dockerfile
+    ports:
+      - "8443:8443"
+      - "8080:8080"
+    volumes:
+      - ../rechor-logic/src/main/resources/timetable:/app/data/timetable:ro
+    environment:
+      - JAVA_OPTS=-Xmx4G -Dserver.port=8443 -Drechor.data.dir=/app/data
+      - RECHOR_KEYSTORE_PASSWORD=${RECHOR_KEYSTORE_PASSWORD}
+    restart: unless-stopped
