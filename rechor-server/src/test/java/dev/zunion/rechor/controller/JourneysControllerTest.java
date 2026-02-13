@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.test.web.servlet.MockMvc;
 
 import ch.epfl.rechor.journey.Journey;
-import dev.zunion.rechor.controller.JourneysController;
 import dev.zunion.rechor.controller.JourneysController.TimeType;
 import dev.zunion.rechor.service.JourneyService;
 
@@ -102,4 +101,37 @@ class JourneysControllerTest {
             .andExpect(jsonPath("$.status").value(422))
             .andExpect(jsonPath("$.message").value(containsString("No data available")));
     }
+
+    @Test
+    void findJourneys_ShouldReturn400_WhenFromExceedsMaxLength() throws Exception {
+        String longFrom = "A".repeat(31); // 31 characters, exceeds 30
+
+        mockMvc.perform(get("/journeys")
+                .param("from", longFrom)
+                .param("to", "Bern")
+                .param("date", "2025-03-17")
+                .param("time", "10:00")
+                .param("type", "DEPARTURE")
+                .param("limit", "10"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value(containsString("exceed 30 characters")));
+    }
+
+    @Test
+    void findJourneys_ShouldReturn400_WhenToExceedsMaxLength() throws Exception {
+        String longTo = "B".repeat(31); // 31 characters, exceeds 30
+
+        mockMvc.perform(get("/journeys")
+                .param("from", "Lausanne")
+                .param("to", longTo)
+                .param("date", "2025-03-17")
+                .param("time", "10:00")
+                .param("type", "DEPARTURE")
+                .param("limit", "10"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.status").value(400))
+            .andExpect(jsonPath("$.message").value(containsString("exceed 30 characters")));
+    }
+
 }

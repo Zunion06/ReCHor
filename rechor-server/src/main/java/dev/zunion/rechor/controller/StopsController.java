@@ -26,12 +26,14 @@ public class StopsController {
 
     @GetMapping("/stops")
     public List<String> stops(
-            @RequestParam 
+            @RequestParam(defaultValue = "")
             @Size(max = 30, message = "Query must not exceed 30 characters")
             String query,
+
             @RequestParam(defaultValue = DEFAULT_LIMIT)
             @Min(value = 1, message = "Limit must be at least 1")
-            @Max(value = 50, message = "Limit cannot exceed 50") int limit
+            @Max(value = 50, message = "Limit cannot exceed 50") 
+            int limit
     ) {
         return stopIndex.stopsMatching(query, limit);
     }

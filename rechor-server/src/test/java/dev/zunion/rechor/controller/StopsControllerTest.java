@@ -100,12 +100,17 @@ class StopsControllerTest {
     }
 
     @Test
-    void stops_ShouldReturn400_WhenQueryIsMissing() throws Exception {
+    void stops_ShouldReturn400_WhenQueryExceedsMaxLength() throws Exception {
+        String longQuery = "A".repeat(31); 
+
         mockMvc.perform(get("/stops")
+                .param("query", longQuery)
                 .param("limit", "10"))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value(containsString("query")));
+            .andExpect(jsonPath("$.message")
+                .value(containsString("exceed 30")));
     }
+
 
     @Test
     void stops_ShouldUseDefaultLimit_WhenLimitNotProvided() throws Exception {
