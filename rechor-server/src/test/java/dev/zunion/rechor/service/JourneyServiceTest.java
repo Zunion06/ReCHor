@@ -3,12 +3,12 @@ package dev.zunion.rechor.service;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static dev.zunion.rechor.HelperProfile.testPath;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,8 +23,8 @@ import ch.epfl.rechor.journey.Router;
 import ch.epfl.rechor.timetable.CachedTimeTable;
 import ch.epfl.rechor.timetable.TimeTable;
 import ch.epfl.rechor.timetable.mapped.FileTimeTable;
+import static dev.zunion.rechor.HelperProfile.testPath;
 import dev.zunion.rechor.controller.JourneysController.TimeType;
-import dev.zunion.rechor.service.JourneyService;
 
 class JourneyServiceTest {
 
@@ -55,21 +55,44 @@ class JourneyServiceTest {
 
     @Test
     void getRecommendedJourneys_ShouldReturnRealJourneys_WhenRequestIsValid() {
-        // Arrange
-        // Use a date/time known to exist in your test timetable/profile
         LocalDate date = LocalDate.of(2025, Month.MARCH, 18);
         LocalTime time = LocalTime.of(8, 0);
 
-        // Act
-        List<Journey> results = journeyService.getRecommendedJourneys(
+        List<Journey> resultsDep = journeyService.getRecommendedJourneys(
                 "Bern", "Lausanne", date, time, TimeType.DEPARTURE, 3);
 
-        // Assert
-        assertThat(results).isNotNull();
-        // Even if the list is empty (depending on test data), we verify no crash occurred
-        // and that logic like time filtering was applied.
-        for (Journey j : results) {
+        assertThat(resultsDep).isNotNull();
+        for (Journey j : resultsDep) {
             assertThat(j.depTime().toLocalTime()).isAfterOrEqualTo(time);
+        }
+
+        List<Journey> resultsArr = journeyService.getRecommendedJourneys(
+                "Bern", "Lausanne", date, time, TimeType.ARRIVAL, 3);
+        assertThat(resultsArr).isNotNull();
+        for (Journey j : resultsArr) {
+            assertThat(j.arrTime().toLocalTime()).isBeforeOrEqualTo(time);
+        }
+    }
+
+    @Test
+    void getRecommendedJourneys_ShouldReturnJourneysClosestToTimeArg_WhenRequestIsValid() {
+        LocalDate dateDep = LocalDate.of(2025, Month.MARCH, 18);
+        LocalTime timeDep = LocalTime.of(8, 0);
+        List<Journey> resultsDep = journeyService.getRecommendedJourneys(
+                "Bern", "Lausanne", dateDep, timeDep, TimeType.DEPARTURE, 3);
+        assertThat(resultsDep).isNotNull();
+
+        LocalDateTime dateTimeArr = resultsDep.getLast().arrTime();
+        LocalDate dateArr = dateTimeArr.toLocalDate();
+        LocalTime timeArr = dateTimeArr.toLocalTime();
+        List<Journey> resultsArr = journeyService.getRecommendedJourneys(
+                "Bern", "Lausanne", dateArr, timeArr, TimeType.ARRIVAL, 3);
+        assertThat(resultsArr).isNotNull();
+
+        // With those conditions Set(resultsDep) == Set(resultsArr)
+        // aka. the two list contains the same elements
+        for (Journey j : resultsDep) {
+            assertThat(resultsArr.contains(j));
         }
     }
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ch.epfl.rechor.StopIndex;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 @RestController
 @Validated // Required for @Min/@Max 
@@ -25,7 +26,9 @@ public class StopsController {
 
     @GetMapping("/stops")
     public List<String> stops(
-            @RequestParam String query,
+            @RequestParam 
+            @Size(max = 30, message = "Query must not exceed 30 characters")
+            String query,
             @RequestParam(defaultValue = DEFAULT_LIMIT)
             @Min(value = 1, message = "Limit must be at least 1")
             @Max(value = 50, message = "Limit cannot exceed 50") int limit

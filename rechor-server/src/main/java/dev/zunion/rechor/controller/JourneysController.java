@@ -22,6 +22,7 @@ import ch.epfl.rechor.journey.Journey;
 import dev.zunion.rechor.service.JourneyService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 
 @RestController
 @Validated
@@ -70,14 +71,29 @@ public class JourneysController {
 
     @GetMapping("/journeys")
     public List<Journey> findJourneys(
-            @RequestParam String from,
-            @RequestParam String to,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime time,
-            @RequestParam(defaultValue = "DEPARTURE") TimeType type,
+            @RequestParam 
+            @Size(max = 30, message = "The departure stop's name must not exceed 30 characters")
+            String from,
+
+            @RequestParam 
+            @Size(max = 30, message = "The arrival stop's name must not exceed 30 characters")
+            String to,
+
+            @RequestParam 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) 
+            LocalDate date,
+            
+            @RequestParam 
+            @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) 
+            LocalTime time,
+            
+            @RequestParam(defaultValue = "DEPARTURE") 
+            TimeType type,
+            
             @RequestParam(defaultValue = DEFAULT_LIMIT)
             @Min(value = 1, message = "Limit must be at least 1")
-            @Max(value = 50, message = "Limit cannot exceed 50") int limit
+            @Max(value = 50, message = "Limit cannot exceed 50") 
+            int limit
     ) {
         LocalDate effectiveMax = isMini ? MAX_DATE_MINI : MAX_DATE_FULL;
 

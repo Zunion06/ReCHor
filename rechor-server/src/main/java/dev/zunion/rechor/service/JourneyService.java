@@ -1,8 +1,10 @@
 package dev.zunion.rechor.service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +31,7 @@ public class JourneyService {
     private record JourneyKey(int depId, int arrId, LocalDate date) {}
 
     // Strategy: Cache up to 100 list of journeys, expire them after 15 mins of inactivity
-    private final Cache<JourneyKey, List<Journey>> journeyCache = Caffeine.newBuilder()
+    private final Cache<JourneyKey, Profile> profileCache = Caffeine.newBuilder()
             .maximumSize(100)
             .expireAfterAccess(15, TimeUnit.MINUTES)
             .build();
@@ -50,10 +52,10 @@ public class JourneyService {
         }
 
         JourneyKey key = new JourneyKey(depStationId, arrStationId, date);
-        List<Journey> journeys = journeyCache.get(key, k -> {
-            Profile profile = router.profile(date, arrStationId);
-            return JourneyExtractor.journeys(profile, depStationId);
+        Profile profile = profileCache.get(key, k -> {
+            return router.profile(date, arrStationId);
         });
+        List<Journey> journeys = JourneyExtractor.journeys(profile, depStationId);
 
         LocalDateTime referenceDateTime = LocalDateTime.of(date, time);
 
@@ -62,11 +64,16 @@ public class JourneyService {
                     .filter(j -> !j.depTime().isBefore(referenceDateTime))
                     .limit(limit)
                     .toList();
+
             case ARRIVAL -> journeys.stream()
                     .filter(j -> !j.arrTime().isAfter(referenceDateTime))
+                    .sorted(Comparator.comparingLong(j ->
+                            Math.abs(Duration.between(j.depTime(), referenceDateTime).toMillis())
+                    ))
                     .limit(limit)
                     .toList();
         };
+
     }
 
     private int getStationIndex(String name) {
