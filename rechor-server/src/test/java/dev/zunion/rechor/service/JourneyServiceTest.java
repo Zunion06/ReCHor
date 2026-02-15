@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -115,4 +117,48 @@ class JourneyServiceTest {
             .isInstanceOf(ResponseStatusException.class)
             .hasFieldOrPropertyWithValue("statusCode", HttpStatus.BAD_REQUEST);
     }
+
+    @Test
+    void storeResults_ShouldReturnValidUUID_AndStoreJourneys() {
+        LocalDate date = LocalDate.of(2025, Month.MARCH, 18);
+        LocalTime time = LocalTime.of(8, 0);
+
+        List<Journey> journeys = journeyService.getRecommendedJourneys(
+                "Bern", "Lausanne", date, time, TimeType.DEPARTURE, 2);
+
+        String searchId = journeyService.storeResults(journeys);
+
+        // UUID format validation
+        assertThat(searchId)
+                .isNotNull()
+                .hasSize(36);
+
+        // Ensure it is a real UUID
+        assertThatNoException().isThrownBy(() -> UUID.fromString(searchId));
+
+        // Ensure retrieval works
+        List<Journey> stored = journeyService.getStoredJourneys(searchId);
+        assertThat(stored).containsExactlyElementsOf(journeys);
+    }
+
+    @Test
+    void getStoredJourneys_ShouldThrow410_WhenSearchIdDoesNotExist() {
+        String randomId = UUID.randomUUID().toString();
+
+        assertThatThrownBy(() ->
+                journeyService.getStoredJourneys(randomId))
+            .isInstanceOf(ResponseStatusException.class)
+            .hasFieldOrPropertyWithValue("statusCode", HttpStatus.GONE);
+    }
+
+    @Test
+    void storeResults_ShouldGenerateUniqueIds_ForDifferentCalls() {
+        List<Journey> emptyList = List.of();
+
+        String id1 = journeyService.storeResults(emptyList);
+        String id2 = journeyService.storeResults(emptyList);
+
+        assertThat(id1).isNotEqualTo(id2);
+    }
+
 }

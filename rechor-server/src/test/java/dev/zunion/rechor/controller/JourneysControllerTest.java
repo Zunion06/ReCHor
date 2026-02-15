@@ -12,14 +12,13 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ch.epfl.rechor.journey.Journey;
 import dev.zunion.rechor.controller.JourneysController.TimeType;
 import dev.zunion.rechor.service.JourneyService;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(JourneysController.class) // Only loads the web layer
 class JourneysControllerTest {
@@ -35,12 +34,11 @@ class JourneysControllerTest {
         @Bean
         @Primary
         public JourneyService journeyService() {
-            // We create a subclass manually so Mockito doesn't have to "modify" the class
             return new JourneyService(null, null) {
                 @Override
                 public List<Journey> getRecommendedJourneys(String from, String to, 
                     LocalDate date, LocalTime time, TimeType type, int limit) {
-                    return List.of(); // Return empty list for validation tests
+                    return List.of(); 
                 }
             };
         }

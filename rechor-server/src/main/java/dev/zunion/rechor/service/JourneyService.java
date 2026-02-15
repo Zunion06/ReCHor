@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.http.HttpStatus;
@@ -28,12 +29,17 @@ public class JourneyService {
     private final List<String> nameList;
 
     // Cache record to serve as a composite key
-    private record JourneyKey(int depId, int arrId, LocalDate date) {}
+    private record RouterKey(int arrId, LocalDate date) {}
 
     // Strategy: Cache up to 100 list of journeys, expire them after 15 mins of inactivity
-    private final Cache<JourneyKey, Profile> profileCache = Caffeine.newBuilder()
+    private final Cache<RouterKey, Profile> profileCache = Caffeine.newBuilder()
             .maximumSize(100)
             .expireAfterAccess(15, TimeUnit.MINUTES)
+            .build();
+
+    private final Cache<String, List<Journey>> resultStore = Caffeine.newBuilder()
+            .maximumSize(500)
+            .expireAfterWrite(30, TimeUnit.MINUTES)
             .build();
 
     public JourneyService(Router router, List<String> nameList) {
@@ -51,7 +57,7 @@ public class JourneyService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stations must be different");
         }
 
-        JourneyKey key = new JourneyKey(depStationId, arrStationId, date);
+        RouterKey key = new RouterKey(arrStationId, date);
         Profile profile = profileCache.get(key, k -> {
             return router.profile(date, arrStationId);
         });
@@ -82,5 +88,19 @@ public class JourneyService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Station not found: " + name);
         }
         return index;
+    }
+
+    public String storeResults(List<Journey> journeys) {
+        String id = UUID.randomUUID().toString();
+        resultStore.put(id, journeys);
+        return id;
+    }
+
+    public List<Journey> getStoredJourneys(String searchId) {
+        List<Journey> journeys = resultStore.getIfPresent(searchId);
+        if (journeys == null) {
+            throw new ResponseStatusException(HttpStatus.GONE, "Search session expired. Please search again.");
+        }
+        return journeys;
     }
 }

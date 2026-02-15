@@ -8,6 +8,7 @@
 **/target/
 **/lib/
 **/.vscode/
+scripts/
 .env
 .envrc
 *.p12

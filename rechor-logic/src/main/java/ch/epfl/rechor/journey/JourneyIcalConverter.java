@@ -1,5 +1,11 @@
 package ch.epfl.rechor.journey;
 
+import java.time.LocalDateTime;
+import java.util.StringJoiner;
+import java.util.UUID;
+
+import ch.epfl.rechor.FormatterFr;
+import ch.epfl.rechor.IcalBuilder;
 import static ch.epfl.rechor.IcalBuilder.Component.VCALENDAR;
 import static ch.epfl.rechor.IcalBuilder.Component.VEVENT;
 import static ch.epfl.rechor.IcalBuilder.Name.DESCRIPTION;
@@ -10,14 +16,6 @@ import static ch.epfl.rechor.IcalBuilder.Name.PRODID;
 import static ch.epfl.rechor.IcalBuilder.Name.SUMMARY;
 import static ch.epfl.rechor.IcalBuilder.Name.UID;
 import static ch.epfl.rechor.IcalBuilder.Name.VERSION;
-
-import java.time.LocalDateTime;
-import java.util.StringJoiner;
-import java.util.UUID;
-
-import ch.epfl.rechor.FormatterFr;
-import ch.epfl.rechor.IcalBuilder;
-import ch.epfl.rechor.journey.Journey;
 
 /**
  * used to convert a journey into the ICalendar format

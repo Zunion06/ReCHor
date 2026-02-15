@@ -33,9 +33,10 @@ public class JourneysController {
     private final boolean isMini = Boolean.parseBoolean(System.getenv("RECHOR_MINI")) 
                                 || Boolean.getBoolean("RECHOR_MINI");
 
-    private static final LocalDate MIN_DATE = LocalDate.of(2025, 3, 17);
+    private static final LocalDate MIN_DATE_FULL = LocalDate.of(2025, 3, 17);
+    private static final LocalDate MIN_DATE_MINI = LocalDate.of(2025, 5, 30);
     private static final LocalDate MAX_DATE_FULL = LocalDate.of(2025, 6, 1);
-    private static final LocalDate MAX_DATE_MINI = LocalDate.of(2025, 3, 18);
+    private static final LocalDate MAX_DATE_MINI = LocalDate.of(2025, 5, 31);
     
     private static final String DEFAULT_LIMIT = "10";
 
@@ -51,6 +52,8 @@ public class JourneysController {
             return TimeType.valueOf(value.toUpperCase());
         }
     }
+
+    public record JourneyResponse(String searchId, List<Journey> journeys) {}
 
     @ControllerAdvice
     public class EnumExceptionHandler {
@@ -70,7 +73,7 @@ public class JourneysController {
     }
 
     @GetMapping("/journeys")
-    public List<Journey> findJourneys(
+    public JourneyResponse findJourneys(
             @RequestParam 
             @Size(max = 30, message = "The departure stop's name must not exceed 30 characters")
             String from,
@@ -96,15 +99,20 @@ public class JourneysController {
             int limit
     ) {
         LocalDate effectiveMax = isMini ? MAX_DATE_MINI : MAX_DATE_FULL;
+        LocalDate effectiveMin = isMini ? MIN_DATE_MINI : MIN_DATE_FULL;
 
-        if (date.isBefore(MIN_DATE) || date.isAfter(effectiveMax)) {
+        if (date.isBefore(effectiveMin) || date.isAfter(effectiveMax)) {
             String message = isMini 
-                ? "MINI MODE: Only dates between 2025-03-17 and 2025-03-18 are supported."
+                ? "MINI MODE: Only dates between 2025-05-30 and 2025-05-31 are supported."
                 : "No data available for the requested date: " + date;
                 
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, message);
         }
 
-        return journeyService.getRecommendedJourneys(from, to, date, time, type, limit);
+        List<Journey> results = journeyService.getRecommendedJourneys(from, to, date, time, type, limit);
+    
+        String id = journeyService.storeResults(results);
+
+        return new JourneyResponse(id, results);
     }
 }

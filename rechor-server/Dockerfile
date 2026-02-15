@@ -24,14 +24,11 @@ WORKDIR /app
 
 COPY --from=build /app/rechor-server/target/*.jar app.jar
 
-RUN mkdir -p /app/data/timetable
-COPY rechor-server/src/main/resources/timetable-mini /app/data/timetable/
+RUN mkdir -p /app/data/
+COPY rechor-server/src/main/resources/ /app/data/
+RUN mv data/timetable-mini data/timetable
 
-# For security
-# If attacker gains access to the container, it won't be as a root user
-# Therefore the attacker can't download or remove anything
-RUN useradd -m rechoruser
-USER rechoruser
+RUN useradd -m noaccess
+USER noaccess
 
-# Using "sh -c" allows the shell to expand the $JAVA_OPTS variable
-ENTRYPOINT ["sh", "-c", "java -DRECHOR_MINI=true $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["sh", "-c", "java -DRECHOR_MINI=true -Xmx512m -Xms512m -Drechor.data.dir=/app/data -jar app.jar"]
