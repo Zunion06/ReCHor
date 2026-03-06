@@ -44,7 +44,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-            </dependency>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.2.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -72,13 +78,6 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
-                    <argLine>
-                        -XX:+EnableDynamicAgentLoading
-                        -Xshare:off
-                        --add-opens java.base/java.lang=ALL-UNNAMED
-                        --add-opens java.base/java.util=ALL-UNNAMED
-                        --add-opens java.base/java.time=ALL-UNNAMED
-                    </argLine>
                     <systemPropertyVariables>
                         <rechor.data.dir>${rechor.test.data.dir}</rechor.data.dir>
                     </systemPropertyVariables>

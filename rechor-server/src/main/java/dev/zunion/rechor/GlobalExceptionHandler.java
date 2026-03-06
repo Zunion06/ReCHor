@@ -16,10 +16,25 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.ConstraintViolationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @Schema(description = "Standard API error response")
+    public class ApiError {
+
+        @Schema(example = "2026-03-01T13:00:00")
+        public String timestamp;
+
+        @Schema(example = "400")
+        public int status;
+
+        @Schema(example = "Validation failed")
+        public String message;
+    }
+    
 
     // 1. Handle Explicit Logic Errors (404, 422, etc. thrown via ResponseStatusException)
     @ExceptionHandler(ResponseStatusException.class)

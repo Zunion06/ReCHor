@@ -13,3 +13,4 @@ scripts/
 .envrc
 *.p12
 rechor-mobile/
+**.tar
