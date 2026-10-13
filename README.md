@@ -12,26 +12,9 @@ A Java application similar to the SBB itinerary planning app.
 
 ### Deployment
 
-*(Status as of 06/03/2026)*
+*(Status as of 13/10/2026)*
 
-The application is currently deployed and accessible at:
-
-- **Main web application:**  
-  https://rechor.pommier.dev/  
-  *(Fallback access via the AWS public endpoint: http://ec2-44-211-229-81.compute-1.amazonaws.com/)*
-
-- **API documentation (Swagger UI):**  
-  https://rechor.pommier.dev/swagger-ui/index.html
-
-### Current configuration
-
-To stay within the limits of the AWS Free Tier, the server is currently running in a "minimal mode".
-
-In this mode, only two dates are available for testing:
-- 30/05/2025  
-- 31/05/2025  
-
-This helps reduce storage usage while still allowing the main features of the application to be tested.
+The application is not deployed anymore.
 
 ## Authors
 
